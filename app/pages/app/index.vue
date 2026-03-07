@@ -16,6 +16,17 @@ const isWinnerModalOpen = ref(false);
 
 const wheelRef = useTemplateRef("wheelRef");
 
+const wheelPalette = [
+  "#f04e23",
+  "#ffbd2f",
+  "#4cc9f0",
+  "#2a9d8f",
+  "#8338ec",
+  "#ef476f",
+  "#06d6a0",
+  "#fb5607"
+];
+
 const winner = ref<string | null>(null);
 
 const entries = computed(() => {
@@ -97,16 +108,7 @@ const resetWheel = () => {
           v-model:spinning="isSpinning"
           :entries="entries"
           :is-spinning="isSpinning"
-          :palette="[
-            '#f04e23',
-            '#ffbd2f',
-            '#4cc9f0',
-            '#2a9d8f',
-            '#8338ec',
-            '#ef476f',
-            '#06d6a0',
-            '#fb5607',
-          ]"
+          :palette="wheelPalette"
           :idle-spin="true"
           @select="isWinnerModalOpen = true"
         />
