@@ -1,1 +1,31 @@
-/* main.css */
+@import 'https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap';
+
+body {
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+}
+
+h1 {
+  font-family: Fraunces, Georgia, serif;
+}
+
+.wheel-canvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.animate-on-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 1px rgb(0 0 0 / 15%);
+}
+
+.animate-on-hover {
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.scale-on-hover:hover {
+  transform: scale(1.05);
+}
+
+.scale-on-hover {
+  transition: transform 160ms ease;
+}
