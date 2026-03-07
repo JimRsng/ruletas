@@ -1,62 +1,47 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 
-const defaultEntries = [
+const defaultEntries = ref([
   "Pizza Night",
   "Sushi Run",
   "Burger Break",
   "Taco Time",
   "Pasta Party",
   "Salad Stop"
-];
+]);
 
-const entriesText = ref(defaultEntries.join("\n"));
-const spinDurationMs = ref(5000);
+const entriesText = ref(defaultEntries.value.join("\n"));
 const isSpinning = ref(false);
-const winner = ref("");
-const wheelRef = ref();
 const isWinnerModalOpen = ref(false);
 
-const palette = [
-  "#f04e23",
-  "#ffbd2f",
-  "#4cc9f0",
-  "#2a9d8f",
-  "#8338ec",
-  "#ef476f",
-  "#06d6a0",
-  "#fb5607"
-];
+const wheelRef = useTemplateRef("wheelRef");
+
+const winner = ref<string | null>(null);
 
 const entries = computed(() => {
   const parsed = entriesText.value
     .split("\n")
-    .map(item => item.trim())
-    .filter(Boolean);
+    .map((item) => {
+      const itemNumber = Number(item.trim());
+      return isNaN(itemNumber) ? item.trim() : itemNumber;
+    })
+    .filter(Boolean) as typeof defaultEntries.value;
 
-  return parsed.length > 0 ? parsed.slice(0, 30) : defaultEntries;
+  return parsed.length > 0 ? parsed : defaultEntries.value;
 });
 
-function clearEntries () {
-  if (isSpinning.value) {
-    return;
-  }
+const clearEntries = () => {
+  if (isSpinning.value) return;
+  defaultEntries.value = [];
   entriesText.value = "";
-  winner.value = "";
-}
+  winner.value = null;
+};
 
-function resetWheel () {
-  if (isSpinning.value) {
-    return;
-  }
-  winner.value = "";
+const resetWheel = () => {
+  if (isSpinning.value) return;
+  winner.value = null;
   wheelRef.value?.reset();
-}
-
-function handleWinner (value: string) {
-  winner.value = value;
-  isWinnerModalOpen.value = true;
-}
+};
 </script>
 
 <template>
@@ -108,17 +93,27 @@ function handleWinner (value: string) {
 
         <WheelSpinner
           ref="wheelRef"
+          v-model="winner"
+          v-model:spinning="isSpinning"
           :entries="entries"
-          :spin-duration="spinDurationMs"
           :is-spinning="isSpinning"
-          :palette="palette"
-          @winner="handleWinner"
-          @update:is-spinning="(value) => isSpinning = value"
+          :palette="[
+            '#f04e23',
+            '#ffbd2f',
+            '#4cc9f0',
+            '#2a9d8f',
+            '#8338ec',
+            '#ef476f',
+            '#06d6a0',
+            '#fb5607',
+          ]"
+          :idle-spin="true"
+          @select="isWinnerModalOpen = true"
         />
 
         <UModal v-model:open="isWinnerModalOpen">
           <template #content>
-            <div :class="{ reveal: !!winner && !isSpinning }" class="text-center p-4">
+            <div class="text-center p-4">
               <p class="m-0 text-xs uppercase tracking-widest">Ganador</p>
               <strong class="text-5xl">{{ winner }}</strong>
             </div>

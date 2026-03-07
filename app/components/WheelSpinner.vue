@@ -1,21 +1,26 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import { Wheel } from "spin-wheel";
 
-interface Props {
-  entries: string[];
-  spinDuration: number;
-  isSpinning: boolean;
-  palette: string[];
-}
+const props = withDefaults(defineProps<{
+  entries: T[];
+  spinDuration?: number;
+  palette?: string[];
+  idleSpin?: boolean;
+}>(), {
+  spinDuration: 5000,
+  palette: () => ["#fff"],
+  idleSpin: true
+});
 
-const props = defineProps<Props>();
+const isSpinning = defineModel<boolean>("spinning", { required: false });
+const select = defineModel<T>({ required: false });
 
 const emit = defineEmits<{
-  "winner": [value: string];
-  "update:isSpinning": [value: boolean];
+  select: [value: T];
 }>();
 
-const wheelContainerRef = ref<HTMLDivElement | null>(null);
+const wheelContainerRef = useTemplateRef("wheelContainerRef");
+
 let wheel: Wheel | null = null;
 let idleAnimFrame: number | null = null;
 let lastTs: number | null = null;
@@ -41,8 +46,8 @@ const stopIdleSpin = () => {
 };
 
 const items = computed(() => props.entries.map((label, index) => ({
-  label,
-  backgroundColor: props.palette[index % props.palette.length] || "#f04e23",
+  label: String(label),
+  backgroundColor: props.palette[index % props.palette.length]!,
   labelColor: "#17110d"
 })));
 
@@ -55,12 +60,13 @@ const init = () => {
     items: items.value,
     borderWidth: 5,
     borderColor: "#1f160f",
-    itemLabelRadius: 0.5,
+    radius: 1,
+    itemLabelRadius: 0.57,
     itemLabelRotation: 0,
     itemLabelAlign: "center",
     itemLabelBaselineOffset: -0.07,
     itemLabelFont: "Space Grotesk",
-    itemLabelFontSizeMax: 32,
+    itemLabelFontSizeMax: 24,
     itemBackgroundColors: items.value.map(item => item.backgroundColor),
     itemLabelColors: items.value.map(item => item.labelColor),
     lineColor: "#1f160f",
@@ -70,37 +76,41 @@ const init = () => {
   });
 
   wheel.onRest = () => {
-    emit("update:isSpinning", false);
+    isSpinning.value = false;
     const winnerIndex = wheel?.getCurrentIndex();
     if (winnerIndex !== undefined && winnerIndex !== null) {
-      emit("winner", props.entries[winnerIndex] || "");
+      const winner = props.entries[winnerIndex]!;
+      emit("select", winner);
+      select.value = winner;
     }
   };
 
-  startIdleSpin();
+  if (props.idleSpin) startIdleSpin();
+  else stopIdleSpin();
 };
 
 const spin = () => {
-  if (!props.isSpinning && props.entries.length >= 2 && wheel) {
+  if (!isSpinning.value && props.entries.length >= 2 && wheel) {
     stopIdleSpin();
-    emit("update:isSpinning", true);
+    isSpinning.value = true;
 
-    const winnerIndex = Math.floor(Math.random() * props.entries.length);
+    const winnerIndex = getRandomValue(0, props.entries.length);
 
     wheel.spinToItem(winnerIndex, props.spinDuration, false, 5, 2);
   }
 };
 
 const reset = () => {
-  if (!props.isSpinning && wheel) {
+  if (!isSpinning.value && wheel) {
     wheel.rotation = 0;
+    if (props.idleSpin) startIdleSpin();
   }
 };
 
 defineExpose({ reset });
 
 onUnmounted(() => {
-  stopIdleSpin();
+  if (props.idleSpin) stopIdleSpin();
 });
 
 onMounted(() => {
@@ -109,8 +119,13 @@ onMounted(() => {
   });
 });
 
-watch(items, () => {
-  if (!props.isSpinning && wheelContainerRef.value) {
+watch(() => [
+  props.entries,
+  props.spinDuration,
+  props.palette,
+  props.idleSpin
+], () => {
+  if (!isSpinning.value && wheelContainerRef.value) {
     if (wheel) {
       wheel.remove();
     }
@@ -123,6 +138,7 @@ watch(items, () => {
 <template>
   <section class="relative grid place-items-center p-4 min-h-140 overflow-hidden max-[920px]:min-h-110 bg-elevated rounded-xl">
     <button
+      v-if="wheelContainerRef"
       type="button"
       class="absolute inset-1/2 -translate-1/2 z-2 size-18 flex items-center justify-center cursor-pointer scale-on-hover before:bg-default before:size-18 before:-rotate-45 before:absolute before:rounded-[50%_0_50%_50%]"
       :disabled="isSpinning || entries.length < 2"
@@ -131,6 +147,6 @@ watch(items, () => {
     >
       <span class="relative z-3 font-bold text-sm tracking-widest uppercase">GIRAR</span>
     </button>
-    <div ref="wheelContainerRef" class="wheel-canvas w-[min(72vw,560px)] h-[min(72vw,560px)] max-w-140 max-h-140 block relative" />
+    <div ref="wheelContainerRef" class="wheel-canvas w-[min(72vw,560px)] h-[min(72vw,560px)] max-w-140 max-h-140 block relative rounded-full bg-accented shadow" />
   </section>
 </template>
