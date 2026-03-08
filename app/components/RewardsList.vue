@@ -34,7 +34,9 @@ watch(selected, async (reward, oldReward) => {
   rewardsStore.edit(reward.id, {
     active: reward.active,
     cost: reward.cost
-  }).catch(() => {}).finally(() => {
+  }).catch(() => {
+    redemptionsStore.clearInterval();
+  }).finally(() => {
     isEditing.value = false;
   });
 }, { deep: true });
