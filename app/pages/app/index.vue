@@ -94,7 +94,6 @@ const winnerInfo = computed(() => {
           v-model="winner"
           v-model:spinning="isSpinning"
           :entries="entriesNames"
-          :is-spinning="isSpinning"
           :palette="wheelPalette"
           :idle-spin="true"
           @select="isWinnerModalOpen = true"
