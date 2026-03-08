@@ -1,3 +1,4 @@
+import icons from "./icons";
 import { SITE } from "../shared/utils/site";
 
 export default defineNuxtConfig({
@@ -124,9 +125,10 @@ export default defineNuxtConfig({
 
   icon: {
     mode: "svg",
-    clientBundle: { scan: true, sizeLimitKb: 2048 },
+    provider: "none",
+    clientBundle: { icons },
     customCollections: [
-      { prefix: "ruletas", dir: "./app/assets/icons" }
+      { prefix: "custom", dir: "./app/assets/icons" }
     ]
   },
 

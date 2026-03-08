@@ -110,7 +110,7 @@ onUnmounted(() => {
 <template>
   <div v-if="selectedReward" class="p-4 bg-elevated rounded-xl flex gap-4 items-center relative">
     <div class="flex flex-col items-center justify-center rounded-xl" :style="{ backgroundColor: selectedReward.color }">
-      <Icon name="ruletas:points" size="1.4rem" class="my-2" />
+      <Icon name="custom:points" size="1.4rem" class="my-2" />
       <UInputNumber
         v-model="selectedReward.cost"
         class="max-w-20"
@@ -159,7 +159,7 @@ onUnmounted(() => {
           >
             <div class="flex gap-4 items-center">
               <div class="flex items-center justify-center rounded-xl h-16 w-18 relative" :style="{ backgroundColor: reward.color }">
-                <Icon name="ruletas:points" size="1.4rem" />
+                <Icon name="custom:points" size="1.4rem" />
                 <span class="text-xs bg-default/80 absolute bottom-1 px-2 rounded-xl">{{ formatNumber(reward.cost) }}</span>
               </div>
               <div>
@@ -191,7 +191,7 @@ onUnmounted(() => {
                 class="flex-1"
                 :ui="{ base: 'text-start' }"
                 :format-options="{ style: 'decimal' }"
-                decrement-icon="ruletas:points"
+                decrement-icon="custom:points"
                 :increment="false"
                 :decrement="{
                   color: 'neutral',

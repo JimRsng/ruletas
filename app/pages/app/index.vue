@@ -83,7 +83,7 @@ const winnerInfo = computed(() => {
               :disabled="isSpinning"
               class="rounded-full border-3 animate-on-hover"
               color="neutral"
-              icon="ruletas:points"
+              icon="custom:points"
               block
             />
           </div>
@@ -120,7 +120,7 @@ const winnerInfo = computed(() => {
                 </NuxtLink>
               </div>
               <p v-if="winnerInfo?.input" class="text-sm text-muted">{{ winnerInfo.input }}</p>
-              <UButton label="Cobrar puntos" icon="ruletas:points" color="primary" variant="outline" class="mt-2" />
+              <UButton label="Cobrar puntos" icon="custom:points" color="primary" variant="outline" class="mt-2" />
             </div>
           </template>
         </UModal>
