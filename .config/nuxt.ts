@@ -9,7 +9,8 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@nuxtjs/color-mode",
     "@nuxtjs/sitemap",
-    "@nuxthub/core"
+    "@nuxthub/core",
+    "nuxt-auth-utils"
   ],
 
   $production: {
@@ -123,7 +124,10 @@ export default defineNuxtConfig({
 
   icon: {
     mode: "svg",
-    clientBundle: { scan: true, sizeLimitKb: 2048 }
+    clientBundle: { scan: true, sizeLimitKb: 2048 },
+    customCollections: [
+      { prefix: "ruletas", dir: "./app/assets/icons" }
+    ]
   },
 
   sitemap: {

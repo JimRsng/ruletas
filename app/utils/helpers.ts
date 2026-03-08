@@ -4,3 +4,7 @@ export const getRandomValue = (min: number, max: number) => {
   crypto.getRandomValues(randomBytes);
   return min + (randomBytes[0]! % range);
 };
+
+export const formatNumber = (num: number) => {
+  return Intl.NumberFormat(undefined, { style: "decimal" }).format(num);
+};

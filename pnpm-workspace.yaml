@@ -6,5 +6,7 @@ packages:
 
 ignoredBuiltDependencies:
   - '@parcel/watcher'
+  - canvas
   - esbuild
   - unrs-resolver
+  - vue-demi

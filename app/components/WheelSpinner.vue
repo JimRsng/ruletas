@@ -56,7 +56,6 @@ const init = () => {
   if (!container) return;
 
   wheel = new Wheel(container, {
-    debug: import.meta.dev,
     items: items.value,
     borderWidth: 5,
     borderColor: "#1f160f",
