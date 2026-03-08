@@ -89,7 +89,7 @@ const winnerInfo = computed(() => {
           </div>
         </aside>
 
-        <WheelSpinner
+        <SpinWheel
           ref="wheelRef"
           v-model="winner"
           v-model:spinning="isSpinning"

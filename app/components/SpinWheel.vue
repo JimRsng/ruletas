@@ -135,7 +135,10 @@ watch(() => [
 </script>
 
 <template>
-  <section class="relative grid place-items-center p-4 min-h-140 overflow-hidden max-[920px]:min-h-110 bg-elevated rounded-xl">
+  <section
+    class="relative grid place-items-center p-4 min-h-140 overflow-hidden max-[920px]:min-h-110 bg-elevated rounded-xl"
+    :class="{ 'animate-pulse': !wheelContainerRef }"
+  >
     <button
       v-if="wheelContainerRef"
       type="button"
