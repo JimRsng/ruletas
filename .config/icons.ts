@@ -6,4 +6,4 @@ export default [
   "lucide:plus",
   "lucide:trash",
   "lucide:loader-circle"
-]
+];
