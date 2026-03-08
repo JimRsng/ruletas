@@ -1,4 +1,6 @@
 <script setup lang="ts">
+definePageMeta({ middleware: "authenticated" });
+
 const { loggedIn, openInPopup } = useUserSession();
 
 watch(loggedIn, (value) => {
