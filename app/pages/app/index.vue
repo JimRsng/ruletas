@@ -37,7 +37,7 @@ const winnerInfo = computed(() => {
 const completeWinner = () => {
   if (!winnerInfo.value || !selected.value) return;
   isLoading.value = true;
-  redemptionsStore.completeAndRejectDuplicates(selected.value.id, winnerInfo.value.id).then(() => {
+  redemptionsStore.complete(selected.value.id, winnerInfo.value.id).then(() => {
     isWinnerModalOpen.value = false;
   }).finally(() => {
     isLoading.value = false;
@@ -164,9 +164,6 @@ const rejectAllRedemptions = () => {
                   :loading="isLoading"
                   @click="completeWinner"
                 />
-                <p v-if="winnerInfo.inputs.length > 1" class="text-xs text-muted text-balance">
-                  Se cobrará una vez y se reembolsarán {{ winnerInfo.inputs.length - 1 }} canjes duplicados del ganador
-                </p>
               </div>
             </div>
           </template>

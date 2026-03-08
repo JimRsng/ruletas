@@ -47,30 +47,6 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
     });
   };
 
-  const completeAndRejectDuplicates = async (rewardId: string, redemptionId: string) => {
-    const redemption = redemptions.value.find(r => r.id === redemptionId);
-    if (!redemption) return;
-
-    $fetch(`/api/rewards/${rewardId}/redemptions/${redemptionId}`, {
-      method: "PATCH"
-    }).then(() => {
-      const duplicates = redemptions.value.filter(r => r.user.name === redemption.user.name && r.id !== redemptionId).map(r => r.id);
-      if (duplicates.length > 0) {
-        $fetch(`/api/rewards/${rewardId}/redemptions`, {
-          method: "DELETE",
-          query: { id: duplicates }
-        }).then(() => {
-          redemptions.value = redemptions.value.filter(r => !duplicates.includes(r.id) && r.id !== redemptionId);
-          toast.add({ description: `El canje ha sido marcado como completado y se han reembolsado ${duplicates.length} canjes duplicados`, color: "success" });
-        });
-      }
-      else {
-        redemptions.value = redemptions.value.filter(r => r.id !== redemptionId);
-        toast.add({ description: "El canje ha sido marcado como completado", color: "success" });
-      }
-    });
-  };
-
   const reject = async (rewardId: string, redemptionId: string) => {
     if (!confirm("¿Estás seguro de que quieres reembolsar este canje?")) return;
     return $fetch(`/api/rewards/${rewardId}/redemptions/${redemptionId}`, {
@@ -100,7 +76,6 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
     createInterval,
     clearInterval,
     complete,
-    completeAndRejectDuplicates,
     reject,
     rejectAll
   };
