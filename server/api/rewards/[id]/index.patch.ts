@@ -20,8 +20,18 @@ export default defineEventHandler(async (event) => {
   const provider = new StaticAuthProvider(config.oauth.twitch.clientId, accessToken, scope);
   const twitch = new ApiClient({ authProvider: provider });
 
-  await twitch.channelPoints.updateCustomReward(user.id, params.id, {
+  const reward = await twitch.channelPoints.updateCustomReward(user.id, params.id, {
     isEnabled: body.active,
     cost: body.cost
   });
+
+  return {
+    id: reward.id,
+    title: reward.title,
+    description: reward.prompt,
+    cost: reward.cost,
+    input: reward.userInputRequired,
+    active: reward.isEnabled,
+    color: reward.backgroundColor
+  };
 });

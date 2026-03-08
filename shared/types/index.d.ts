@@ -12,6 +12,16 @@ declare global {
     };
     input: string;
   }
+
+  interface RuletasReward {
+    id: string;
+    title: string;
+    cost: number;
+    description: string;
+    input: boolean;
+    active: boolean;
+    color: string;
+  }
 }
 
 export {};

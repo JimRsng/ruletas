@@ -1,62 +1,37 @@
 <script setup lang="ts">
-const { data: rewards, refresh: refreshRewards } = await useFetch("/api/rewards", {
-  deep: true
+const { data } = await useFetch("/api/rewards", {
+  key: "rewards"
 });
 
-type Reward = NonNullable<typeof rewards.value>[number];
+const rewardsStore = useRewardsStore();
+const { rewards, selected } = storeToRefs(rewardsStore);
+rewardsStore.setup(data.value || []);
 
-const items = defineModel<RuletasRedemption[]>("redemptions", { required: true });
+const redemptionsStore = useRedemptionsStore();
 
-const selectedReward = ref<Reward | null>(null);
-const redemptionsInterval = ref<number | null>(null);
-const intervalMs = import.meta.dev ? 10000 : 2000;
-
-const selectReward = (reward: Reward) => {
+const selectReward = (id: string) => {
   if (isModalOpen.value) {
     isModalOpen.value = false;
   }
 
-  selectedReward.value = reward;
+  rewardsStore.select(id);
 };
 
-const clearRedemptionsInterval = () => {
-  if (redemptionsInterval.value) {
-    console.info("Stopping listening to redemptions...");
-    clearInterval(redemptionsInterval.value);
-    redemptionsInterval.value = null;
-  }
-};
-
-const fetchRedemptions = () => {
-  if (!selectedReward.value) return;
-
-  $fetch(`/api/rewards/${selectedReward.value.id}/redemptions`).then((data) => {
-    if (data.length > 0) {
-      items.value = data;
-    }
-  }).catch(() => {});
-};
-
-watch(selectedReward, (reward, oldReward) => {
+watch(selected, async (reward, oldReward) => {
   if (!reward) return;
 
   if (reward.active) {
-    console.info("Listening to redemptions...");
-    fetchRedemptions();
-    redemptionsInterval.value = window.setInterval(fetchRedemptions, intervalMs);
+    redemptionsStore.createInterval(reward.id);
   }
   else {
-    clearRedemptionsInterval();
+    redemptionsStore.clearInterval();
   }
 
   if (!oldReward || reward.id !== oldReward.id) return;
 
-  $fetch(`/api/rewards/${reward.id}`, {
-    method: "PATCH",
-    body: {
-      active: reward.active,
-      cost: reward.cost
-    }
+  await rewardsStore.edit(reward.id, {
+    active: reward.active,
+    cost: reward.cost
   });
 }, { deep: true });
 
@@ -75,11 +50,7 @@ const form = useFormState({
 
 const createReward = async () => {
   isCreating.value = true;
-  $fetch("/api/rewards", {
-    method: "POST",
-    body: form.value
-  }).then(async () => {
-    await refreshRewards();
+  rewardsStore.create(form.value).then(() => {
     form.reset();
   }).finally(() => {
     isCreating.value = false;
@@ -87,32 +58,26 @@ const createReward = async () => {
   });
 };
 
-const deleteReward = async (reward: Reward) => {
-  if (!confirm("¿Estás seguro de que quieres eliminar esta recompensa?")) return;
+const deleteReward = async (reward: RuletasReward) => {
   isDeleting.value = true;
-  $fetch(`/api/rewards/${reward.id}`, {
-    method: "DELETE"
-  }).then(async () => {
-    await refreshRewards();
-    if (selectedReward.value?.id === reward.id) {
-      selectedReward.value = null;
-    }
+  rewardsStore.remove(reward.id).then(() => {
+    rewardsStore.clearSelected();
   }).finally(() => {
     isDeleting.value = false;
   });
 };
 
 onUnmounted(() => {
-  clearRedemptionsInterval();
+  redemptionsStore.clearInterval();
 });
 </script>
 
 <template>
-  <div v-if="selectedReward" class="p-4 bg-elevated rounded-xl flex gap-4 items-center relative">
-    <div class="flex flex-col items-center justify-center rounded-xl" :style="{ backgroundColor: selectedReward.color }">
+  <div v-if="selected" class="p-4 bg-elevated rounded-xl flex gap-4 items-center relative">
+    <div class="flex flex-col items-center justify-center rounded-xl" :style="{ backgroundColor: selected.color }">
       <Icon name="custom:points" size="1.4rem" class="my-2" />
       <UInputNumber
-        v-model="selectedReward.cost"
+        v-model="selected.cost"
         class="max-w-20"
         size="sm"
         :ui="{ base: 'rounded-xl rounded-t-none text-center' }"
@@ -124,10 +89,10 @@ onUnmounted(() => {
       />
     </div>
     <div>
-      <h3 class="text-lg font-semibold">{{ selectedReward.title }}</h3>
-      <p class="text-muted text-sm">{{ selectedReward.description }}</p>
+      <h3 class="text-lg font-semibold">{{ selected.title }}</h3>
+      <p class="text-muted text-sm">{{ selected.description }}</p>
     </div>
-    <USwitch v-model="selectedReward.active" class="ms-auto" label="Activo" />
+    <USwitch v-model="selected.active" class="ms-auto" label="Activo" />
     <UButton icon="lucide:refresh-ccw" class="rounded-full absolute -top-2 -inset-e-2 shadow" size="sm" @click="isModalOpen = true" />
   </div>
   <UModal
@@ -141,7 +106,7 @@ onUnmounted(() => {
     }"
   >
     <UButton
-      v-if="!selectedReward"
+      v-if="!selected"
       label="Selecciona una recompensa de Twitch para usar la ruleta"
       variant="ghost"
       color="neutral"
@@ -155,7 +120,7 @@ onUnmounted(() => {
             v-for="reward of rewards"
             :key="reward.id"
             class="p-4 border border-default rounded-lg cursor-pointer hover:bg-elevated hover:border-primary"
-            @click="selectReward(reward)"
+            @click="selectReward(reward.id)"
           >
             <div class="flex gap-4 items-center">
               <div class="flex items-center justify-center rounded-xl h-16 w-18 relative" :style="{ backgroundColor: reward.color }">

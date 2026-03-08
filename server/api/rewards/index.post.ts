@@ -1,7 +1,7 @@
 import { StaticAuthProvider, refreshUserToken } from "@twurple/auth";
 import { ApiClient } from "@twurple/api";
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<RuletasReward> => {
   const { user, secure } = await requireUserSession(event);
 
   const body = await readValidatedBody(event, z.object({
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
   const provider = new StaticAuthProvider(config.oauth.twitch.clientId, accessToken, scope);
   const twitch = new ApiClient({ authProvider: provider });
 
-  await twitch.channelPoints.createCustomReward(user.id, {
+  const reward = await twitch.channelPoints.createCustomReward(user.id, {
     title: body.title,
     prompt: body.description,
     cost: body.cost,
@@ -27,4 +27,14 @@ export default defineEventHandler(async (event) => {
     isEnabled: body.active,
     backgroundColor: body.color
   });
+
+  return {
+    id: reward.id,
+    title: reward.title,
+    description: reward.prompt,
+    cost: reward.cost,
+    input: reward.userInputRequired,
+    active: reward.isEnabled,
+    color: reward.backgroundColor
+  };
 });

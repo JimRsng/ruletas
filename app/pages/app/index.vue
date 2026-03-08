@@ -1,23 +1,10 @@
 <script setup lang="ts">
 const { user } = useUserSession();
 
-const entries = ref<RuletasRedemption[]>([]);
+const redemptionsStore = useRedemptionsStore();
+const { redemptions, deduplicated } = storeToRefs(redemptionsStore);
 
-const deduplicatedEntries = computed(() => {
-  const map = new Map<string, RuletasRedemption>();
-  for (const entry of entries.value) {
-    const existing = map.get(entry.user.name);
-    if (existing) {
-      existing.input += `, ${entry.input}`;
-    }
-    else {
-      map.set(entry.user.name, { ...entry });
-    }
-  }
-  return Array.from(map.values());
-});
-
-const entriesNames = computed(() => deduplicatedEntries.value.map(e => e.user.name));
+const names = computed(() => deduplicated.value.map(e => e.user.name));
 
 const isSpinning = ref(false);
 const isWinnerModalOpen = ref(false);
@@ -38,7 +25,7 @@ const wheelPalette = [
 const winner = ref<string | null>(null);
 const winnerInfo = computed(() => {
   if (!winner.value) return null;
-  return deduplicatedEntries.value.find(e => e.user.name === winner.value) || null;
+  return deduplicated.value.find(e => e.user.name === winner.value) || null;
 });
 </script>
 
@@ -51,26 +38,26 @@ const winnerInfo = computed(() => {
         <p>Gira la rueda para elegir a un ganador al azar</p>
       </div>
 
-      <RewardsList v-model:redemptions="entries" />
+      <RewardsList />
 
       <div class="grid gap-4 grid-cols-[minmax(280px,360px)_1fr] max-[920px]:grid-cols-1">
         <aside class="p-4 bg-elevated rounded-xl space-y-2">
           <div class="flex items-center gap-2 text-sm font-semibold">
             <UIcon name="simple-icons:twitch" size="1.3rem" />
-            <span>Participantes (<span class="text-primary">{{ entries.length }}</span>)</span>
+            <span>Participantes (<span class="text-primary">{{ deduplicated.length }}</span>)</span>
           </div>
 
           <ul class="bg-default h-100 overflow-y-auto rounded-md border-2 border-accented">
             <li
-              v-for="(entry, i) in entries"
-              :key="entry.id"
+              v-for="(redemption, i) of redemptions"
+              :key="redemption.id"
               class="px-3 py-2"
               :class="{ 'bg-elevated': i % 2 !== 0 }"
             >
-              <UUser :description="entry.input">
+              <UUser :description="redemption.input">
                 <template #name>
-                  <NuxtLink :to="`https://www.twitch.tv/popout/${user?.login}/viewercard/${entry.user.login}`" target="_blank" class="hover:underline">
-                    {{ entry.user.name }}
+                  <NuxtLink :to="`https://www.twitch.tv/popout/${user?.login}/viewercard/${redemption.user.login}`" target="_blank" class="hover:underline">
+                    {{ redemption.user.name }}
                   </NuxtLink>
                 </template>
               </UUser>
@@ -93,7 +80,7 @@ const winnerInfo = computed(() => {
           ref="wheelRef"
           v-model="winner"
           v-model:spinning="isSpinning"
-          :entries="entriesNames"
+          :entries="names"
           :palette="wheelPalette"
           :idle-spin="true"
           @select="isWinnerModalOpen = true"

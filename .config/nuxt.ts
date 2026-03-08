@@ -11,7 +11,8 @@ export default defineNuxtConfig({
     "@nuxtjs/color-mode",
     "@nuxtjs/sitemap",
     "@nuxthub/core",
-    "nuxt-auth-utils"
+    "nuxt-auth-utils",
+    "@pinia/nuxt"
   ],
 
   $production: {
