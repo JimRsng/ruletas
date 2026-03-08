@@ -84,8 +84,8 @@ const init = () => {
     }
   };
 
+  stopIdleSpin();
   if (props.idleSpin) startIdleSpin();
-  else stopIdleSpin();
 };
 
 const spin = () => {

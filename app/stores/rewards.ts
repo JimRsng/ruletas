@@ -1,5 +1,6 @@
 export const useRewardsStore = defineStore("rewards", () => {
   const toast = useToast();
+
   const rewards = ref<RuletasReward[]>([]);
   const selected = ref<RuletasReward | null>(null);
 
@@ -13,7 +14,7 @@ export const useRewardsStore = defineStore("rewards", () => {
       body: data
     }).then((newReward) => {
       rewards.value.push(newReward);
-      toast.add({ description: "Your reward has been created", color: "success" });
+      toast.add({ description: "La recompensa ha sido creada", color: "success" });
     });
   };
 
@@ -26,7 +27,7 @@ export const useRewardsStore = defineStore("rewards", () => {
       if (reward) {
         Object.assign(reward, updatedReward);
       }
-      toast.add({ description: "Your reward has been updated", color: "success" });
+      toast.add({ description: "La recompensa ha sido actualizada", color: "success" });
     });
   };
 
@@ -36,7 +37,7 @@ export const useRewardsStore = defineStore("rewards", () => {
       method: "DELETE"
     }).then(() => {
       rewards.value = rewards.value.filter(r => r.id !== id);
-      toast.add({ description: "Your reward has been deleted", color: "success" });
+      toast.add({ description: "La recompensa ha sido eliminada", color: "success" });
     });
   };
 

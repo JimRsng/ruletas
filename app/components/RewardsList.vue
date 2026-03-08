@@ -29,9 +29,12 @@ watch(selected, async (reward, oldReward) => {
 
   if (!oldReward || reward.id !== oldReward.id) return;
 
-  await rewardsStore.edit(reward.id, {
+  isEditing.value = true;
+  rewardsStore.edit(reward.id, {
     active: reward.active,
     cost: reward.cost
+  }).catch(() => {}).finally(() => {
+    isEditing.value = false;
   });
 }, { deep: true });
 
@@ -39,6 +42,7 @@ const isModalOpen = ref(false);
 const isCreate = ref(false);
 const isCreating = ref(false);
 const isDeleting = ref(false);
+const isEditing = ref(false);
 
 const form = useFormState({
   title: "",
@@ -86,13 +90,14 @@ onUnmounted(() => {
         }"
         :increment="false"
         :decrement="false"
+        :disabled="isEditing"
       />
     </div>
     <div>
       <h3 class="text-lg font-semibold">{{ selected.title }}</h3>
       <p class="text-muted text-sm">{{ selected.description }}</p>
     </div>
-    <USwitch v-model="selected.active" class="ms-auto" label="Activo" />
+    <USwitch v-model="selected.active" class="ms-auto" label="Activo" :loading="isEditing" />
     <UButton icon="lucide:refresh-ccw" class="rounded-full absolute -top-2 -inset-e-2 shadow" size="sm" @click="isModalOpen = true" />
   </div>
   <UModal
@@ -131,7 +136,7 @@ onUnmounted(() => {
                 <h3 class="text-lg font-semibold">{{ reward.title }}</h3>
                 <p class="text-muted text-sm">{{ reward.description }}</p>
               </div>
-              <UButton icon="lucide:trash" color="error" class="ms-auto" size="sm" :loading="isDeleting" :disabled="isDeleting" @click.stop="deleteReward(reward)" />
+              <UButton icon="lucide:trash" color="error" class="ms-auto" size="sm" :loading="isDeleting" @click.stop="deleteReward(reward)" />
             </div>
           </div>
         </TransitionGroup>
@@ -173,8 +178,8 @@ onUnmounted(() => {
             </UFormField>
           </div>
           <div class="grid md:grid-cols-2 gap-2">
-            <UButton type="button" label="Cancelar" class="uppercase" color="error" block :disabled="isCreating" @click="isCreate = false" />
-            <UButton type="submit" label="Crear" class="uppercase" :loading="isCreating" :disabled="isCreating" block />
+            <UButton type="button" label="Cancelar" class="uppercase" color="error" block @click="isCreate = false" />
+            <UButton type="submit" label="Crear" class="uppercase" :loading="isCreating" block />
           </div>
         </form>
       </div>

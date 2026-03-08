@@ -1,6 +1,9 @@
 <script setup lang="ts">
 const { user } = useUserSession();
 
+const rewardsStore = useRewardsStore();
+const { selected } = storeToRefs(rewardsStore);
+
 const redemptionsStore = useRedemptionsStore();
 const { redemptions, deduplicated } = storeToRefs(redemptionsStore);
 
@@ -8,6 +11,9 @@ const names = computed(() => deduplicated.value.map(e => e.user.name));
 
 const isSpinning = ref(false);
 const isWinnerModalOpen = ref(false);
+const isLoading = ref(false);
+const isDeleting = ref(false);
+const isDeletingAll = ref(false);
 
 const wheelRef = useTemplateRef("wheelRef");
 
@@ -27,6 +33,32 @@ const winnerInfo = computed(() => {
   if (!winner.value) return null;
   return deduplicated.value.find(e => e.user.name === winner.value) || null;
 });
+
+const completeWinner = () => {
+  if (!winnerInfo.value || !selected.value) return;
+  isLoading.value = true;
+  redemptionsStore.completeAndRejectDuplicates(selected.value.id, winnerInfo.value.id).then(() => {
+    isWinnerModalOpen.value = false;
+  }).finally(() => {
+    isLoading.value = false;
+  });
+};
+
+const rejectRedemption = (redemptionId: string) => {
+  if (!selected.value) return;
+  isDeleting.value = true;
+  redemptionsStore.reject(selected.value.id, redemptionId).finally(() => {
+    isDeleting.value = false;
+  });
+};
+
+const rejectAllRedemptions = () => {
+  if (!selected.value) return;
+  isDeletingAll.value = true;
+  redemptionsStore.rejectAll(selected.value.id).finally(() => {
+    isDeletingAll.value = false;
+  });
+};
 </script>
 
 <template>
@@ -54,24 +86,38 @@ const winnerInfo = computed(() => {
               class="px-3 py-2"
               :class="{ 'bg-elevated': i % 2 !== 0 }"
             >
-              <UUser :description="redemption.input">
-                <template #name>
-                  <NuxtLink :to="`https://www.twitch.tv/popout/${user?.login}/viewercard/${redemption.user.login}`" target="_blank" class="hover:underline">
-                    {{ redemption.user.name }}
-                  </NuxtLink>
-                </template>
-              </UUser>
+              <div class="flex items-center gap-2">
+                <UUser :description="redemption.input">
+                  <template #name>
+                    <NuxtLink :to="`https://www.twitch.tv/popout/${user?.login}/viewercard/${redemption.user.login}`" target="_blank" class="hover:underline">
+                      {{ redemption.user.name }}
+                    </NuxtLink>
+                  </template>
+                </UUser>
+                <UButton
+                  icon="lucide:x"
+                  variant="outline"
+                  color="error"
+                  size="xs"
+                  class="rounded-full ms-auto"
+                  :loading="isDeleting"
+                  @click="rejectRedemption(redemption.id)"
+                />
+              </div>
             </li>
           </ul>
           <div class="flex gap-2">
             <UButton
               type="button"
-              label="Devolver puntos"
-              :disabled="isSpinning"
-              class="rounded-full border-3 animate-on-hover"
+              label="Reembolsar todos"
+              class="rounded-full border-3"
+              :class="{ 'animate-on-hover': !isSpinning && redemptions.length }"
               color="neutral"
               icon="custom:points"
               block
+              :loading="isDeletingAll"
+              :disabled="isSpinning || !redemptions.length"
+              @click="rejectAllRedemptions"
             />
           </div>
         </aside>
@@ -87,26 +133,41 @@ const winnerInfo = computed(() => {
         />
 
         <UModal
+          v-if="winnerInfo && user"
           v-model:open="isWinnerModalOpen"
           title="Ganador"
           description="Modal del ganador"
           :dismissible="false"
         >
           <template #content>
-            <div class="text-center px-4 py-6 relative">
+            <div class="text-center p-6 relative space-y-4">
               <UButton icon="lucide:x" variant="outline" color="neutral" class="absolute inset-e-2 top-2 rounded-full" size="sm" @click="isWinnerModalOpen = false" />
               <p class="uppercase tracking-widest text-primary">Ganador</p>
               <div>
                 <NuxtLink
-                  :to="`https://www.twitch.tv/popout/${user?.login}/viewercard/${winnerInfo?.user.login}`"
+                  :to="`https://www.twitch.tv/popout/${user.login}/viewercard/${winnerInfo.user.login}`"
                   target="_blank"
                   class="text-5xl hover:underline font-bold"
                 >
                   {{ winner }}
                 </NuxtLink>
+                <p v-if="winnerInfo.inputs.length" class="text-sm text-muted">{{ winnerInfo.inputs.join(", ") }}</p>
               </div>
-              <p v-if="winnerInfo?.input" class="text-sm text-muted">{{ winnerInfo.input }}</p>
-              <UButton label="Cobrar puntos" icon="custom:points" color="primary" variant="outline" class="mt-2" />
+              <div>
+                <UButton
+                  type="button"
+                  label="Cobrar puntos"
+                  icon="custom:points"
+                  color="primary"
+                  variant="outline"
+                  class="mt-2"
+                  :loading="isLoading"
+                  @click="completeWinner"
+                />
+                <p v-if="winnerInfo.inputs.length > 1" class="text-xs text-muted text-balance">
+                  Se cobrará una vez y se reembolsarán {{ winnerInfo.inputs.length - 1 }} canjes duplicados del ganador
+                </p>
+              </div>
             </div>
           </template>
         </UModal>

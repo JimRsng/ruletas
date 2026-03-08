@@ -13,6 +13,10 @@ declare global {
     input: string;
   }
 
+  interface RuletasRedemptionWithDuplicates extends Omit<RuletasRedemption, "input"> {
+    inputs: string[];
+  }
+
   interface RuletasReward {
     id: string;
     title: string;

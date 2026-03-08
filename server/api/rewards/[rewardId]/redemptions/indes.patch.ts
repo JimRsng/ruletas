@@ -6,7 +6,11 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
 
   const params = await getValidatedRouterParams(event, z.object({
-    id: z.string()
+    rewardId: z.string()
+  }).parse);
+
+  const body = await readValidatedBody(event, z.object({
+    redemptionIds: z.array(z.string()).min(1)
   }).parse);
 
   const { accessToken, scope } = await refreshUserToken(config.oauth.twitch.clientId, config.oauth.twitch.clientSecret, secure!.refreshToken);
@@ -14,8 +18,7 @@ export default defineEventHandler(async (event) => {
   const provider = new StaticAuthProvider(config.oauth.twitch.clientId, accessToken, scope);
   const twitch = new ApiClient({ authProvider: provider });
 
-  const redemptionsPagination = twitch.channelPoints.getRedemptionsForBroadcasterPaginated(user.id, params.id, "UNFULFILLED", { newestFirst: true });
-  const redemptions = await redemptionsPagination.getAll();
+  const redemptions = await twitch.channelPoints.updateRedemptionStatusByIds(user.id, params.rewardId, body.redemptionIds, "FULFILLED");
 
   return redemptions.map(redemption => ({
     id: redemption.id,
@@ -24,6 +27,7 @@ export default defineEventHandler(async (event) => {
       name: redemption.userDisplayName,
       login: redemption.userName
     },
-    input: redemption.userInput
+    input: redemption.userInput,
+    status: redemption.isFulfilled ? "FULFILLED" : redemption.isCanceled ? "CANCELED" : "UNFULFILLED"
   }));
 });

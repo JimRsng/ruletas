@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const { user, secure } = await requireUserSession(event);
 
   const params = await getValidatedRouterParams(event, z.object({
-    id: z.string()
+    rewardId: z.string()
   }).parse);
 
   const body = await readValidatedBody(event, z.object({
@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
   const provider = new StaticAuthProvider(config.oauth.twitch.clientId, accessToken, scope);
   const twitch = new ApiClient({ authProvider: provider });
 
-  const reward = await twitch.channelPoints.updateCustomReward(user.id, params.id, {
+  const reward = await twitch.channelPoints.updateCustomReward(user.id, params.rewardId, {
     isEnabled: body.active,
     cost: body.cost
   });
