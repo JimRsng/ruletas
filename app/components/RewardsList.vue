@@ -139,7 +139,15 @@ onUnmounted(() => {
                 <h3 class="text-lg font-semibold">{{ reward.title }}</h3>
                 <p class="text-muted text-sm">{{ reward.description }}</p>
               </div>
-              <UButton icon="lucide:trash" color="error" class="ms-auto" size="sm" :loading="isDeleting" @click.stop="deleteReward(reward)" />
+              <UButton
+                icon="lucide:trash"
+                variant="outline"
+                color="error"
+                size="sm"
+                class="ms-auto"
+                :loading="isDeleting"
+                @click.stop="deleteReward(reward)"
+              />
             </div>
           </div>
         </TransitionGroup>
@@ -156,11 +164,11 @@ onUnmounted(() => {
             <UInput v-model="form.description" placeholder="Descripción" class="w-full" />
           </UFormField>
           <div class="flex gap-2 items-center">
-            <UFormField label="Costo" required>
+            <UFormField label="Precio" required>
               <UInputNumber
                 v-model="form.cost"
                 :min="1"
-                placeholder="Costo"
+                placeholder="Precio"
                 class="flex-1"
                 :ui="{ base: 'text-start' }"
                 :format-options="{ style: 'decimal' }"

@@ -59,6 +59,16 @@ const rejectAllRedemptions = () => {
     isDeletingAll.value = false;
   });
 };
+
+const toast = useToast();
+
+const canSpin = () => {
+  if (!selected.value?.active) {
+    toast.add({ description: "Activa la recompensa para poder girar la ruleta", color: "error" });
+  }
+
+  return !isSpinning.value && redemptions.value.length >= 2 && !!selected.value?.active;
+};
 </script>
 
 <template>
@@ -129,6 +139,7 @@ const rejectAllRedemptions = () => {
           :entries="names"
           :palette="wheelPalette"
           :idle-spin="true"
+          :spin-guard="canSpin"
           @select="isWinnerModalOpen = true"
         />
 

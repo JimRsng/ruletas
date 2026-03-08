@@ -1,7 +1,7 @@
 <template>
   <div>
     <NuxtLoadingIndicator :throttle="0" />
-    <UApp>
+    <UApp :toaster="{ duration: 2000 }">
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>

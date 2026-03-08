@@ -6,10 +6,12 @@ const props = withDefaults(defineProps<{
   spinDuration?: number;
   palette?: string[];
   idleSpin?: boolean;
+  spinGuard?: () => boolean;
 }>(), {
   spinDuration: 5000,
   palette: () => ["#fff"],
-  idleSpin: true
+  idleSpin: true,
+  spinGuard: () => true
 });
 
 const isSpinning = defineModel<boolean>("spinning", { required: false });
@@ -89,7 +91,7 @@ const init = () => {
 };
 
 const spin = () => {
-  if (!isSpinning.value && props.entries.length >= 2 && wheel) {
+  if (!isSpinning.value && props.entries.length >= 2 && wheel && props.spinGuard()) {
     stopIdleSpin();
     isSpinning.value = true;
 
