@@ -14,6 +14,7 @@ const selectReward = (id: string) => {
     isModalOpen.value = false;
   }
 
+  redemptionsStore.clear();
   rewardsStore.select(id);
 };
 

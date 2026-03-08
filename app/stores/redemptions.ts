@@ -69,6 +69,11 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
     });
   };
 
+  const clear = () => {
+    clearInterval();
+    redemptions.value = [];
+  };
+
   return {
     redemptions,
     deduplicated,
@@ -77,6 +82,7 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
     clearInterval,
     complete,
     reject,
-    rejectAll
+    rejectAll,
+    clear
   };
 });
