@@ -29,3 +29,49 @@ h1 {
 .scale-on-hover {
   transition: transform 160ms ease;
 }
+
+.spin-wheel-indicator::before {
+  content: "";
+  position: absolute;
+  position-area: center;
+  inset: 0px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50% 0px 50% 50%;
+  transform: rotate(-45deg);
+  background: rgb(255, 255, 255);
+  z-index: -1;
+  @media (width >= 48rem) {
+    width: 170px;
+    height: 170px;
+  }
+}
+
+.spin-wheel-gradient {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 150vmax;
+  height: 150vmax;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    rgba(255, 107, 107, 10%) 0deg 45deg,
+    rgba(254, 202, 87, 10%) 45deg 90deg,
+    rgba(72, 219, 251, 10%) 90deg 135deg,
+    rgba(29, 209, 161, 10%) 135deg 180deg,
+    rgba(95, 39, 205, 10%) 180deg 225deg,
+    rgba(255, 159, 243, 10%) 225deg 270deg,
+    rgba(84, 160, 255, 10%) 270deg 315deg,
+    rgba(0, 210, 211, 10%) 315deg 360deg
+  );
+  animation: rotateWheel 120s linear infinite;
+}
+
+@keyframes rotateWheel {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
