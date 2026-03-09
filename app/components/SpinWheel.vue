@@ -15,8 +15,8 @@ const props = withDefaults(defineProps<{
   spinGuard: () => true
 });
 
-const isSpinning = defineModel<boolean>("spinning", { required: false });
 const select = defineModel<T>({ required: false });
+const isSpinning = defineModel<boolean>("spinning", { required: false });
 
 const emit = defineEmits<{
   select: [value: NonNullable<T>];
@@ -100,7 +100,7 @@ const init = () => {
   };
 
   wheel.onCurrentIndexChange = () => {
-    if (idleAnimFrame && !isSpinning.value) return;
+    if (idleAnimFrame || !isSpinning.value) return;
     sounds.tick.play();
   };
 
