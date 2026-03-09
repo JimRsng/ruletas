@@ -8,5 +8,6 @@ export default [
   "lucide:loader-circle",
   "lucide:settings",
   "lucide:check",
-  "lucide:star"
+  "lucide:star",
+  "lucide:log-out"
 ];

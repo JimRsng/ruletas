@@ -49,6 +49,11 @@ export const useRewardsStore = defineStore("rewards", () => {
     selected.value = null;
   };
 
+  const clear = () => {
+    rewards.value = [];
+    selected.value = null;
+  };
+
   return {
     rewards,
     selected,
@@ -57,6 +62,7 @@ export const useRewardsStore = defineStore("rewards", () => {
     edit,
     remove,
     select,
-    clearSelected
+    clearSelected,
+    clear
   };
 });

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ middleware: "authenticated" });
 
-const { user } = useUserSession();
+const { user, clear } = useUserSession();
 
 const rewardsStore = useRewardsStore();
 const { selected } = storeToRefs(rewardsStore);
@@ -46,8 +46,6 @@ const participants = computed(() => {
   }).map(e => e.user.name);
 });
 
-const wheelRef = useTemplateRef("wheelRef");
-
 const winner = ref<string | null>(null);
 const winnerInfo = computed(() => {
   if (!winner.value) return null;
@@ -89,15 +87,30 @@ const canSpin = () => {
 
   return !isSpinning.value && redemptions.value.length >= 2 && !selected.value?.active;
 };
+
+const logout = () => {
+  clear();
+  rewardsStore.clear();
+  redemptionsStore.clear();
+  navigateTo("/");
+};
 </script>
 
 <template>
   <main class="min-h-screen py-8 px-4">
     <section class="max-w-280 mx-auto space-y-2">
-      <div class="mb-5">
+      <div class="mb-5 relative">
         <p class="text-xs uppercase tracking-widest">JimTracker</p>
         <h1 class="text-5xl leading-none">Ruletas</h1>
         <p>Crea ruletas a partir de recompensas de puntos de tu canal de Twitch</p>
+        <UButton
+          label="Salir"
+          variant="outline"
+          color="error"
+          icon="lucide:log-out"
+          class="absolute top-0 inset-e-0"
+          @click="logout"
+        />
       </div>
 
       <RewardsList />
