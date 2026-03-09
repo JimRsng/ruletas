@@ -31,9 +31,23 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: "en"
       },
-      link: [],
+      link: [
+        { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+        { rel: "shortcut icon", href: "/favicon.ico" },
+        { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+        { rel: "icon", type: "image/png", sizes: "512x512", href: "/web-app-manifest-512x512.png" },
+        { rel: "icon", type: "image/png", sizes: "192x192", href: "/web-app-manifest-192x192.png" },
+        { rel: "icon", type: "image/png", sizes: "96x96", href: "/favicon-96x96.png" },
+        { rel: "manifest", href: "/site.webmanifest" },
+        { rel: "preconnect", href: "https://static-cdn.jtvnw.net" }
+      ],
       meta: [
-        { name: "robots", content: "index, follow" }
+        { name: "robots", content: "index, follow" },
+        { name: "apple-mobile-web-app-title", content: SITE.name },
+        { name: "apple-mobile-web-app-capable", content: SITE.name },
+        { name: "application-name", content: SITE.name },
+        { property: "og:site_name", content: SITE.name }
       ]
     }
   },
@@ -65,10 +79,6 @@ export default defineNuxtConfig({
       password: "",
       maxAge: 60 * 60 * 24 * 30 // 30 days
     }
-  },
-
-  routeRules: {
-    "/api/_nuxt_icon/**": { cache: { maxAge: 1.577e+7 } }
   },
 
   features: {
@@ -107,16 +117,6 @@ export default defineNuxtConfig({
     },
     cache: true
     */
-  },
-
-  vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          silenceDeprecations: ["color-functions", "import", "global-builtin"]
-        }
-      }
-    }
   },
 
   eslint: {
