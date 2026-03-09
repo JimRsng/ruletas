@@ -1,4 +1,6 @@
 <script setup lang="ts">
+definePageMeta({ middleware: "authenticated" });
+
 const { user } = useUserSession();
 
 const rewardsStore = useRewardsStore();
