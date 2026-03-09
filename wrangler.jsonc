@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "ruletas",
+  "compatibility_date": "2026-03-09",
+  "main": ".output/server/index.mjs",
+  "compatibility_flags": ["nodejs_compat"],
+  "routes": [
+    {
+      "pattern": "ruletas.jimtracker.com",
+      "custom_domain": true
+    }
+  ],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".output/public"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "CACHE",
+      "id": "36d341e36e79416d93659249c2cd27e0"
+    }
+  ]
+}
