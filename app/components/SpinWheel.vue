@@ -138,19 +138,22 @@ watch(() => [
 
 <template>
   <section
-    class="relative grid place-items-center p-4 min-h-140 overflow-hidden max-[920px]:min-h-110 bg-elevated rounded-xl"
+    class="relative grid place-items-center"
     :class="{ 'animate-pulse': !wheelContainerRef }"
   >
     <button
       v-if="wheelContainerRef"
       type="button"
-      class="absolute inset-1/2 -translate-1/2 z-2 size-18 flex items-center justify-center cursor-pointer scale-on-hover before:bg-default before:size-18 before:-rotate-45 before:absolute before:rounded-[50%_0_50%_50%]"
+      class="absolute inset-1/2 -translate-1/2 z-2 size-18 flex items-center justify-center cursor-pointer scale-on-hover before:bg-default before:size-18 before:-rotate-45 before:absolute before:rounded-[50%_0_50%_50%] before:drop-shadow"
       :disabled="isSpinning || entries.length < 2"
       aria-label="Girar la ruleta"
       @click="spin"
     >
       <span class="relative z-3 font-bold text-sm tracking-widest uppercase">GIRAR</span>
     </button>
-    <div ref="wheelContainerRef" class="wheel-canvas w-[min(72vw,560px)] h-[min(72vw,560px)] max-w-140 max-h-140 block relative rounded-full bg-accented shadow" />
+    <div
+      ref="wheelContainerRef"
+      class="wheel-canvas size-80 sm:size-120 md:size-120 lg:size-140 max-w-140 max-h-140 rounded-full bg-accented shadow"
+    />
   </section>
 </template>

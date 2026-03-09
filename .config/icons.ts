@@ -5,5 +5,6 @@ export default [
   "lucide:refresh-ccw",
   "lucide:plus",
   "lucide:trash",
-  "lucide:loader-circle"
+  "lucide:loader-circle",
+  "lucide:settings"
 ];

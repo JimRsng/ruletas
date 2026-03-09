@@ -7,26 +7,32 @@ const { selected } = storeToRefs(rewardsStore);
 const redemptionsStore = useRedemptionsStore();
 const { redemptions, deduplicated } = storeToRefs(redemptionsStore);
 
-const names = computed(() => deduplicated.value.map(e => e.user.name));
-
 const isSpinning = ref(false);
 const isWinnerModalOpen = ref(false);
 const isLoading = ref(false);
 const isDeleting = ref(false);
 const isDeletingAll = ref(false);
 
-const wheelRef = useTemplateRef("wheelRef");
+const settings = useFormState({
+  disallowDuplicates: true,
+  palette: [
+    "#f04e23",
+    "#ffbd2f",
+    "#4cc9f0",
+    "#2a9d8f",
+    "#8338ec",
+    "#ef476f",
+    "#06d6a0",
+    "#fb5607"
+  ]
+});
 
-const wheelPalette = [
-  "#f04e23",
-  "#ffbd2f",
-  "#4cc9f0",
-  "#2a9d8f",
-  "#8338ec",
-  "#ef476f",
-  "#06d6a0",
-  "#fb5607"
-];
+const participants = computed(() => {
+  const entries = settings.value.disallowDuplicates ? deduplicated.value : redemptions.value;
+  return entries.map(e => e.user.name);
+});
+
+const wheelRef = useTemplateRef("wheelRef");
 
 const winner = ref<string | null>(null);
 const winnerInfo = computed(() => {
@@ -77,45 +83,53 @@ const canSpin = () => {
       <div class="mb-5">
         <p class="text-xs uppercase tracking-widest">JimTracker</p>
         <h1 class="text-5xl leading-none">Ruletas</h1>
-        <p>Gira la rueda para elegir a un ganador al azar</p>
+        <p>Crea ruletas a partir de recompensas de puntos de tu canal de Twitch</p>
       </div>
 
       <RewardsList />
 
       <div class="grid gap-4 grid-cols-[minmax(280px,360px)_1fr] max-[920px]:grid-cols-1">
-        <aside class="p-4 bg-elevated rounded-xl space-y-2">
-          <div class="flex items-center gap-2 text-sm font-semibold">
-            <UIcon name="simple-icons:twitch" size="1.3rem" />
-            <span>Participantes (<span class="text-primary">{{ deduplicated.length }}</span>)</span>
+        <aside class="p-4 bg-elevated rounded-xl space-y-4">
+          <div class="space-y-2">
+            <div class="flex items-center gap-1">
+              <UIcon name="custom:points" size="1.3rem" />
+              <h3 class="text-sm font-semibold">Entradas (<span class="text-primary">{{ redemptions.length }}</span>)</h3>
+            </div>
+            <ul class="bg-default h-100 overflow-y-auto rounded-md border-2 border-accented">
+              <li
+                v-for="(redemption, i) of redemptions"
+                :key="redemption.id"
+                class="px-3 py-2"
+                :class="{ 'bg-elevated': i % 2 !== 0 }"
+              >
+                <div class="flex items-center gap-2">
+                  <UUser :description="redemption.input">
+                    <template #name>
+                      <NuxtLink :to="`https://www.twitch.tv/popout/${user?.login}/viewercard/${redemption.user.login}`" target="_blank" class="hover:underline">
+                        {{ redemption.user.name }}
+                      </NuxtLink>
+                    </template>
+                  </UUser>
+                  <UButton
+                    icon="lucide:x"
+                    variant="outline"
+                    color="error"
+                    size="xs"
+                    class="rounded-full ms-auto"
+                    :loading="isDeleting"
+                    @click="rejectRedemption(redemption.id)"
+                  />
+                </div>
+              </li>
+            </ul>
           </div>
-
-          <ul class="bg-default h-100 overflow-y-auto rounded-md border-2 border-accented">
-            <li
-              v-for="(redemption, i) of redemptions"
-              :key="redemption.id"
-              class="px-3 py-2"
-              :class="{ 'bg-elevated': i % 2 !== 0 }"
-            >
-              <div class="flex items-center gap-2">
-                <UUser :description="redemption.input">
-                  <template #name>
-                    <NuxtLink :to="`https://www.twitch.tv/popout/${user?.login}/viewercard/${redemption.user.login}`" target="_blank" class="hover:underline">
-                      {{ redemption.user.name }}
-                    </NuxtLink>
-                  </template>
-                </UUser>
-                <UButton
-                  icon="lucide:x"
-                  variant="outline"
-                  color="error"
-                  size="xs"
-                  class="rounded-full ms-auto"
-                  :loading="isDeleting"
-                  @click="rejectRedemption(redemption.id)"
-                />
-              </div>
-            </li>
-          </ul>
+          <div class="space-y-2">
+            <div class="flex items-center gap-1">
+              <UIcon name="lucide:settings" size="1.3rem" />
+              <h3 class="text-sm font-semibold">Settings</h3>
+            </div>
+            <USwitch v-model="settings.disallowDuplicates" label="No permitir participantes duplicados" />
+          </div>
           <div class="flex gap-2">
             <UButton
               type="button"
@@ -132,16 +146,23 @@ const canSpin = () => {
           </div>
         </aside>
 
-        <SpinWheel
-          ref="wheelRef"
-          v-model="winner"
-          v-model:spinning="isSpinning"
-          :entries="names"
-          :palette="wheelPalette"
-          :idle-spin="true"
-          :spin-guard="canSpin"
-          @select="isWinnerModalOpen = true"
-        />
+        <div class="p-4 overflow-hidden bg-elevated rounded-xl space-y-4">
+          <div class="flex items-center gap-1">
+            <UIcon name="simple-icons:twitch" size="1.3rem" />
+            <h3 class="text-sm font-semibold">Participantes (<span class="text-primary">{{ participants.length }}</span>)</h3>
+          </div>
+
+          <SpinWheel
+            ref="wheelRef"
+            v-model="winner"
+            v-model:spinning="isSpinning"
+            :entries="participants"
+            :palette="settings.palette"
+            :idle-spin="true"
+            :spin-guard="canSpin"
+            @select="isWinnerModalOpen = true"
+          />
+        </div>
 
         <UModal
           v-if="winnerInfo && user"
