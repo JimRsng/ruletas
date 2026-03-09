@@ -25,21 +25,29 @@ export default defineEventHandler(async (event) => {
      * @see https://dev.twitch.tv/docs/api/reference#get-broadcaster-subscriptions
      */
     const chunkSize = 100;
+    const promises = [];
+
     for (let i = 0; i < redemptionUserIds.length; i += chunkSize) {
       const userIdChunk = redemptionUserIds.slice(i, i + chunkSize);
 
-      const response = await $fetch<{ data: { user_id: string, tier: TwitchSubscriptionTier }[] }>("https://api.twitch.tv/helix/subscriptions", {
-        headers: {
-          "Authorization": `Bearer ${accessToken}`,
-          "Client-Id": config.oauth.twitch.clientId
-        },
-        query: {
-          broadcaster_id: user.id,
-          user_id: userIdChunk,
-          first: 100
-        }
-      });
+      promises.push(
+        $fetch<{ data: { user_id: string, tier: TwitchSubscriptionTier }[] }>("https://api.twitch.tv/helix/subscriptions", {
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Client-Id": config.oauth.twitch.clientId
+          },
+          query: {
+            broadcaster_id: user.id,
+            user_id: userIdChunk,
+            first: 100
+          }
+        })
+      );
+    }
 
+    const responses = await Promise.all(promises);
+
+    for (const response of responses) {
       subscriptions.push(...response.data);
     }
   }

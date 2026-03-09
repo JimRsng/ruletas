@@ -35,11 +35,16 @@ export default defineEventHandler(async (event) => {
      * @see https://dev.twitch.tv/docs/api/reference#update-redemption-status
      */
     const chunkSize = 50;
+    const promises = [];
 
     for (let i = 0; i < redemptionIds.length; i += chunkSize) {
       const redemptionIdsChunk = redemptionIds.slice(i, i + chunkSize);
 
-      await twitch.channelPoints.updateRedemptionStatusByIds(user.id, params.rewardId, redemptionIdsChunk, "FULFILLED");
+      promises.push(
+        twitch.channelPoints.updateRedemptionStatusByIds(user.id, params.rewardId, redemptionIdsChunk, "FULFILLED")
+      );
     }
+
+    await Promise.all(promises);
   }
 });
