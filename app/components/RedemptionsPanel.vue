@@ -86,7 +86,7 @@ const completeAllRedemptions = () => {
   </div>
 
   <!-- Actions -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-1">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
     <UButton
       label="Canjear todo"
       :class="{ 'animate-on-hover': !isSpinning && redemptions.length }"
