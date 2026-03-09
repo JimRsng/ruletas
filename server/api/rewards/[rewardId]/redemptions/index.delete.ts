@@ -30,7 +30,16 @@ export default defineEventHandler(async (event) => {
 
     const redemptionIds = redemptions.map(r => r.id);
 
-    // TODO: separate by chunks of 50 if more than 50 redemptions
-    await twitch.channelPoints.updateRedemptionStatusByIds(user.id, params.rewardId, redemptionIds, "CANCELED");
+    /**
+     * Twitch API allows up to 50 redemption IDs per request
+     * @see https://dev.twitch.tv/docs/api/reference#update-redemption-status
+     */
+    const chunkSize = 50;
+
+    for (let i = 0; i < redemptionIds.length; i += chunkSize) {
+      const redemptionIdsChunk = redemptionIds.slice(i, i + chunkSize);
+
+      await twitch.channelPoints.updateRedemptionStatusByIds(user.id, params.rewardId, redemptionIdsChunk, "CANCELED");
+    }
   }
 });

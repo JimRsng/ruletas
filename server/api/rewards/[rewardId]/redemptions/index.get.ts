@@ -17,20 +17,32 @@ export default defineEventHandler(async (event) => {
   const redemptions = await twitch.channelPoints.getRedemptionsForBroadcasterPaginated(user.id, params.rewardId, "UNFULFILLED", { newestFirst: false }).getAll();
 
   const redemptionUserIds = [...new Set(redemptions.map(r => r.userId))];
-  // TODO: iterate if there are more than 100 users
-  const response = await $fetch<{ data: { user_id: string, tier: TwitchSubscriptionTier }[] }>("https://api.twitch.tv/helix/subscriptions", {
-    headers: {
-      "Authorization": `Bearer ${accessToken}`,
-      "Client-Id": config.oauth.twitch.clientId
-    },
-    query: {
-      broadcaster_id: user.id,
-      user_id: redemptionUserIds,
-      first: 100
-    }
-  });
+  const subscriptions: { user_id: string, tier: TwitchSubscriptionTier }[] = [];
 
-  const subscriptions = response.data;
+  if (redemptionUserIds.length > 0) {
+    /**
+     * Twitch API allows up to 100 user IDs per request for the Get Broadcaster Subscriptions endpoint
+     * @see https://dev.twitch.tv/docs/api/reference#get-broadcaster-subscriptions
+     */
+    const chunkSize = 100;
+    for (let i = 0; i < redemptionUserIds.length; i += chunkSize) {
+      const userIdChunk = redemptionUserIds.slice(i, i + chunkSize);
+
+      const response = await $fetch<{ data: { user_id: string, tier: TwitchSubscriptionTier }[] }>("https://api.twitch.tv/helix/subscriptions", {
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+          "Client-Id": config.oauth.twitch.clientId
+        },
+        query: {
+          broadcaster_id: user.id,
+          user_id: userIdChunk,
+          first: 100
+        }
+      });
+
+      subscriptions.push(...response.data);
+    }
+  }
 
   return redemptions.map((redemption) => {
     const subscription = subscriptions.find(s => s.user_id === redemption.userId);

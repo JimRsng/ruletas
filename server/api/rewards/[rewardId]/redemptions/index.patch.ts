@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     rewardId: z.string()
   }).parse);
 
-  const query = await readValidatedBody(event, z.object({
+  const query = await getValidatedQuery(event, z.object({
     id: z.union([z.string(), z.array(z.string())]).optional().transform((val) => {
       if (val === undefined) return undefined;
       return Array.isArray(val) ? val : [val];
@@ -30,7 +30,16 @@ export default defineEventHandler(async (event) => {
 
     const redemptionIds = redemptions.map(r => r.id);
 
-    // TODO: separate by chunks of 50 if more than 50 redemptions
-    await twitch.channelPoints.updateRedemptionStatusByIds(user.id, params.rewardId, redemptionIds, "FULFILLED");
+    /**
+     * Twitch API allows up to 50 redemption IDs per request
+     * @see https://dev.twitch.tv/docs/api/reference#update-redemption-status
+     */
+    const chunkSize = 50;
+
+    for (let i = 0; i < redemptionIds.length; i += chunkSize) {
+      const redemptionIdsChunk = redemptionIds.slice(i, i + chunkSize);
+
+      await twitch.channelPoints.updateRedemptionStatusByIds(user.id, params.rewardId, redemptionIdsChunk, "FULFILLED");
+    }
   }
 });
