@@ -10,8 +10,8 @@ watch(loggedIn, (value) => {
 </script>
 
 <template>
-  <div class="w-screen h-screen flex flex-col items-center justify-center relative overflow-hidden">
-    <div class="w-screen h-screen spin-wheel-gradient" />
+  <div class="w-dvw h-dvh flex flex-col items-center justify-center relative overflow-hidden">
+    <div class="w-dvw h-dvh spin-wheel-gradient" />
     <div class="relative flex flex-col items-center gap-2 text-center text-white bg-neutral-900 p-4 rounded-lg spin-wheel-indicator border">
       <p class="font-bold md:text-2xl">REWARDS WHEEL</p>
       <div class="relative">
