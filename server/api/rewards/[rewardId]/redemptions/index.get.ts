@@ -18,10 +18,22 @@ export default defineEventHandler(async (event) => {
 
   const redemptionUserIds = [...new Set(redemptions.map(r => r.userId))];
   // TODO: iterate if there are more than 100 users
-  const subscriptions = await twitch.subscriptions.getSubscriptionsForUsers(user.id, redemptionUserIds);
+  const response = await $fetch<{ data: { user_id: string, tier: string }[] }>("https://api.twitch.tv/helix/subscriptions", {
+    headers: {
+      "Authorization": `Bearer ${accessToken}`,
+      "Client-Id": config.oauth.twitch.clientId
+    },
+    query: {
+      broadcaster_id: user.id,
+      user_id: redemptionUserIds,
+      first: 100
+    }
+  });
+
+  const subscriptions = response.data;
 
   return redemptions.map((redemption) => {
-    const subscription = subscriptions.find(s => s.userId === redemption.userId);
+    const subscription = subscriptions.find(s => s.user_id === redemption.userId);
     return {
       id: redemption.id,
       user: {
