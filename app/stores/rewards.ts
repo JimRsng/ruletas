@@ -1,11 +1,19 @@
+import { useStorage } from "@vueuse/core";
+
 export const useRewardsStore = defineStore("rewards", () => {
   const toast = useToast();
 
   const rewards = ref<RuletasReward[]>([]);
   const selected = ref<RuletasReward | null>(null);
 
+  const storedId = useStorage<string | null>("reward", null);
+
   const setup = (data: RuletasReward[]) => {
     rewards.value = data;
+
+    onMounted(() => {
+      selected.value = rewards.value.find(r => r.id === storedId.value) || null;
+    });
   };
 
   const create = async (data: Omit<RuletasReward, "id" | "input">) => {
@@ -43,15 +51,18 @@ export const useRewardsStore = defineStore("rewards", () => {
 
   const select = (id: string) => {
     selected.value = rewards.value.find(r => r.id === id) || null;
+    if (!selected.value) return;
+    storedId.value = selected.value.id;
   };
 
   const clearSelected = () => {
     selected.value = null;
+    storedId.value = null;
   };
 
   const clear = () => {
     rewards.value = [];
-    selected.value = null;
+    clearSelected();
   };
 
   return {
