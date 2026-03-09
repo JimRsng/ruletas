@@ -2,7 +2,7 @@
   "private": true,
   "name": "ruletas",
   "version": "1.0.0",
-  "description": "Web app for creating picker wheels linked to Twitch channel point rewards lists.",
+  "description": "Web app for creating picker wheels linked to Twitch channel point rewards.",
   "type": "module",
   "license": "MIT",
   "author": {
