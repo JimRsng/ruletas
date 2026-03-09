@@ -1,17 +1,31 @@
 <script setup lang="ts">
-defineProps<{
-  disabled?: boolean;
-}>();
-
 const { data } = await useFetch("/api/rewards", {
   key: "rewards"
 });
 
 const rewardsStore = useRewardsStore();
 const { rewards, selected } = storeToRefs(rewardsStore);
+const redemptionsStore = useRedemptionsStore();
+const { isSpinning } = storeToRefs(useWheelStore());
+
 rewardsStore.setup(data.value || []);
 
-const redemptionsStore = useRedemptionsStore();
+const loading = ref({
+  create: false,
+  deletions: {} as Record<string, boolean>,
+  edit: false
+});
+
+const isModalOpen = ref(false);
+const isCreate = ref(false);
+
+const form = useFormState({
+  title: "",
+  description: "",
+  cost: 100,
+  color: "#000000",
+  active: false
+});
 
 const selectReward = (id: string) => {
   if (isModalOpen.value) {
@@ -34,47 +48,36 @@ watch(selected, async (reward, oldReward) => {
 
   if (!oldReward || reward.id !== oldReward.id) return;
 
-  isEditing.value = true;
+  loading.value.edit = true;
   rewardsStore.edit(reward.id, {
     active: reward.active,
     cost: reward.cost
   }).catch(() => {
     redemptionsStore.clearInterval();
   }).finally(() => {
-    isEditing.value = false;
+    loading.value.edit = false;
   });
 }, { deep: true });
 
-const isModalOpen = ref(false);
-const isCreate = ref(false);
-const isCreating = ref(false);
-const isDeleting = ref(false);
-const isEditing = ref(false);
-
-const form = useFormState({
-  title: "",
-  description: "",
-  cost: 100,
-  color: "#000000",
-  active: false
-});
-
 const createReward = async () => {
-  isCreating.value = true;
+  loading.value.create = true;
   rewardsStore.create(form.value).then(() => {
     form.reset();
   }).finally(() => {
-    isCreating.value = false;
+    loading.value.create = false;
     isCreate.value = false;
   });
 };
 
 const deleteReward = async (reward: RuletasReward) => {
-  isDeleting.value = true;
+  loading.value.deletions[reward.id] = true;
   rewardsStore.remove(reward.id).then(() => {
-    rewardsStore.clearSelected();
+    if (selected.value?.id === reward.id) {
+      redemptionsStore.clearInterval();
+      rewardsStore.clearSelected();
+    }
   }).finally(() => {
-    isDeleting.value = false;
+    loading.value.deletions[reward.id] = false;
   });
 };
 
@@ -97,15 +100,15 @@ onUnmounted(() => {
         }"
         :increment="false"
         :decrement="false"
-        :disabled="isEditing || disabled"
+        :disabled="loading.edit || isSpinning"
       />
     </div>
     <div class="text-center lg:text-start">
       <h3 class="text-lg font-semibold">{{ selected.title }}</h3>
       <p class="text-muted text-sm">{{ selected.description }}</p>
     </div>
-    <USwitch v-model="selected.active" class="lg:ms-auto" label="Activo" :loading="isEditing" :disabled="disabled" />
-    <UButton icon="lucide:refresh-ccw" class="rounded-full absolute -top-2 -inset-e-2 shadow" size="sm" :disabled="disabled" @click="isModalOpen = true" />
+    <USwitch v-model="selected.active" class="lg:ms-auto" label="Activo" :loading="loading.edit" :disabled="isSpinning" />
+    <UButton icon="lucide:refresh-ccw" class="rounded-full absolute -top-2 -inset-e-2 shadow" size="sm" :disabled="isSpinning" @click="isModalOpen = true" />
   </div>
   <UModal
     v-model:open="isModalOpen"
@@ -149,8 +152,8 @@ onUnmounted(() => {
                 color="error"
                 size="sm"
                 class="ms-auto"
-                :loading="isDeleting"
-                :disabled="disabled"
+                :loading="loading.deletions[reward.id]"
+                :disabled="isSpinning"
                 @click.stop="deleteReward(reward)"
               />
             </div>
@@ -195,7 +198,7 @@ onUnmounted(() => {
           </div>
           <div class="grid md:grid-cols-2 gap-2">
             <UButton type="button" label="Cancelar" class="uppercase" color="error" block @click="isCreate = false" />
-            <UButton type="submit" label="Crear" class="uppercase" :loading="isCreating" block />
+            <UButton type="submit" label="Crear" class="uppercase" :loading="loading.create" block />
           </div>
         </form>
       </div>

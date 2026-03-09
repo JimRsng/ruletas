@@ -19,7 +19,7 @@ const isSpinning = defineModel<boolean>("spinning", { required: false });
 const select = defineModel<T>({ required: false });
 
 const emit = defineEmits<{
-  select: [value: T];
+  select: [value: NonNullable<T>];
 }>();
 
 const wheelContainerRef = useTemplateRef("wheelContainerRef");
@@ -159,10 +159,7 @@ watch(() => [
 </script>
 
 <template>
-  <section
-    class="relative grid place-items-center"
-    :class="{ 'animate-pulse': !wheelContainerRef }"
-  >
+  <section class="relative grid place-items-center">
     <button
       v-if="wheelContainerRef"
       type="button"
@@ -177,6 +174,7 @@ watch(() => [
     <div
       ref="wheelContainerRef"
       class="wheel-canvas size-80 sm:size-120 md:size-120 lg:size-140 max-w-140 max-h-140 rounded-full bg-accented shadow"
+      :class="{ 'animate-pulse': !wheelContainerRef }"
     />
   </section>
 </template>
