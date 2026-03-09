@@ -56,14 +56,14 @@ h1 {
   height: 150vmax;
   transform: translate(-50%, -50%);
   background: conic-gradient(
-    rgb(255 107 107 / 10%) 0deg 45deg,
-    rgb(254 202 87 / 10%) 45deg 90deg,
-    rgb(72 219 251 / 10%) 90deg 135deg,
-    rgb(29 209 161 / 10%) 135deg 180deg,
-    rgb(95 39 205 / 10%) 180deg 225deg,
-    rgb(255 159 243 / 10%) 225deg 270deg,
-    rgb(84 160 255 / 10%) 270deg 315deg,
-    rgb(0 210 211 / 10%) 315deg 360deg
+    rgb(255 107 107 / 20%) 0deg 45deg,
+    rgb(254 202 87 / 20%) 45deg 90deg,
+    rgb(72 219 251 / 20%) 90deg 135deg,
+    rgb(29 209 161 / 20%) 135deg 180deg,
+    rgb(95 39 205 / 20%) 180deg 225deg,
+    rgb(255 159 243 / 20%) 225deg 270deg,
+    rgb(84 160 255 / 20%) 270deg 315deg,
+    rgb(0 210 211 / 20%) 315deg 360deg
   );
   animation: rotate-wheel 120s linear infinite;
 }
