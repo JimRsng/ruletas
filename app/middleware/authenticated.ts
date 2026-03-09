@@ -4,5 +4,5 @@ export default defineNuxtRouteMiddleware((to) => {
   const isApp = to.path.includes("/app");
 
   if (loggedIn.value && !isApp) return navigateTo("/app", { replace: true });
-  else return navigateTo("/", { replace: true });
+  if (!loggedIn.value && isApp) return navigateTo("/", { replace: true });
 });

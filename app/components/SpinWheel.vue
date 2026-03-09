@@ -1,5 +1,6 @@
 <script setup lang="ts" generic="T">
 import { Wheel } from "spin-wheel";
+import { Howl } from "howler";
 
 const props = withDefaults(defineProps<{
   entries: T[];
@@ -8,7 +9,7 @@ const props = withDefaults(defineProps<{
   idleSpin?: boolean;
   spinGuard?: () => boolean;
 }>(), {
-  spinDuration: 5000,
+  spinDuration: 8000,
   palette: () => ["#fff"],
   idleSpin: true,
   spinGuard: () => true
@@ -22,6 +23,8 @@ const emit = defineEmits<{
 }>();
 
 const wheelContainerRef = useTemplateRef("wheelContainerRef");
+
+const sound = new Howl({ src: ["/sounds/tick.ogg"] });
 
 let wheel: Wheel | null = null;
 let idleAnimFrame: number | null = null;
@@ -52,6 +55,11 @@ const items = computed(() => props.entries.map((label, index) => ({
   backgroundColor: props.palette[index % props.palette.length]!,
   labelColor: "#17110d"
 })));
+
+function easeOutCubic (t: number) {
+  const t1 = t - 1;
+  return t1 * t1 * t1 + 1;
+}
 
 const init = () => {
   const container = wheelContainerRef.value;
@@ -88,7 +96,7 @@ const init = () => {
 
   wheel.onCurrentIndexChange = () => {
     if (idleAnimFrame) return;
-    // TODO: add audible tick sound effect on index change
+    sound.play();
   };
 
   stopIdleSpin();
@@ -102,7 +110,7 @@ const spin = () => {
 
     const winnerIndex = getRandomValue(0, props.entries.length);
 
-    wheel.spinToItem(winnerIndex, props.spinDuration, false, 5, 2);
+    wheel.spinToItem(winnerIndex, props.spinDuration, false, 1, 3, easeOutCubic);
   }
 };
 

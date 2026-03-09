@@ -43,8 +43,15 @@ declare module "spin-wheel" {
 
     init (options?: WheelOptions): void;
     spin (rotationSpeed?: number): void;
-    spinTo (rotation?: number, duration?: number, easingFunction?: number): void;
-    spinToItem (itemIndex?: number, duration?: number, spinToCenter?: boolean, numberOfRevolutions?: number, direction?: number): void;
+    spinTo (rotation?: number, duration?: number): void;
+    spinToItem (
+      itemIndex?: number,
+      duration?: number,
+      spinToCenter?: boolean,
+      numberOfRevolutions?: number,
+      direction?: number,
+      easingFunction?: (t: number) => number
+    ): void;
     stop (): void;
     getCurrentIndex (): number | null;
     remove (): void;

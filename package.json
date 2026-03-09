@@ -55,6 +55,7 @@
     "@twurple/auth": "^8.0.3",
     "drizzle-kit": "^0.31.9",
     "drizzle-orm": "^0.45.1",
+    "howler": "^2.2.4",
     "nuxt": "^4.3.1",
     "nuxt-auth-utils": "^0.5.29",
     "pinia": "^3.0.4",
@@ -65,11 +66,12 @@
     "@iconify-json/lucide": "^1.2.96",
     "@iconify-json/simple-icons": "^1.2.72",
     "@nuxt/eslint": "^1.15.2",
+    "@types/howler": "^2.2.12",
     "eslint": "^10.0.3",
     "stylelint": "^17.4.0",
     "stylelint-config-standard-scss": "^17.0.0",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.5"
   },
-  "packageManager": "pnpm@10.30.3"
+  "packageManager": "pnpm@10.31.0"
 }
