@@ -95,7 +95,7 @@ const init = () => {
   };
 
   wheel.onCurrentIndexChange = () => {
-    if (idleAnimFrame) return;
+    if (idleAnimFrame && !isSpinning.value) return;
     sound.play();
   };
 
