@@ -32,7 +32,7 @@ const userMenu = computed<DropdownMenuItem[][]>(() => [
     <p class="text-muted">Crea ruletas a partir de recompensas de puntos de tu canal de Twitch</p>
     <UDropdownMenu v-if="user" :items="userMenu" :content="{ align: 'end', side: 'bottom', sideOffset: 8 }" :modal="false" arrow>
       <UButton
-        :label="user.display_name"
+        :label="user.displayName"
         trailing-icon="lucide:chevron-down"
         variant="subtle"
         color="neutral"
@@ -42,8 +42,8 @@ const userMenu = computed<DropdownMenuItem[][]>(() => [
         }"
       >
         <template #leading>
-          <UAvatar v-if="user.profile_image_url" :src="user.profile_image_url" :alt="user.login" size="2xs" />
-          <UAvatar v-else :alt="user.display_name" size="2xs" class="bg-accented" />
+          <UAvatar v-if="user.image" :src="user.image" :alt="user.login" size="2xs" />
+          <UAvatar v-else :alt="user.displayName" size="2xs" class="bg-accented" />
         </template>
       </UButton>
     </UDropdownMenu>

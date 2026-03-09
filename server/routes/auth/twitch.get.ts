@@ -8,7 +8,12 @@ export default defineOAuthTwitchEventHandler({
   },
   async onSuccess (event, { user, tokens }) {
     await setUserSession(event, {
-      user,
+      user: {
+        id: user.id,
+        login: user.login,
+        displayName: user.display_name,
+        image: user.profile_image_url
+      },
       secure: {
         refreshToken: tokens.refresh_token
       }
