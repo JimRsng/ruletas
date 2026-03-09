@@ -47,6 +47,16 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
     });
   };
 
+  const completeAll = async (rewardId: string) => {
+    if (!redemptions.value.length || !confirm("¿Estás seguro de que quieres marcar todos los canjes pendientes como completados?")) return;
+    return $fetch(`/api/rewards/${rewardId}/redemptions`, {
+      method: "PATCH"
+    }).then(() => {
+      redemptions.value = [];
+      toast.add({ description: "Todos los canjes pendientes han sido marcados como completados", color: "success" });
+    });
+  };
+
   const reject = async (rewardId: string, redemptionId: string) => {
     if (!confirm("¿Estás seguro de que quieres reembolsar este canje?")) return;
     return $fetch(`/api/rewards/${rewardId}/redemptions/${redemptionId}`, {
@@ -58,9 +68,7 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
   };
 
   const rejectAll = async (rewardId: string) => {
-    if (!redemptions.value.length
-      || !confirm("¿Estás seguro de que quieres reembolsar todos los canjes pendientes?")
-    ) return;
+    if (!redemptions.value.length || !confirm("¿Estás seguro de que quieres reembolsar todos los canjes pendientes?")) return;
     return $fetch(`/api/rewards/${rewardId}/redemptions`, {
       method: "DELETE"
     }).then(() => {
@@ -81,6 +89,7 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
     createInterval,
     clearInterval,
     complete,
+    completeAll,
     reject,
     rejectAll,
     clear

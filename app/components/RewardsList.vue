@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineProps<{
+  disabled?: boolean;
+}>();
+
 const { data } = await useFetch("/api/rewards", {
   key: "rewards"
 });
@@ -80,7 +84,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="selected" class="p-4 bg-elevated rounded-xl flex gap-4 items-center relative">
+  <div v-if="selected" class="p-4 bg-elevated rounded-xl flex flex-col lg:flex-row gap-4 items-center relative">
     <div class="flex flex-col items-center justify-center rounded-xl" :style="{ backgroundColor: selected.color }">
       <Icon name="custom:points" size="1.4rem" class="my-2" />
       <UInputNumber
@@ -93,15 +97,15 @@ onUnmounted(() => {
         }"
         :increment="false"
         :decrement="false"
-        :disabled="isEditing"
+        :disabled="isEditing || disabled"
       />
     </div>
-    <div>
+    <div class="text-center lg:text-start">
       <h3 class="text-lg font-semibold">{{ selected.title }}</h3>
       <p class="text-muted text-sm">{{ selected.description }}</p>
     </div>
-    <USwitch v-model="selected.active" class="ms-auto" label="Activo" :loading="isEditing" />
-    <UButton icon="lucide:refresh-ccw" class="rounded-full absolute -top-2 -inset-e-2 shadow" size="sm" @click="isModalOpen = true" />
+    <USwitch v-model="selected.active" class="lg:ms-auto" label="Activo" :loading="isEditing" :disabled="disabled" />
+    <UButton icon="lucide:refresh-ccw" class="rounded-full absolute -top-2 -inset-e-2 shadow" size="sm" :disabled="disabled" @click="isModalOpen = true" />
   </div>
   <UModal
     v-model:open="isModalOpen"
@@ -146,6 +150,7 @@ onUnmounted(() => {
                 size="sm"
                 class="ms-auto"
                 :loading="isDeleting"
+                :disabled="disabled"
                 @click.stop="deleteReward(reward)"
               />
             </div>

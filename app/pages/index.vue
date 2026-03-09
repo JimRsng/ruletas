@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ middleware: "authenticated" });
+definePageMeta({ middleware: "authenticated", layout: false });
 
 const { loggedIn, openInPopup } = useUserSession();
 

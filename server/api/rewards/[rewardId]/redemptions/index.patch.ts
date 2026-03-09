@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     rewardId: z.string()
   }).parse);
 
-  const query = await getValidatedQuery(event, z.object({
+  const query = await readValidatedBody(event, z.object({
     id: z.union([z.string(), z.array(z.string())]).optional().transform((val) => {
       if (val === undefined) return undefined;
       return Array.isArray(val) ? val : [val];
@@ -25,12 +25,12 @@ export default defineEventHandler(async (event) => {
     await twitch.channelPoints.updateRedemptionStatusByIds(user.id, params.rewardId, query.id, "CANCELED");
   }
   else {
-    const redemptionsPagination = twitch.channelPoints.getRedemptionsForBroadcasterPaginated(user.id, params.rewardId, "UNFULFILLED", { newestFirst: false });
+    const redemptionsPagination = twitch.channelPoints.getRedemptionsForBroadcasterPaginated(user.id, params.rewardId, "FULFILLED", { newestFirst: false });
     const redemptions = await redemptionsPagination.getAll();
 
     const redemptionIds = redemptions.map(r => r.id);
 
     // TODO: separate by chunks of 50 if more than 50 redemptions
-    await twitch.channelPoints.updateRedemptionStatusByIds(user.id, params.rewardId, redemptionIds, "CANCELED");
+    await twitch.channelPoints.updateRedemptionStatusByIds(user.id, params.rewardId, redemptionIds, "FULFILLED");
   }
 });

@@ -14,6 +14,7 @@ const isWinnerModalOpen = ref(false);
 const isLoading = ref(false);
 const isDeleting = ref(false);
 const isDeletingAll = ref(false);
+const isCompletingAll = ref(false);
 
 const settings = useFormState({
   disallowDuplicates: true,
@@ -78,6 +79,14 @@ const rejectAllRedemptions = () => {
   });
 };
 
+const completeAllRedemptions = () => {
+  if (!selected.value) return;
+  isCompletingAll.value = true;
+  redemptionsStore.completeAll(selected.value.id).finally(() => {
+    isCompletingAll.value = false;
+  });
+};
+
 const toast = useToast();
 
 const canSpin = () => {
@@ -97,163 +106,173 @@ const logout = () => {
 </script>
 
 <template>
-  <main class="min-h-screen py-8 px-4">
-    <section class="max-w-280 mx-auto space-y-2">
-      <div class="mb-5 relative">
-        <p class="text-xs uppercase tracking-widest">JimTracker</p>
-        <h1 class="text-5xl leading-none">Ruletas</h1>
-        <p>Crea ruletas a partir de recompensas de puntos de tu canal de Twitch</p>
-        <UButton
-          label="Salir"
-          variant="outline"
-          color="error"
-          icon="lucide:log-out"
-          class="absolute top-0 inset-e-0"
-          @click="logout"
+  <UContainer class="mx-auto space-y-2" as="main">
+    <div class="mb-5 relative">
+      <p class="text-xs uppercase tracking-widest">JimTracker</p>
+      <h1 class="text-5xl leading-none">Ruletas</h1>
+      <p>Crea ruletas a partir de recompensas de puntos de tu canal de Twitch</p>
+      <UButton
+        label="Salir"
+        variant="outline"
+        color="error"
+        icon="lucide:log-out"
+        class="absolute top-0 inset-e-0 rounded-full"
+        @click="logout"
+      />
+    </div>
+
+    <RewardsList :disabled="isSpinning" />
+
+    <div class="grid gap-2 grid-cols-1 lg:grid-cols-[375px_1fr]">
+      <aside class="p-4 bg-elevated rounded-xl space-y-4">
+        <div class="space-y-2">
+          <div class="flex items-center gap-1">
+            <UIcon name="custom:points" size="1.3rem" />
+            <h3 class="text-sm font-semibold">Entradas (<span class="text-primary">{{ redemptions.length }}</span>)</h3>
+          </div>
+          <ul class="bg-default h-100 overflow-y-auto rounded-md border-2 border-accented">
+            <li
+              v-for="(redemption, i) of redemptions"
+              :key="redemption.id"
+              class="px-3 py-2"
+              :class="{ 'bg-elevated': i % 2 !== 0 }"
+            >
+              <div class="flex items-center gap-2">
+                <UUser :description="redemption.input">
+                  <template #name>
+                    <div class="flex gap-2 items-center">
+                      <NuxtLink :to="`https://www.twitch.tv/popout/${user?.login}/viewercard/${redemption.user.login}`" target="_blank" class="hover:underline">
+                        {{ redemption.user.name }}
+                      </NuxtLink>
+                      <div v-if="redemption.user.subscription" :title="`Suscriptor tier ${redemption.user.subscription.tier.replace('000', '')}`">
+                        <Icon
+                          name="lucide:star"
+                          :class="{
+                            'text-purple-400': redemption.user.subscription.tier === '1000',
+                            'text-slate-400': redemption.user.subscription.tier === '2000',
+                            'text-amber-400': redemption.user.subscription.tier === '3000',
+                          }"
+                        />
+                      </div>
+                    </div>
+                  </template>
+                </UUser>
+                <UButton
+                  icon="lucide:x"
+                  variant="outline"
+                  color="error"
+                  size="xs"
+                  class="rounded-full ms-auto"
+                  :loading="isDeleting"
+                  @click="rejectRedemption(redemption.id)"
+                />
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-1">
+          <UButton
+            label="Canjear todo"
+            class="rounded-full cursor-pointer"
+            :class="{ 'animate-on-hover': !isSpinning && redemptions.length }"
+            color="neutral"
+            icon="lucide:check"
+            block
+            :loading="isCompletingAll"
+            :disabled="isSpinning || !redemptions.length"
+            @click="completeAllRedemptions"
+          />
+          <UButton
+            label="Reembolsar todo"
+            class="rounded-full cursor-pointer"
+            :class="{ 'animate-on-hover': !isSpinning && redemptions.length }"
+            color="error"
+            icon="lucide:x"
+            block
+            :loading="isDeletingAll"
+            :disabled="isSpinning || !redemptions.length"
+            @click="rejectAllRedemptions"
+          />
+        </div>
+        <div class="space-y-2">
+          <div class="flex items-center gap-1">
+            <UIcon name="lucide:settings" size="1.3rem" />
+            <h3 class="text-sm font-semibold">Configuración</h3>
+          </div>
+          <USwitch
+            v-model="settings.disallowDuplicates"
+            label="Sin participantes duplicados"
+            :disabled="isSpinning"
+          />
+          <USwitch
+            v-model="settings.subscribersOnly"
+            label="Solo suscriptores"
+            :disabled="isSpinning"
+          />
+          <UCheckboxGroup
+            v-if="settings.subscribersOnly"
+            v-model="settings.subscriberTiers"
+            orientation="horizontal"
+            :items="['Tier 1', 'Tier 2', 'Tier 3']"
+            class="ms-5"
+          />
+        </div>
+      </aside>
+
+      <div class="p-4 overflow-hidden bg-elevated rounded-xl space-y-4">
+        <div class="flex items-center gap-1">
+          <UIcon name="simple-icons:twitch" size="1.3rem" />
+          <h3 class="text-sm font-semibold">Participantes (<span class="text-primary">{{ participants.length }}</span>)</h3>
+        </div>
+
+        <SpinWheel
+          ref="wheelRef"
+          v-model="winner"
+          v-model:spinning="isSpinning"
+          :entries="participants"
+          :palette="settings.palette"
+          :idle-spin="true"
+          :spin-guard="canSpin"
+          @select="isWinnerModalOpen = true"
         />
       </div>
 
-      <RewardsList />
-
-      <div class="grid gap-4 grid-cols-[minmax(280px,360px)_1fr] max-[920px]:grid-cols-1">
-        <aside class="p-4 bg-elevated rounded-xl space-y-4">
-          <div class="space-y-2">
-            <div class="flex items-center gap-1">
-              <UIcon name="custom:points" size="1.3rem" />
-              <h3 class="text-sm font-semibold">Entradas (<span class="text-primary">{{ redemptions.length }}</span>)</h3>
-            </div>
-            <ul class="bg-default h-100 overflow-y-auto rounded-md border-2 border-accented">
-              <li
-                v-for="(redemption, i) of redemptions"
-                :key="redemption.id"
-                class="px-3 py-2"
-                :class="{ 'bg-elevated': i % 2 !== 0 }"
+      <UModal
+        v-if="winnerInfo && user"
+        v-model:open="isWinnerModalOpen"
+        title="Ganador"
+        description="Modal del ganador"
+        :dismissible="false"
+      >
+        <template #content>
+          <div class="text-center p-6 relative space-y-4">
+            <UButton icon="lucide:x" variant="outline" color="neutral" class="absolute inset-e-2 top-2 rounded-full" size="sm" @click="isWinnerModalOpen = false" />
+            <p class="uppercase tracking-widest text-primary">Ganador</p>
+            <div>
+              <NuxtLink
+                :to="`https://www.twitch.tv/popout/${user.login}/viewercard/${winnerInfo.user.login}`"
+                target="_blank"
+                class="text-5xl hover:underline font-bold"
               >
-                <div class="flex items-center gap-2">
-                  <UUser :description="redemption.input">
-                    <template #name>
-                      <div class="flex gap-2 items-center">
-                        <NuxtLink :to="`https://www.twitch.tv/popout/${user?.login}/viewercard/${redemption.user.login}`" target="_blank" class="hover:underline">
-                          {{ redemption.user.name }}
-                        </NuxtLink>
-                        <div v-if="redemption.user.subscription" :title="`Suscriptor tier ${redemption.user.subscription.tier.replace('000', '')}`">
-                          <Icon
-                            name="lucide:star"
-                            :class="{
-                              'text-purple-400': redemption.user.subscription.tier === '1000',
-                              'text-slate-400': redemption.user.subscription.tier === '2000',
-                              'text-amber-400': redemption.user.subscription.tier === '3000',
-                            }"
-                          />
-                        </div>
-                      </div>
-                    </template>
-                  </UUser>
-                  <UButton
-                    icon="lucide:x"
-                    variant="outline"
-                    color="error"
-                    size="xs"
-                    class="rounded-full ms-auto"
-                    :loading="isDeleting"
-                    @click="rejectRedemption(redemption.id)"
-                  />
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="space-y-2">
-            <div class="flex items-center gap-1">
-              <UIcon name="lucide:settings" size="1.3rem" />
-              <h3 class="text-sm font-semibold">Configuración</h3>
+                {{ winner }}
+              </NuxtLink>
+              <p v-if="winnerInfo.inputs.length" class="text-sm text-muted">{{ winnerInfo.inputs.join(", ") }}</p>
             </div>
-            <USwitch
-              v-model="settings.disallowDuplicates"
-              label="No permitir participantes duplicados"
-            />
-            <USwitch
-              v-model="settings.subscribersOnly"
-              label="Solo suscriptores"
-            />
-            <UCheckboxGroup
-              v-if="settings.subscribersOnly"
-              v-model="settings.subscriberTiers"
-              orientation="horizontal"
-              :items="['Tier 1', 'Tier 2', 'Tier 3']"
-              class="ms-5"
-            />
-          </div>
-          <div class="flex gap-2">
-            <UButton
-              type="button"
-              label="Reembolsar todos"
-              class="rounded-full border-3"
-              :class="{ 'animate-on-hover': !isSpinning && redemptions.length }"
-              color="neutral"
-              icon="custom:points"
-              block
-              :loading="isDeletingAll"
-              :disabled="isSpinning || !redemptions.length"
-              @click="rejectAllRedemptions"
-            />
-          </div>
-        </aside>
-
-        <div class="p-4 overflow-hidden bg-elevated rounded-xl space-y-4">
-          <div class="flex items-center gap-1">
-            <UIcon name="simple-icons:twitch" size="1.3rem" />
-            <h3 class="text-sm font-semibold">Participantes (<span class="text-primary">{{ participants.length }}</span>)</h3>
-          </div>
-
-          <SpinWheel
-            ref="wheelRef"
-            v-model="winner"
-            v-model:spinning="isSpinning"
-            :entries="participants"
-            :palette="settings.palette"
-            :idle-spin="true"
-            :spin-guard="canSpin"
-            @select="isWinnerModalOpen = true"
-          />
-        </div>
-
-        <UModal
-          v-if="winnerInfo && user"
-          v-model:open="isWinnerModalOpen"
-          title="Ganador"
-          description="Modal del ganador"
-          :dismissible="false"
-        >
-          <template #content>
-            <div class="text-center p-6 relative space-y-4">
-              <UButton icon="lucide:x" variant="outline" color="neutral" class="absolute inset-e-2 top-2 rounded-full" size="sm" @click="isWinnerModalOpen = false" />
-              <p class="uppercase tracking-widest text-primary">Ganador</p>
-              <div>
-                <NuxtLink
-                  :to="`https://www.twitch.tv/popout/${user.login}/viewercard/${winnerInfo.user.login}`"
-                  target="_blank"
-                  class="text-5xl hover:underline font-bold"
-                >
-                  {{ winner }}
-                </NuxtLink>
-                <p v-if="winnerInfo.inputs.length" class="text-sm text-muted">{{ winnerInfo.inputs.join(", ") }}</p>
-              </div>
-              <div>
-                <UButton
-                  type="button"
-                  label="Cobrar puntos"
-                  icon="custom:points"
-                  color="primary"
-                  variant="outline"
-                  class="mt-2"
-                  :loading="isLoading"
-                  @click="completeWinner"
-                />
-              </div>
+            <div>
+              <UButton
+                type="button"
+                label="Cobrar puntos"
+                icon="custom:points"
+                color="primary"
+                variant="outline"
+                class="mt-2"
+                :loading="isLoading"
+                @click="completeWinner"
+              />
             </div>
-          </template>
-        </UModal>
-      </div>
-    </section>
-  </main>
+          </div>
+        </template>
+      </UModal>
+    </div>
+  </UContainer>
 </template>
