@@ -3,6 +3,8 @@ import type { ErrorCode } from "#shared/utils/errors";
 declare global {
   type ErrorCode = typeof ErrorCode;
 
+  type TwitchSubscriptionTier = "1000" | "2000" | "3000";
+
   interface RuletasRedemption {
     id: string;
     user: {
@@ -10,7 +12,7 @@ declare global {
       name: string;
       login: string;
       subscription: {
-        tier: "1000" | "2000" | "3000";
+        tier: TwitchSubscriptionTier;
       } | null;
     };
     input: string;
