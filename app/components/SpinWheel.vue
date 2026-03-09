@@ -69,6 +69,7 @@ const init = () => {
   if (!container) return;
 
   wheel = new Wheel(container, {
+    debug: import.meta.dev,
     items: items.value,
     borderWidth: 5,
     borderColor: "#1f160f",
@@ -165,7 +166,8 @@ watch(() => [
     <button
       v-if="wheelContainerRef"
       type="button"
-      class="absolute inset-1/2 -translate-1/2 z-2 size-18 flex items-center justify-center cursor-pointer scale-on-hover before:bg-default before:size-18 before:-rotate-45 before:absolute before:rounded-[50%_0_50%_50%] before:drop-shadow"
+      class="absolute inset-1/2 -translate-1/2 z-2 size-18 flex items-center justify-center cursor-pointer before:bg-default before:size-18 before:-rotate-45 before:absolute before:rounded-[50%_0_50%_50%] before:drop-shadow"
+      :class="{ 'scale-on-hover': !isSpinning }"
       :disabled="isSpinning || entries.length < 2"
       aria-label="Girar la ruleta"
       @click="spin"
