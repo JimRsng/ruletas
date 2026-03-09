@@ -9,6 +9,9 @@ declare global {
       id: string;
       name: string;
       login: string;
+      subscription: {
+        tier: "1000" | "2000" | "3000";
+      } | null;
     };
     input: string;
   }

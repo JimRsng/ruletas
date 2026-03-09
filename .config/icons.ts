@@ -6,5 +6,7 @@ export default [
   "lucide:plus",
   "lucide:trash",
   "lucide:loader-circle",
-  "lucide:settings"
+  "lucide:settings",
+  "lucide:check",
+  "lucide:star"
 ];

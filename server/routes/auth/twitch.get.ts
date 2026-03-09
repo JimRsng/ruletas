@@ -1,6 +1,10 @@
 export default defineOAuthTwitchEventHandler({
   config: {
-    scope: ["channel:read:redemptions", "channel:manage:redemptions"]
+    scope: [
+      "channel:read:redemptions",
+      "channel:manage:redemptions",
+      "channel:read:subscriptions"
+    ]
   },
   async onSuccess (event, { user, tokens }) {
     await setUserSession(event, {
