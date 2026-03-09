@@ -24,7 +24,10 @@ const emit = defineEmits<{
 
 const wheelContainerRef = useTemplateRef("wheelContainerRef");
 
-const sound = new Howl({ src: ["/sounds/tick.ogg"] });
+const sounds = {
+  tick: new Howl({ src: ["/sounds/tick.ogg"] }),
+  winner: new Howl({ src: ["/sounds/winner.ogg"] })
+};
 
 let wheel: Wheel | null = null;
 let idleAnimFrame: number | null = null;
@@ -88,6 +91,7 @@ const init = () => {
     isSpinning.value = false;
     const winnerIndex = wheel?.getCurrentIndex();
     if (winnerIndex !== undefined && winnerIndex !== null) {
+      sounds.winner.play();
       const winner = props.entries[winnerIndex]!;
       emit("select", winner);
       select.value = winner;
@@ -96,7 +100,7 @@ const init = () => {
 
   wheel.onCurrentIndexChange = () => {
     if (idleAnimFrame && !isSpinning.value) return;
-    sound.play();
+    sounds.tick.play();
   };
 
   stopIdleSpin();
