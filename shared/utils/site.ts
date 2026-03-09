@@ -1,11 +1,9 @@
 export const SITE = {
-  name: "my-nuxt-starter",
-  author: "Yizack Rangel",
-  domain: "my-nuxt-starter.yizack.com",
-  host: import.meta.dev ? "http://localhost:5173" : "https://my-nuxt-starter.yizack.com",
-  cdn: import.meta.dev ? "http://localhost:5173" : "https://my-nuxt-starter-cdn.yizack.com",
+  name: "Ruletas | JimTracker",
+  domain: "ruletas.jimtracker.com",
+  host: import.meta.dev ? "http://localhost:5173" : "https://ruletas.jimtracker.com",
   github: {
-    author: "Yizack",
-    repo: "https://github.com/Yizack/my-nuxt-starter"
+    author: "JimRsng",
+    repo: "https://github.com/JimRsng/ruletas"
   }
 };

@@ -8,5 +8,7 @@ ignoredBuiltDependencies:
   - '@parcel/watcher'
   - canvas
   - esbuild
+  - sharp
   - unrs-resolver
   - vue-demi
+  - workerd
