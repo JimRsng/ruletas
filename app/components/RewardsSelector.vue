@@ -108,7 +108,13 @@ onUnmounted(() => {
       <p class="text-muted text-sm">{{ selected.description }}</p>
     </div>
     <USwitch v-model="selected.active" class="lg:ms-auto" label="Activo" :loading="loading.edit" :disabled="isSpinning" />
-    <UButton icon="lucide:refresh-ccw" class="rounded-full absolute -top-2 -inset-e-2 shadow" size="sm" :disabled="isSpinning" @click="isModalOpen = true" />
+    <UButton
+      icon="lucide:refresh-ccw"
+      class="absolute -top-2 -inset-e-2 shadow"
+      size="sm"
+      :disabled="isSpinning"
+      @click="isModalOpen = true"
+    />
   </div>
   <UModal
     v-model:open="isModalOpen"
@@ -125,7 +131,7 @@ onUnmounted(() => {
       label="Selecciona una recompensa de Twitch para usar la ruleta"
       variant="ghost"
       color="neutral"
-      class="p-4 rounded-xl cursor-pointer border-2 border-default text-muted hover:text-default animate-on-hover"
+      class="p-4 rounded-xl border-2 border-default text-muted hover:text-default animate-on-hover"
       block
     />
     <template #body>
@@ -134,7 +140,7 @@ onUnmounted(() => {
           <div
             v-for="reward of rewards"
             :key="reward.id"
-            class="p-4 border border-default rounded-lg cursor-pointer hover:bg-elevated hover:border-primary"
+            class="p-4 border border-default rounded-xl hover:bg-elevated hover:border-primary"
             @click="selectReward(reward.id)"
           >
             <div class="flex gap-4 items-center">
@@ -159,11 +165,16 @@ onUnmounted(() => {
             </div>
           </div>
         </TransitionGroup>
-        <div v-if="!isCreate" class="p-4 border-2 border-dashed border-default rounded-lg text-center cursor-pointer hover:bg-elevated hover:border-primary " @click="isCreate = true">
-          <Icon name="lucide:plus" size="1.4rem" class="mx-auto mb-2" />
+        <div v-if="!isCreate" class="p-4 border-2 border-dashed border-default rounded-xl text-center cursor-pointer hover:bg-elevated hover:border-primary group" @click="isCreate = true">
+          <UButton
+            icon="lucide:plus"
+            variant="outline"
+            color="primary"
+            class="mb-2 group-hover:scale-[1.1] transition-transform group-hover:bg-primary/10"
+          />
           <p>Crear recompensa</p>
         </div>
-        <form v-else class="border border-dashed border-default rounded-lg p-4 flex flex-col gap-3" @submit.prevent="createReward">
+        <form v-else class="border-2 border-dashed border-default rounded-xl p-4 flex flex-col gap-3" @submit.prevent="createReward">
           <h3 class="font-semibold">Crear recompensa</h3>
           <UFormField label="Título" required>
             <UInput v-model="form.title" placeholder="Título" class="w-full" required />
@@ -191,14 +202,14 @@ onUnmounted(() => {
             </UFormField>
             <UFormField label="Color" required>
               <label class="cursor-pointer" title="Color">
-                <span class="block size-9 rounded-lg border border-default" :style="{ backgroundColor: form.color }" />
+                <span class="block size-9 rounded-xl border border-default" :style="{ backgroundColor: form.color }" />
                 <input v-model="form.color" type="color" class="sr-only">
               </label>
             </UFormField>
           </div>
           <div class="grid md:grid-cols-2 gap-2">
-            <UButton type="button" label="Cancelar" class="uppercase" color="error" block @click="isCreate = false" />
-            <UButton type="submit" label="Crear" class="uppercase" :loading="loading.create" block />
+            <UButton type="button" label="Cancelar" variant="subtle" color="error" block @click="isCreate = false" />
+            <UButton type="submit" label="Crear" variant="subtle" :loading="loading.create" block />
           </div>
         </form>
       </div>

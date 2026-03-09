@@ -9,5 +9,6 @@ export default [
   "lucide:settings",
   "lucide:check",
   "lucide:star",
-  "lucide:log-out"
+  "lucide:log-out",
+  "lucide:chevron-down"
 ];

@@ -38,7 +38,7 @@ const completeWinner = () => {
           icon="lucide:x"
           variant="outline"
           color="neutral"
-          class="absolute inset-e-2 top-2 rounded-full"
+          class="absolute inset-e-2 top-2"
           size="sm"
           @click="open = false"
         />

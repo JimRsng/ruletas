@@ -76,7 +76,7 @@ const completeAllRedemptions = () => {
             variant="outline"
             color="error"
             size="xs"
-            class="rounded-full ms-auto"
+            class="ms-auto"
             :loading="loading.rejections[redemption.id]"
             @click="rejectRedemption(redemption.id)"
           />
@@ -89,7 +89,6 @@ const completeAllRedemptions = () => {
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-1">
     <UButton
       label="Canjear todo"
-      class="rounded-full cursor-pointer"
       :class="{ 'animate-on-hover': !isSpinning && redemptions.length }"
       color="neutral"
       icon="lucide:check"
@@ -100,7 +99,6 @@ const completeAllRedemptions = () => {
     />
     <UButton
       label="Reembolsar todo"
-      class="rounded-full cursor-pointer"
       :class="{ 'animate-on-hover': !isSpinning && redemptions.length }"
       color="error"
       icon="lucide:x"
@@ -113,9 +111,12 @@ const completeAllRedemptions = () => {
 
   <!-- Settings -->
   <div class="space-y-2">
-    <div class="flex items-center gap-1">
-      <UIcon name="lucide:settings" size="1.3rem" />
-      <h3 class="text-sm font-semibold">Configuración</h3>
+    <div>
+      <div class="flex items-center gap-1">
+        <UIcon name="lucide:settings" size="1.3rem" />
+        <h3 class="text-sm font-semibold">Configuración</h3>
+      </div>
+      <p class="text-xs text-muted">Ajustes aplicados a los participantes de la ruleta</p>
     </div>
     <USwitch
       v-model="settings.disallowDuplicates"
