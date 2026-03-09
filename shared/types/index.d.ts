@@ -29,6 +29,7 @@ declare global {
     description: string;
     input: boolean;
     active: boolean;
+    paused: boolean;
     color: string;
   }
 }

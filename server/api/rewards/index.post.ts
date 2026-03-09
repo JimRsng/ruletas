@@ -35,6 +35,7 @@ export default defineEventHandler(async (event): Promise<RuletasReward> => {
     cost: reward.cost,
     input: reward.userInputRequired,
     active: reward.isEnabled,
+    paused: reward.isPaused,
     color: reward.backgroundColor
   };
 });

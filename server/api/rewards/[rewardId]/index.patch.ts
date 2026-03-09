@@ -10,6 +10,7 @@ export default defineEventHandler(async (event) => {
 
   const body = await readValidatedBody(event, z.object({
     active: z.boolean(),
+    paused: z.boolean(),
     cost: z.number().int().positive()
   }).parse);
 
@@ -22,6 +23,7 @@ export default defineEventHandler(async (event) => {
 
   const reward = await twitch.channelPoints.updateCustomReward(user.id, params.rewardId, {
     isEnabled: body.active,
+    isPaused: body.paused,
     cost: body.cost
   });
 
@@ -32,6 +34,7 @@ export default defineEventHandler(async (event) => {
     cost: reward.cost,
     input: reward.userInputRequired,
     active: reward.isEnabled,
+    paused: reward.isPaused,
     color: reward.backgroundColor
   };
 });

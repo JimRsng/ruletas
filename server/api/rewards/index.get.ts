@@ -18,7 +18,8 @@ export default defineEventHandler(async (event) => {
     cost: reward.cost,
     description: reward.prompt,
     input: reward.userInputRequired,
-    active: reward.isEnabled && reward.isInStock,
+    active: reward.isEnabled,
+    paused: reward.isPaused,
     color: reward.backgroundColor
   }));
 });

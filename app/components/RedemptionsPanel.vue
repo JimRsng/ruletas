@@ -62,9 +62,9 @@ const completeAllRedemptions = () => {
                   <Icon
                     name="lucide:star"
                     :class="{
-                      'text-purple-400': redemption.user.subscription.tier === '1000',
-                      'text-slate-400': redemption.user.subscription.tier === '2000',
-                      'text-amber-400': redemption.user.subscription.tier === '3000',
+                      'dark:text-purple-400 light:text-purple-500': redemption.user.subscription.tier === '1000',
+                      'dark:text-slate-400 light:text-slate-400': redemption.user.subscription.tier === '2000',
+                      'dark:text-amber-400 light:text-amber-400': redemption.user.subscription.tier === '3000',
                     }"
                   />
                 </div>
@@ -132,8 +132,9 @@ const completeAllRedemptions = () => {
       v-if="settings.subscribersOnly"
       v-model="settings.subscriberTiers"
       orientation="horizontal"
+      color="secondary"
       :items="['Tier 1', 'Tier 2', 'Tier 3']"
-      class="ms-5"
+      class="ms-4"
       :disabled="isSpinning"
     />
   </div>

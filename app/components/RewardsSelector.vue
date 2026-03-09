@@ -24,7 +24,8 @@ const form = useFormState({
   description: "",
   cost: 100,
   color: "#000000",
-  active: false
+  active: true,
+  paused: false
 });
 
 const selectReward = (id: string) => {
@@ -39,7 +40,7 @@ const selectReward = (id: string) => {
 watch(selected, async (reward, oldReward) => {
   if (!reward) return;
 
-  if (reward.active) {
+  if (reward.active && !reward.paused) {
     redemptionsStore.createInterval(reward.id);
   }
   else {
@@ -51,6 +52,7 @@ watch(selected, async (reward, oldReward) => {
   loading.value.edit = true;
   rewardsStore.edit(reward.id, {
     active: reward.active,
+    paused: reward.paused,
     cost: reward.cost
   }).catch(() => {
     redemptionsStore.clearInterval();
@@ -107,7 +109,10 @@ onUnmounted(() => {
       <h3 class="text-lg font-semibold">{{ selected.title }}</h3>
       <p class="text-muted text-sm">{{ selected.description }}</p>
     </div>
-    <USwitch v-model="selected.active" class="lg:ms-auto" label="Activo" :loading="loading.edit" :disabled="isSpinning" />
+    <div class="flex flex-col lg:ms-auto gap-2">
+      <USwitch v-model="selected.active" label="Activo" :loading="loading.edit" :disabled="isSpinning" />
+      <USwitch v-model="selected.paused" label="Pausado" color="secondary" :loading="loading.edit" :disabled="isSpinning" />
+    </div>
     <UButton
       icon="lucide:refresh-ccw"
       class="absolute -top-2 -inset-e-2 shadow"
