@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
     await twitch.channelPoints.updateRedemptionStatusByIds(user.id, params.rewardId, query.id, "CANCELED");
   }
   else {
-    const redemptionsPagination = twitch.channelPoints.getRedemptionsForBroadcasterPaginated(user.id, params.rewardId, "FULFILLED", { newestFirst: false });
+    const redemptionsPagination = twitch.channelPoints.getRedemptionsForBroadcasterPaginated(user.id, params.rewardId, "UNFULFILLED", { newestFirst: false });
     const redemptions = await redemptionsPagination.getAll();
 
     const redemptionIds = redemptions.map(r => r.id);
