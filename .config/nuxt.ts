@@ -12,7 +12,8 @@ export default defineNuxtConfig({
     "@nuxtjs/sitemap",
     "@nuxthub/core",
     "nuxt-auth-utils",
-    "@pinia/nuxt"
+    "@pinia/nuxt",
+    "@nuxt/fonts"
   ],
 
   $production: {
@@ -124,6 +125,13 @@ export default defineNuxtConfig({
       autoInit: false,
       stylistic: true
     }
+  },
+
+  fonts: {
+    families: [
+      { name: "Space Grotesk", weights: [400, 500, 600], display: "swap" },
+      { name: "Fraunces", weights: [600], display: "swap" }
+    ]
   },
 
   icon: {
