@@ -81,11 +81,11 @@ const rejectAllRedemptions = () => {
 const toast = useToast();
 
 const canSpin = () => {
-  if (!selected.value?.active) {
-    toast.add({ description: "Activa la recompensa para poder girar la ruleta", color: "error" });
+  if (selected.value?.active) {
+    toast.add({ description: "Desactiva la recompensa para poder girar la ruleta", color: "error" });
   }
 
-  return !isSpinning.value && redemptions.value.length >= 2 && !!selected.value?.active;
+  return !isSpinning.value && redemptions.value.length >= 2 && !selected.value?.active;
 };
 </script>
 

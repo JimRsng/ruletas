@@ -61,6 +61,7 @@ declare module "spin-wheel" {
     itemLabelFont: string;
     itemLabelFontSizeMax: number;
     onRest?: (event?: unknown) => void;
+    onCurrentIndexChange?: (event?: unknown) => void;
     onSpin?: (event?: unknown) => void;
   }
 }

@@ -86,6 +86,11 @@ const init = () => {
     }
   };
 
+  wheel.onCurrentIndexChange = () => {
+    if (idleAnimFrame) return;
+    // TODO: add audible tick sound effect on index change
+  };
+
   stopIdleSpin();
   if (props.idleSpin) startIdleSpin();
 };
@@ -120,8 +125,12 @@ onMounted(() => {
   });
 });
 
+watch(() => props.entries, () => {
+  if (!wheel) return;
+  wheel.items = items.value;
+});
+
 watch(() => [
-  props.entries,
   props.spinDuration,
   props.palette,
   props.idleSpin
