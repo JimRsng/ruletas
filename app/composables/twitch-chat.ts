@@ -24,5 +24,10 @@ export const useTwitchChat = (channel?: string) => {
     chat.quit();
   });
 
-  return messages;
+  // return only the last 100 messages to prevent memory issues
+  const slicedMessages = computed(() => {
+    return messages.value.slice(-100);
+  });
+
+  return slicedMessages;
 };
