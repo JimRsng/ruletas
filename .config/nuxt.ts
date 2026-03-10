@@ -13,7 +13,8 @@ export default defineNuxtConfig({
     "@nuxthub/core",
     "nuxt-auth-utils",
     "@pinia/nuxt",
-    "@nuxt/fonts"
+    "@nuxt/fonts",
+    "nuxt-ui-colors-no-inline"
   ],
 
   $production: {
@@ -70,6 +71,9 @@ export default defineNuxtConfig({
   ui: {
     colorMode: true,
     fonts: true,
+    theme: {
+      colors: ["primary", "secondary", "success", "error"]
+    },
     colors: {
       neutral: "zinc",
       primary: "emerald",
