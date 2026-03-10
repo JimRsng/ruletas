@@ -6,7 +6,7 @@ const { user } = useUserSession();
 const { winner, isSpinning, selected: wheelSelected } = storeToRefs(useWheelStore());
 
 const chat = useTwitchChat(user.value?.login);
-const winnerChat = ref(chat.value.filter(m => m.login === winner.value?.user.login));
+const winnerChat = ref(chat.value.filter(m => m.userInfo.userName === winner.value?.user.login));
 
 const chatsTab = ref("live");
 const chatContainer = useTemplateRef("chatContainer");
@@ -81,16 +81,14 @@ const rejectWinner = () => {
           >
             <template v-if="item.value === 'live'">
               <div v-for="(message, i) in chat" :key="i">
-                <span class="font-semibold" :style="{ color: message.color }">{{ message.displayName }}</span>
-                <span v-if="message.isAction" :style="{ color: message.color }">&nbsp;{{ message.text }}</span>
-                <span v-else>:&nbsp;{{ message.text }}</span>
+                <span class="font-semibold" :style="{ color: message.userInfo.color }">{{ message.userInfo.displayName }}</span>
+                <span>: {{ message.text }}</span>
               </div>
             </template>
             <template v-else-if="item.value === 'winner'">
               <div v-for="(message, i) in winnerChat" :key="i">
-                <span class="font-semibold" :style="{ color: message.color }">{{ message.displayName }}</span>
-                <span v-if="message.isAction" :style="{ color: message.color }">&nbsp;{{ message.text }}</span>
-                <span v-else>:&nbsp;{{ message.text }}</span>
+                <span class="font-semibold" :style="{ color: message.userInfo.color }">{{ message.userInfo.displayName }}</span>
+                <span>: {{ message.text }}</span>
               </div>
             </template>
           </div>

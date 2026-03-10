@@ -1,41 +1,27 @@
-const messages = ref<TwitchParsedMessage[]>([]);
+import { ChatClient, type ChatMessage } from "@twurple/chat";
 
 export const useTwitchChat = (channel?: string) => {
+  const messages = ref<ChatMessage[]>([]);
+
   if (!channel) return messages;
-  let ws: WebSocket;
+
+  let chat: ChatClient;
+
   onMounted(() => {
-    ws = new WebSocket("wss://irc-ws.chat.twitch.tv:443");
+    chat = new ChatClient({
+      channels: [channel],
+      rejoinChannelsOnReconnect: true
+    });
 
-    ws.onopen = () => {
-      const anon = "justinfan" + Math.floor(Math.random() * 100000);
+    chat.connect();
 
-      ws.send("CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership");
-      ws.send("PASS SCHMOOPIIE");
-      ws.send(`NICK ${anon}`);
-      ws.send(`JOIN #${channel}`);
-    };
-
-    ws.onmessage = (event) => {
-      const chunk = String(event.data || "");
-      const lines = chunk.split("\r\n").filter(Boolean);
-
-      for (const line of lines) {
-        if (line.startsWith("PING")) {
-          ws.send("PONG :tmi.twitch.tv");
-          continue;
-        }
-
-        const parsed = parseTwitchIrcMessage(line);
-
-        if (parsed?.command === "PRIVMSG" && parsed.text) {
-          messages.value.push(parsed);
-        }
-      }
-    };
+    chat.onMessage((_, user, text, data) => {
+      messages.value.push(data);
+    });
   });
 
   onUnmounted(() => {
-    ws.close();
+    chat.quit();
   });
 
   return messages;
