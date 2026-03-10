@@ -1,6 +1,13 @@
 export const useWheelStore = defineStore("wheel", () => {
   const isSpinning = ref(false);
-  const winner = ref<string | null>(null);
+  const selected = ref<string | null>(null);
+
+  const { deduplicated } = storeToRefs(useRedemptionsStore());
+
+  const winner = computed(() => {
+    if (!selected.value) return null;
+    return deduplicated.value.find(e => e.user.name === selected.value) || null;
+  });
 
   const settings = ref({
     disallowDuplicates: true,
@@ -21,6 +28,7 @@ export const useWheelStore = defineStore("wheel", () => {
   return {
     settings,
     isSpinning,
+    selected,
     winner
   };
 });

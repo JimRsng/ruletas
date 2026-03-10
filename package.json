@@ -65,6 +65,7 @@
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.96",
     "@iconify-json/simple-icons": "^1.2.72",
+    "@iconify-json/tabler": "^1.2.31",
     "@nuxt/eslint": "^1.15.2",
     "@types/howler": "^2.2.12",
     "eslint": "^10.0.3",

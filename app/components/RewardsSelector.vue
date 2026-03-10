@@ -114,7 +114,7 @@ onUnmounted(() => {
       <USwitch v-model="selected.paused" label="Pausado" color="secondary" :loading="loading.edit" :disabled="isSpinning" />
     </div>
     <UButton
-      icon="lucide:refresh-ccw"
+      icon="lucide:arrow-left-right"
       class="absolute -top-2 -inset-e-2 shadow"
       size="sm"
       :disabled="isSpinning"

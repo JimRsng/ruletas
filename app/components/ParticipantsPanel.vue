@@ -3,7 +3,7 @@ const toast = useToast();
 
 const { selected } = storeToRefs(useRewardsStore());
 const { redemptions, deduplicated } = storeToRefs(useRedemptionsStore());
-const { settings, isSpinning, winner } = storeToRefs(useWheelStore());
+const { settings, isSpinning, selected: wheelSelected } = storeToRefs(useWheelStore());
 
 const emits = defineEmits<{
   winner: [name: string];
@@ -40,8 +40,7 @@ const canSpinGuard = () => {
   </div>
 
   <SpinWheel
-    ref="wheelRef"
-    v-model="winner"
+    v-model="wheelSelected"
     v-model:spinning="isSpinning"
     :entries="participants"
     :palette="settings.palette"

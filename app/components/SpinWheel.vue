@@ -159,7 +159,7 @@ watch(() => [
 </script>
 
 <template>
-  <section class="relative grid place-items-center">
+  <section class="relative grid place-items-center size-full">
     <button
       v-if="wheelContainerRef"
       type="button"
@@ -173,7 +173,7 @@ watch(() => [
     </button>
     <div
       ref="wheelContainerRef"
-      class="wheel-canvas size-80 sm:size-120 md:size-120 lg:size-140 max-w-140 max-h-140 rounded-full bg-accented shadow"
+      class="wheel-canvas size-80 sm:size-120 md:size-full max-w-140 max-h-140 rounded-full bg-accented shadow"
       :class="{ 'animate-pulse': !wheelContainerRef }"
     />
   </section>

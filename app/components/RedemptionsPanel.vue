@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const { user } = useUserSession();
-
 const redemptionsStore = useRedemptionsStore();
 const { redemptions } = storeToRefs(redemptionsStore);
 const { selected } = storeToRefs(useRewardsStore());
@@ -44,7 +42,7 @@ const completeAllRedemptions = () => {
       <UIcon name="custom:points" size="1.3rem" />
       <h3 class="text-sm font-semibold">Entradas (<span class="text-primary">{{ redemptions.length }}</span>)</h3>
     </div>
-    <ul class="bg-default h-100 overflow-y-auto rounded-md border-2 border-accented">
+    <ul class="bg-default h-100 overflow-y-auto rounded-xl border-2 border-accented">
       <li
         v-for="(redemption, i) of redemptions"
         :key="redemption.id"
@@ -52,25 +50,16 @@ const completeAllRedemptions = () => {
         :class="{ 'bg-elevated': i % 2 !== 0 }"
       >
         <div class="flex items-center gap-2">
-          <UUser :description="redemption.input">
-            <template #name>
-              <div class="flex gap-2 items-center">
-                <NuxtLink :to="`https://www.twitch.tv/popout/${user?.login}/viewercard/${redemption.user.login}`" target="_blank" class="hover:underline">
-                  {{ redemption.user.name }}
-                </NuxtLink>
-                <div v-if="redemption.user.subscription" :title="`Suscriptor tier ${redemption.user.subscription.tier.replace('000', '')}`">
-                  <Icon
-                    name="lucide:star"
-                    :class="{
-                      'dark:text-purple-400 light:text-purple-500': redemption.user.subscription.tier === '1000',
-                      'dark:text-slate-400 light:text-slate-400': redemption.user.subscription.tier === '2000',
-                      'dark:text-amber-400 light:text-amber-400': redemption.user.subscription.tier === '3000',
-                    }"
-                  />
-                </div>
-              </div>
-            </template>
-          </UUser>
+          <UserDisplay
+            :variant="'basic'"
+            :user="{
+              id: redemption.user.id,
+              name: redemption.user.name,
+              description: redemption.input,
+              login: redemption.user.login,
+              subscription: redemption.user.subscription,
+            }"
+          />
           <UButton
             icon="lucide:x"
             variant="outline"
@@ -129,13 +118,15 @@ const completeAllRedemptions = () => {
       :disabled="isSpinning"
     />
     <UCheckboxGroup
-      v-if="settings.subscribersOnly"
       v-model="settings.subscriberTiers"
       orientation="horizontal"
       color="secondary"
       :items="['Tier 1', 'Tier 2', 'Tier 3']"
       class="ms-4"
-      :disabled="isSpinning"
+      :ui="{
+        indicator: !settings.subscribersOnly ? 'bg-accented' : '',
+      }"
+      :disabled="!settings.subscribersOnly || isSpinning"
     />
   </div>
 </template>
