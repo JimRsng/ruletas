@@ -24,12 +24,12 @@ const participants = computed(() => {
   }).map(e => e.user.name);
 });
 
-const canSpingGuard = () => {
-  if (selected.value?.active) {
-    toast.add({ description: "Desactiva la recompensa para poder girar la ruleta", color: "error" });
+const canSpinGuard = () => {
+  if (selected.value?.active && !selected.value?.paused) {
+    toast.add({ description: "Pausa o desactiva la recompensa para poder girar la ruleta", color: "error" });
   }
 
-  return !isSpinning.value && redemptions.value.length >= 2 && !selected.value?.active;
+  return !isSpinning.value && redemptions.value.length >= 2 && (!selected.value?.active || !!selected.value?.paused);
 };
 </script>
 
@@ -46,7 +46,7 @@ const canSpingGuard = () => {
     :entries="participants"
     :palette="settings.palette"
     :idle-spin="true"
-    :spin-guard="canSpingGuard"
+    :spin-guard="canSpinGuard"
     @select="emits('winner', $event)"
   />
 </template>
