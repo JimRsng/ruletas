@@ -108,30 +108,35 @@ const completeAllRedemptions = () => {
       <p class="text-xs text-muted">Ajustes aplicados a los participantes de la ruleta</p>
     </div>
     <USwitch
-      v-model="settings.disallowDuplicates"
-      label="Sin participantes duplicados"
-      :disabled="isSpinning"
-    />
-    <USwitch
-      v-model="settings.weighted"
-      label="Entradas ponderadas"
-      :disabled="isSpinning"
-    />
-    <USwitch
       v-model="settings.subscribersOnly"
       label="Solo suscriptores"
       :disabled="isSpinning"
     />
-    <UCheckboxGroup
-      v-model="settings.subscriberTiers"
-      orientation="horizontal"
-      color="secondary"
-      :items="['Tier 1', 'Tier 2', 'Tier 3']"
-      class="ms-4"
-      :ui="{
-        indicator: !settings.subscribersOnly ? 'bg-accented' : '',
-      }"
-      :disabled="!settings.subscribersOnly || isSpinning"
+    <Transition name="fade" mode="out-in">
+      <UCheckboxGroup
+        v-if="settings.subscribersOnly"
+        v-model="settings.subscriberTiers"
+        orientation="horizontal"
+        color="secondary"
+        :items="['Tier 1', 'Tier 2', 'Tier 3']"
+        class="ms-11"
+        :ui="{
+          indicator: !settings.subscribersOnly ? 'bg-accented' : '',
+        }"
+        size="sm"
+        :disabled="!settings.subscribersOnly || isSpinning"
+      />
+    </Transition>
+    <USwitch
+      v-model="settings.disallowDuplicates"
+      label="Sin participantes duplicados"
+      :disabled="isSpinning"
+      @change="settings.weighted = !settings.disallowDuplicates && settings.weighted"
+    />
+    <USwitch
+      v-model="settings.weighted"
+      label="Entradas ponderadas"
+      :disabled="isSpinning || settings.disallowDuplicates"
     />
   </div>
 </template>

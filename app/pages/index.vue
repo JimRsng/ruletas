@@ -7,6 +7,12 @@ watch(loggedIn, (value) => {
   if (!value) return;
   navigateTo("/app");
 });
+
+useHead({
+  bodyAttrs: {
+    class: "dark"
+  }
+});
 </script>
 
 <template>

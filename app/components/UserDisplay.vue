@@ -58,7 +58,7 @@ if (props.variant === "winner") {
           <NuxtLink :to="`https://www.twitch.tv/popout/${broadcaster?.login}/viewercard/${user.login}`" target="_blank" class="hover:underline">
             {{ user.name }}
           </NuxtLink>
-          <div v-if="user.subscription" :title="`Suscriptor tier ${user.subscription.tier.replace('000', '')}`">
+          <div v-if="user.subscription" :title="`Suscriptor Tier ${user.subscription.tier.replace('000', '')}`">
             <Icon
               name="lucide:star"
               :class="{
@@ -94,7 +94,7 @@ if (props.variant === "winner") {
           <NuxtLink :to="`https://www.twitch.tv/popout/${broadcaster.login}/viewercard/${winner.user.login}`" target="_blank" class="hover:underline">
             {{ winner.user.name }}
           </NuxtLink>
-          <div v-if="winner.user.subscription" :title="`Suscriptor tier ${winner.user.subscription.tier.replace('000', '')}`">
+          <div v-if="winner.user.subscription" :title="`Suscriptor Tier ${winner.user.subscription.tier.replace('000', '')}`">
             <Icon
               name="lucide:star"
               :class="{

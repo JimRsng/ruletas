@@ -30,22 +30,25 @@ const userMenu = computed<DropdownMenuItem[][]>(() => [
     <p class="text-xs uppercase tracking-widest text-primary">JimTracker</p>
     <h1 class="text-5xl">Ruletas</h1>
     <p class="text-muted">Crea ruletas a partir de recompensas de puntos de tu canal de Twitch</p>
-    <UDropdownMenu v-if="user" :items="userMenu" :content="{ align: 'end', side: 'bottom', sideOffset: 8 }" :modal="false" arrow>
-      <UButton
-        :label="user.displayName"
-        trailing-icon="lucide:chevron-down"
-        variant="subtle"
-        color="neutral"
-        class="absolute top-0 inset-e-0 rounded-full"
-        :ui="{
-          base: 'text-md hover:bg-accented/50 data-active:bg-accented/75',
-        }"
-      >
-        <template #leading>
-          <UAvatar v-if="user.image" :src="user.image" :alt="user.login" size="2xs" />
-          <UAvatar v-else :alt="user.displayName" size="2xs" class="bg-accented" />
-        </template>
-      </UButton>
-    </UDropdownMenu>
+    <div class="absolute top-0 inset-e-0">
+      <UColorModeButton />
+      <UDropdownMenu v-if="user" :items="userMenu" :content="{ align: 'end', side: 'bottom', sideOffset: 8 }" :modal="false" arrow>
+        <UButton
+          :label="user.displayName"
+          trailing-icon="lucide:chevron-down"
+          variant="subtle"
+          color="neutral"
+          class="rounded-full"
+          :ui="{
+            base: 'text-md hover:bg-accented/50 data-active:bg-accented/75',
+          }"
+        >
+          <template #leading>
+            <UAvatar v-if="user.image" :src="user.image" :alt="user.login" size="2xs" />
+            <UAvatar v-else :alt="user.displayName" size="2xs" class="bg-accented" />
+          </template>
+        </UButton>
+      </UDropdownMenu>
+    </div>
   </div>
 </template>

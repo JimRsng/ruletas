@@ -207,13 +207,13 @@ watch(() => [
     <button
       v-if="wheelContainerRef"
       type="button"
-      class="absolute inset-1/2 -translate-1/2 z-2 size-18 flex items-center justify-center cursor-pointer before:bg-default before:size-18 before:-rotate-45 before:absolute before:rounded-[50%_0_50%_50%] before:transition before:duration-160"
+      class="absolute inset-1/2 -translate-1/2 z-2 size-18 flex items-center justify-center cursor-pointer before:bg-neutral-900 before:size-18 before:-rotate-45 before:absolute before:rounded-[50%_0_50%_50%] before:transition before:duration-160"
       :class="{ 'scale-on-hover hover:before:drop-shadow-md/50': !isSpinning }"
       :disabled="isSpinning || entries.length < 2"
       aria-label="Girar la ruleta"
       @click="spin"
     >
-      <span class="z-3 font-bold text-sm tracking-widest uppercase">GIRAR</span>
+      <span class="z-3 font-bold text-sm tracking-widest uppercase text-neutral-200">GIRAR</span>
     </button>
     <div
       ref="wheelContainerRef"

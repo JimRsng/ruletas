@@ -12,5 +12,7 @@ export default [
   "lucide:chevron-down",
   "lucide:arrow-left-right",
   "lucide:crown",
+  "lucide:moon",
+  "lucide:sun",
   "tabler:dots-vertical"
 ];
