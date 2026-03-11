@@ -5,23 +5,14 @@ const { selected } = storeToRefs(useRewardsStore());
 const { settings, isSpinning } = storeToRefs(useWheelStore());
 
 const loading = reactive({
-  rejections: {} as Record<string, boolean>,
   rejectAll: false,
   completeAll: false
 });
 
-const rejectRedemption = (redemptionId: string) => {
-  if (!selected.value?.id) return;
-  loading.rejections[redemptionId] = true;
-  redemptionsStore.reject(selected.value.id, redemptionId).finally(() => {
-    loading.rejections[redemptionId] = false;
-  });
-};
-
 const rejectAllRedemptions = () => {
   if (!selected.value?.id) return;
   loading.rejectAll = true;
-  redemptionsStore.rejectAll(selected.value.id).finally(() => {
+  redemptionsStore.rejectAll(selected.value.id).catch(() => {}).finally(() => {
     loading.rejectAll = false;
   });
 };
@@ -29,7 +20,7 @@ const rejectAllRedemptions = () => {
 const completeAllRedemptions = () => {
   if (!selected.value?.id) return;
   loading.completeAll = true;
-  redemptionsStore.completeAll(selected.value.id).finally(() => {
+  redemptionsStore.completeAll(selected.value.id).catch(() => {}).finally(() => {
     loading.completeAll = false;
   });
 };
@@ -84,15 +75,7 @@ const isListening = computed(() => {
               subscription: redemption.user.subscription,
             }"
           />
-          <UButton
-            icon="lucide:x"
-            variant="outline"
-            color="error"
-            size="xs"
-            class="ms-auto"
-            :loading="loading.rejections[redemption.id]"
-            @click="rejectRedemption(redemption.id)"
-          />
+          <RedemptionsOptions :redemption="redemption" class="ms-auto" />
         </div>
       </li>
     </ul>

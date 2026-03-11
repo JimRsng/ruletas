@@ -15,5 +15,8 @@ export default [
   "lucide:moon",
   "lucide:sun",
   "lucide:pencil",
+  "lucide:user",
+  "lucide:user-check",
+  "lucide:user-x",
   "tabler:dots-vertical"
 ];
