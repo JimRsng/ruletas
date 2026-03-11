@@ -2,7 +2,8 @@
 const redemptionsStore = useRedemptionsStore();
 const { redemptions } = storeToRefs(redemptionsStore);
 const { selected } = storeToRefs(useRewardsStore());
-const { settings, isSpinning } = storeToRefs(useWheelStore());
+const wheelStore = useWheelStore();
+const { settings, isSpinning } = storeToRefs(wheelStore);
 
 const loading = reactive({
   rejectAll: false,
@@ -27,6 +28,16 @@ const completeAllRedemptions = () => {
 
 const isListening = computed(() => {
   return selected.value?.active && !selected.value.paused;
+});
+
+watch(settings, () => {
+  if (!selected.value?.id) return;
+  wheelStore.storage.save(selected.value.id);
+}, { deep: true });
+
+watch(selected, () => {
+  if (!selected.value?.id) return;
+  wheelStore.storage.restore(selected.value.id);
 });
 </script>
 

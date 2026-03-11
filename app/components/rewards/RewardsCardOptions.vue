@@ -8,6 +8,7 @@ const props = defineProps<{
 const rewardsStore = useRewardsStore();
 const { selected } = storeToRefs(rewardsStore);
 const redemptionsStore = useRedemptionsStore();
+const wheelStore = useWheelStore();
 
 const loading = ref({
   delete: false,
@@ -35,6 +36,7 @@ const deleteReward = async () => {
       redemptionsStore.clearInterval();
       rewardsStore.clearSelected();
     }
+    wheelStore.storage.remove(rewardId);
   }).catch(() => {}).finally(() => {
     loading.value.delete = false;
   });
