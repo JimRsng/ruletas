@@ -67,7 +67,7 @@ declare module "spin-wheel" {
     itemLabelAlign: "left" | "center" | "right";
     itemLabelFont: string;
     itemLabelFontSizeMax: number;
-    onRest?: (event?: unknown) => void;
+    onRest?: (event: { type: "rest", currentIndex: number, rotation: number }) => void;
     onCurrentIndexChange?: (event?: unknown) => void;
     onSpin?: (event?: unknown) => void;
   }

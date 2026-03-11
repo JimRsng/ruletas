@@ -66,20 +66,19 @@ const items = computed(() => {
     for (const entry of props.entries) {
       counts.set(entry, (counts.get(entry) ?? 0) + 1);
     }
-    return Array.from(counts.entries()).map(([entry, count], index): WheelItem => ({
-      label: `${entry} (x${count})`,
+    return Array.from(counts.entries()).map(([label, count], index): WheelItem => ({
+      label: `${label} [x${count}]`,
       backgroundColor: props.palette[index % props.palette.length]!,
       labelColor: "#17110d",
       weight: count
     }));
   }
   else {
-    return props.entries.map((label, index) => ({
+    return props.entries.map((label, index): WheelItem => ({
       label: String(label),
-
       backgroundColor: props.palette[index % props.palette.length]!,
       labelColor: "#17110d"
-    } satisfies WheelItem));
+    }));
   }
 });
 
@@ -93,7 +92,7 @@ const init = () => {
   if (!container) return;
 
   wheel = new Wheel(container, {
-    // debug: import.meta.dev,
+    debug: import.meta.dev,
     items: items.value,
     borderWidth: 5,
     borderColor: "#1f160f",
@@ -112,12 +111,15 @@ const init = () => {
     isInteractive: false
   });
 
-  wheel.onRest = () => {
+  wheel.onRest = ({ currentIndex }) => {
     isSpinning.value = false;
-    const winnerIndex = wheel?.getCurrentIndex();
-    if (winnerIndex !== undefined && winnerIndex !== null) {
+
+    const winnerIndex = currentIndex;
+    const winnerItem = items.value[winnerIndex];
+    const winner = props.entries.find(entry => String(entry) === winnerItem?.label?.replace(/ \[x\d+\]$/, ""));
+
+    if (winner) {
       sounds.winner.play();
-      const winner = props.entries[winnerIndex]!;
       emit("select", winner);
       select.value = winner;
     }
@@ -137,9 +139,9 @@ const spin = () => {
     stopIdleSpin();
     isSpinning.value = true;
 
-    const winnerIndex = getRandomValue(0, items.value.length);
+    const winnerItem = weightedRandom(items.value, items.value.map(item => item.weight ?? 1));
 
-    wheel.spinToItem(winnerIndex, props.spinDuration, false, 1, 3, easeOutCubic);
+    wheel.spinToItem(winnerItem.index, props.spinDuration, false, 4, 1, easeOutCubic);
   }
 };
 
