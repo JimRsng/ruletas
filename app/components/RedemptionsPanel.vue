@@ -33,6 +33,10 @@ const completeAllRedemptions = () => {
     loading.completeAll = false;
   });
 };
+
+const isListening = computed(() => {
+  return selected.value?.active && !selected.value.paused;
+});
 </script>
 
 <template>
@@ -41,6 +45,25 @@ const completeAllRedemptions = () => {
     <div class="flex items-center gap-1">
       <UIcon name="custom:points" size="1.3rem" />
       <h3 class="text-sm font-semibold">Entradas (<span class="text-primary">{{ redemptions.length }}</span>)</h3>
+      <UPopover mode="hover" :content="{ side: 'top' }" arrow>
+        <UButton variant="link" class="ms-auto p-0 cursor-help">
+          <UChip
+            :class="{ 'animate-pulse': isListening }"
+            :color="isListening ? 'primary' : 'error'"
+            :ui="{
+              base: 'drop-shadow-md ' + (isListening ? 'drop-shadow-primary/30' : 'drop-shadow-error/30'),
+            }"
+            standalone
+            inset
+          />
+        </UButton>
+        <template #content>
+          <div class="p-3 text-sm">
+            <p v-if="isListening">Esperando entradas...</p>
+            <p v-else>La recompensa está pausada o inactiva</p>
+          </div>
+        </template>
+      </UPopover>
     </div>
     <ul class="bg-default h-100 overflow-y-auto rounded-xl border-2 border-accented">
       <li
