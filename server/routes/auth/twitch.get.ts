@@ -12,7 +12,8 @@ export default defineOAuthTwitchEventHandler({
         id: user.id,
         login: user.login,
         displayName: user.display_name,
-        image: user.profile_image_url
+        image: user.profile_image_url,
+        broadcasterType: user.broadcaster_type
       },
       secure: {
         refreshToken: tokens.refresh_token

@@ -8,6 +8,7 @@ declare module "#auth-utils" {
     login: string;
     displayName: string;
     image: string;
+    broadcasterType: string;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
