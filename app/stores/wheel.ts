@@ -14,16 +14,7 @@ export const useWheelStore = defineStore("wheel", () => {
     subscribersOnly: false,
     weighted: false,
     subscriberTiers: [1, 2, 3].map(String),
-    palette: [
-      "#f04e23",
-      "#ffbd2f",
-      "#4cc9f0",
-      "#2a9d8f",
-      "#8338ec",
-      "#ef476f",
-      "#06d6a0",
-      "#fb5607"
-    ]
+    palette: wheelPalette
   });
 
   return {

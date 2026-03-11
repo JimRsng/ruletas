@@ -39,3 +39,14 @@ export const weightedRandom = <T>(items: T[], weights: number[]) => {
 export const formatNumber = (num: number) => {
   return Intl.NumberFormat(undefined, { style: "decimal" }).format(num);
 };
+
+export const wheelPalette = [
+  "#f04e23",
+  "#ffbd2f",
+  "#4cc9f0",
+  "#2a9d8f",
+  "#8338ec",
+  "#ef476f",
+  "#06d6a0",
+  "#ff9ff3"
+];
