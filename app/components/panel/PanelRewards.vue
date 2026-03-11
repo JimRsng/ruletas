@@ -4,47 +4,14 @@ const { data } = await useFetch("/api/rewards", {
 });
 
 const rewardsStore = useRewardsStore();
-const { rewards, selected } = storeToRefs(rewardsStore);
+const { selected } = storeToRefs(rewardsStore);
 const redemptionsStore = useRedemptionsStore();
 const { isSpinning } = storeToRefs(useWheelStore());
 
 rewardsStore.setup(data.value || []);
 
-const loading = ref({
-  create: false,
-  edit: false
-});
-
+const isLoading = ref(false);
 const isModalOpen = ref(false);
-const isCreate = ref(false);
-
-const form = useFormState({
-  title: "",
-  description: "",
-  cost: 10000,
-  color: "#000000",
-  active: true,
-  paused: true
-});
-
-const selectReward = (id: string) => {
-  if (isModalOpen.value) {
-    isModalOpen.value = false;
-  }
-
-  redemptionsStore.clear();
-  rewardsStore.select(id);
-};
-
-const createReward = async () => {
-  loading.value.create = true;
-  rewardsStore.create(form.value).then(() => {
-    form.reset();
-  }).finally(() => {
-    loading.value.create = false;
-    isCreate.value = false;
-  });
-};
 
 watch(selected, async (reward, oldReward) => {
   if (!reward) return;
@@ -58,7 +25,7 @@ watch(selected, async (reward, oldReward) => {
 
   if (!oldReward || reward.id !== oldReward.id) return;
 
-  loading.value.edit = true;
+  isLoading.value = true;
   rewardsStore.edit(reward.id, {
     active: reward.active,
     paused: reward.paused,
@@ -66,7 +33,7 @@ watch(selected, async (reward, oldReward) => {
   }).catch(() => {
     redemptionsStore.clearInterval();
   }).finally(() => {
-    loading.value.edit = false;
+    isLoading.value = false;
   });
 }, { deep: true });
 
@@ -89,7 +56,7 @@ onUnmounted(() => {
         }"
         :increment="false"
         :decrement="false"
-        :disabled="loading.edit || isSpinning"
+        :disabled="isLoading || isSpinning"
       />
     </div>
     <div class="text-center lg:text-start">
@@ -97,8 +64,8 @@ onUnmounted(() => {
       <p class="text-muted text-sm">{{ selected.description }}</p>
     </div>
     <div class="flex flex-col lg:ms-auto gap-2">
-      <USwitch v-model="selected.active" label="Activo" :loading="loading.edit" :disabled="isSpinning" />
-      <USwitch v-model="selected.paused" label="Pausado" color="secondary" :loading="loading.edit" :disabled="isSpinning" />
+      <USwitch v-model="selected.active" label="Activo" :loading="isLoading" :disabled="isSpinning" />
+      <USwitch v-model="selected.paused" label="Pausado" color="secondary" :loading="isLoading" :disabled="isSpinning" />
     </div>
     <UButton
       icon="lucide:arrow-left-right"
@@ -128,33 +95,7 @@ onUnmounted(() => {
     />
     <template #body>
       <div class="flex flex-col gap-2">
-        <TransitionGroup name="slide">
-          <RewardCard
-            v-for="reward of rewards"
-            :key="reward.id"
-            :reward="reward"
-            @click="selectReward(reward.id)"
-          />
-        </TransitionGroup>
-        <div v-if="!isCreate" class="p-4 border-2 border-dashed border-default rounded-xl text-center cursor-pointer hover:bg-elevated hover:border-primary group scale-on-hover" @click="isCreate = true">
-          <UButton
-            icon="lucide:plus"
-            variant="outline"
-            color="primary"
-            class="mb-2 group-hover:scale-[1.1] transition-transform group-hover:bg-primary/10"
-          />
-          <p>Crear recompensa</p>
-        </div>
-        <RewardForm
-          v-else
-          v-model="form"
-          :title="'Crear recompensa'"
-          :submit-label="'Crear'"
-          :loading="loading.create"
-          cancellable
-          @cancel="isCreate = false"
-          @submit.prevent="createReward"
-        />
+        <RewardsManager @select="isModalOpen = false" />
       </div>
     </template>
   </UModal>

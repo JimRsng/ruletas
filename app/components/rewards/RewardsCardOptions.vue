@@ -92,7 +92,7 @@ const emit = defineEmits<{
       }"
     >
       <template #body>
-        <RewardForm
+        <RewardsForm
           v-model="form"
           :title="'Editar recompensa'"
           :submit-label="'Guardar cambios'"

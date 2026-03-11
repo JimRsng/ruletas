@@ -7,8 +7,8 @@ export default defineEventHandler(async (event): Promise<RuletasReward> => {
   const body = await readValidatedBody(event, z.object({
     title: z.string().min(1),
     description: z.string().optional(),
-    active: z.boolean().default(false),
     cost: z.number().int().positive(),
+    input: z.boolean(),
     color: z.string()
   }).parse);
 
@@ -23,8 +23,8 @@ export default defineEventHandler(async (event): Promise<RuletasReward> => {
     title: body.title,
     prompt: body.description,
     cost: body.cost,
-    userInputRequired: true,
-    isEnabled: body.active,
+    userInputRequired: body.input,
+    isEnabled: false, // start disabled to not listen to redemptions right away
     backgroundColor: body.color
   });
 

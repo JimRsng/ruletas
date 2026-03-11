@@ -35,10 +35,10 @@ const colorRef = computed(() => form.value.color);
       @click="emit('cancel')"
     />
     <UFormField label="Título" required>
-      <UInput v-model="form.title" placeholder="Título" class="w-full" required />
+      <UInput v-model.trim="form.title" placeholder="Título" class="w-full" required />
     </UFormField>
     <UFormField label="Descripción">
-      <UInput v-model="form.description" placeholder="Descripción" class="w-full" />
+      <UInput v-model.trim="form.description" placeholder="Descripción" class="w-full" />
     </UFormField>
     <div class="flex gap-2 items-center">
       <UFormField label="Precio" required>

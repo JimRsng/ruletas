@@ -24,7 +24,7 @@ const isActive = computed(() => isHovered.value || isDropdownOpen.value);
         <h3 class="text-lg font-semibold">{{ reward.title }}</h3>
         <p class="text-muted text-sm">{{ reward.description }}</p>
       </div>
-      <RewardOptions :reward="reward" class="ms-auto" @dropdown-open="isDropdownOpen = $event" />
+      <RewardsCardOptions :reward="reward" class="ms-auto" @dropdown-open="isDropdownOpen = $event" />
     </div>
   </div>
 </template>

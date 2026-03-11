@@ -16,7 +16,7 @@ export const useRewardsStore = defineStore("rewards", () => {
     });
   };
 
-  const create = async (data: Omit<RuletasReward, "id" | "input">) => {
+  const create = async (data: Omit<RuletasReward, "id" | "active" | "paused">) => {
     return $fetch("/api/rewards", {
       method: "POST",
       body: data
