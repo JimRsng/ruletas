@@ -60,12 +60,12 @@
     "nuxt": "^4.3.1",
     "nuxt-auth-utils": "^0.5.29",
     "pinia": "^3.0.4",
-    "sass": "^1.97.3",
+    "sass": "^1.98.0",
     "spin-wheel": "^5.0.2"
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.96",
-    "@iconify-json/simple-icons": "^1.2.72",
+    "@iconify-json/simple-icons": "^1.2.73",
     "@iconify-json/tabler": "^1.2.31",
     "@nuxt/eslint": "^1.15.2",
     "@types/howler": "^2.2.12",
@@ -75,7 +75,7 @@
     "stylelint-config-standard-scss": "^17.0.0",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.5",
-    "wrangler": "^4.71.0"
+    "wrangler": "^4.72.0"
   },
-  "packageManager": "pnpm@10.31.0"
+  "packageManager": "pnpm@10.32.1"
 }

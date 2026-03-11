@@ -5,8 +5,8 @@ export default defineEventHandler(async (event): Promise<RuletasReward> => {
   const { user, secure } = await requireUserSession(event);
 
   const body = await readValidatedBody(event, z.object({
-    title: z.string().min(1),
-    description: z.string().optional(),
+    title: z.string().min(1).max(45),
+    description: z.string().max(200).optional(),
     cost: z.number().int().positive(),
     input: z.boolean(),
     color: z.string()

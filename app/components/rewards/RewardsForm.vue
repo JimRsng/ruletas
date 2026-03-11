@@ -11,12 +11,18 @@ const form = defineModel<{
   description?: string;
   cost: number;
   color: string;
+  input: boolean;
 }>({ required: true });
 
 const emit = defineEmits<{
   submit: [event: SubmitEvent];
   cancel: [];
 }>();
+
+const maxLength = {
+  title: 45,
+  description: 200
+};
 
 const colorRef = computed(() => form.value.color);
 </script>
@@ -35,18 +41,28 @@ const colorRef = computed(() => form.value.color);
       @click="emit('cancel')"
     />
     <UFormField label="Título" required>
-      <UInput v-model.trim="form.title" placeholder="Título" class="w-full" required />
+      <UInput v-model.trim="form.title" placeholder="Título" class="w-full" :maxlength="maxLength.title" required />
+      <template #hint>
+        <div class="text-xs text-muted tabular-nums pointer-events-none" aria-live="polite" role="status">
+          {{ form.title?.length }}/{{ maxLength.title }}
+        </div>
+      </template>
     </UFormField>
     <UFormField label="Descripción">
-      <UInput v-model.trim="form.description" placeholder="Descripción" class="w-full" />
+      <UTextarea v-model.trim="form.description" placeholder="Descripción" class="w-full" :maxlength="maxLength.description" />
+      <template #hint>
+        <div class="text-xs text-muted tabular-nums pointer-events-none" aria-live="polite" role="status">
+          {{ form.description?.length }}/{{ maxLength.description }}
+        </div>
+      </template>
     </UFormField>
-    <div class="flex gap-2 items-center">
+    <div class="flex gap-4 items-center">
       <UFormField label="Precio" required>
         <UInputNumber
           v-model="form.cost"
           :min="1"
           placeholder="Precio"
-          class="flex-1"
+          class="flex-1 max-w-35"
           :ui="{ base: 'text-start' }"
           :format-options="{ style: 'decimal' }"
           decrement-icon="custom:points"
@@ -60,10 +76,8 @@ const colorRef = computed(() => form.value.color);
       </UFormField>
       <UFormField label="Color" required>
         <UPopover>
-          <UButton color="neutral" variant="outline" class="rounded-lg">
-            <template #leading>
-              <span :style="{ backgroundColor: form.color }" class="h-5 w-12 rounded-md" />
-            </template>
+          <UButton color="neutral" variant="outline" :style="{ backgroundColor: form.color }" class="overflow-hidden rounded-lg px-0">
+            <div class="h-5 w-12" />
           </UButton>
 
           <template #content>
@@ -78,6 +92,9 @@ const colorRef = computed(() => form.value.color);
             </div>
           </template>
         </UPopover>
+      </UFormField>
+      <UFormField label="Requiere texto">
+        <USwitch v-model="form.input" class="py-1.5" />
       </UFormField>
     </div>
     <UButton type="submit" :label="submitLabel" variant="subtle" :loading="loading" block />
