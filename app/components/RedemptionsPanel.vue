@@ -49,9 +49,9 @@ const isListening = computed(() => {
         <UButton variant="link" class="ms-auto p-0 cursor-help">
           <UChip
             :class="{ 'animate-pulse': isListening }"
-            :color="isListening ? 'primary' : 'error'"
+            :color="selected ? isListening ? 'primary' : 'error' : 'neutral'"
             :ui="{
-              base: 'drop-shadow-md ' + (isListening ? 'drop-shadow-primary/30' : 'drop-shadow-error/30'),
+              base: 'drop-shadow-md ' + (selected ? isListening ? 'drop-shadow-primary/30' : 'drop-shadow-error/30' : 'bg-accented'),
             }"
             standalone
             inset
@@ -59,7 +59,8 @@ const isListening = computed(() => {
         </UButton>
         <template #content>
           <div class="p-3 text-sm">
-            <p v-if="isListening">Esperando entradas...</p>
+            <p v-if="!selected">No has seleccionado una recompensa</p>
+            <p v-else-if="isListening">Esperando entradas...</p>
             <p v-else>La recompensa está pausada o inactiva</p>
           </div>
         </template>

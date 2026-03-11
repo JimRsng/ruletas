@@ -98,14 +98,27 @@ const rejectWinner = () => {
             class="flex-1 max-h-140 min-h-70 overflow-y-auto wrap-break-word text-sm space-y-2 rounded-xl border-2 border-accented bg-default px-2 py-3"
           >
             <template v-if="item.value === 'live'">
+              <div v-if="!chat.length" class="text-muted italic animate-pulse">No hay mensajes aún...</div>
               <div v-for="(message, i) in chat" :key="i">
-                <span class="font-semibold" :style="{ color: message.userInfo.color }">{{ message.userInfo.displayName }}</span>
+                <span class="font-semibold" :style="{ color: message.userInfo.color }">
+                  <NuxtLink :to="`https://twitch.tv/popout/${user?.login}/viewercard/${message.userInfo.userName}`" target="_blank" class="hover:underline">
+                    {{ message.userInfo.displayName }}
+                  </NuxtLink>
+                </span>
                 <span>: {{ message.text }}</span>
               </div>
             </template>
             <template v-else-if="item.value === 'winner'">
+              <div v-if="!winnerChat.length" class="text-muted italic animate-pulse">Esperando mensajes del ganador...</div>
               <div v-for="(message, i) in winnerChat" :key="i">
-                <span class="font-semibold" :style="{ color: message.userInfo.color }">{{ message.userInfo.displayName }}</span>
+                <span class="text-xs text-muted font-semibold" :title="message.date.toLocaleString()">
+                  [{{ message.date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: false }) }}]
+                </span>
+                <span class="font-semibold" :style="{ color: message.userInfo.color }">
+                  <NuxtLink :to="`https://twitch.tv/popout/${user?.login}/viewercard/${message.userInfo.userName}`" target="_blank" class="hover:underline">
+                    {{ message.userInfo.displayName }}
+                  </NuxtLink>
+                </span>
                 <span>: {{ message.text }}</span>
               </div>
             </template>
