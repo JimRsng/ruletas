@@ -6,7 +6,7 @@ export const useRewardsStore = defineStore("rewards", () => {
   const rewards = ref<RuletasReward[]>([]);
   const selected = ref<RuletasReward | null>(null);
 
-  const storedId = useStorage<string | null>("reward", null);
+  const storedId = useStorage<string | null>("rewards:selected", null);
 
   const setup = (data: RuletasReward[]) => {
     rewards.value = data;
