@@ -29,7 +29,7 @@ useHead({
           ${wheelPalette[5]}33 225deg 270deg,
           ${wheelPalette[6]}33 270deg 315deg,
           ${wheelPalette[7]}33 315deg 360deg
-        );`,
+        )`.replace(/\s{2,}/g, ' '),
       }"
     />
     <div class="relative flex flex-col items-center gap-2 text-center text-white bg-neutral-900 p-4 rounded-lg spin-wheel-indicator border">
