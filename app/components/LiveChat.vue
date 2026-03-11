@@ -6,7 +6,7 @@ const { user } = useUserSession();
 const { winner, isSpinning, selected: wheelSelected } = storeToRefs(useWheelStore());
 
 const chat = useTwitchChat(user.value?.login);
-const winnerChat = ref(chat.value.filter(m => m.userInfo.userName === winner.value?.user.login));
+const winnerChat = computed(() => chat.value.filter(m => m.userInfo.userName === winner.value?.user.login));
 
 const chatsTab = ref("live");
 const chatContainer = useTemplateRef("chatContainer");
