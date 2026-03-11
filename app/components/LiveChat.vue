@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { TabsItem } from "@nuxt/ui";
 
-const { user } = useUserSession();
+const { user: broadcaster } = useUserSession();
 
 const { winner, settings, isSpinning, selected: wheelSelected } = storeToRefs(useWheelStore());
 
-const chat = useTwitchChat(user.value?.login);
+const chat = useTwitchChat(broadcaster.value?.login);
 const winnerChat = computed(() => chat.value.filter(m => m.userInfo.userName === winner.value?.user.login));
 
 const chatsTab = ref("live");
@@ -101,7 +101,7 @@ const rejectWinner = () => {
               <div v-if="!chat.length" class="text-muted italic animate-pulse">No hay mensajes aún...</div>
               <div v-for="(message, i) in chat" :key="i">
                 <span class="font-semibold" :style="{ color: message.userInfo.color }">
-                  <NuxtLink :to="`https://twitch.tv/popout/${user?.login}/viewercard/${message.userInfo.userName}`" target="_blank" class="hover:underline">
+                  <NuxtLink :to="`https://twitch.tv/popout/${broadcaster?.login}/viewercard/${message.userInfo.userName}`" target="_blank" class="hover:underline">
                     {{ message.userInfo.displayName }}
                   </NuxtLink>
                 </span>
@@ -115,7 +115,7 @@ const rejectWinner = () => {
                   [{{ message.date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: false }) }}]
                 </span>
                 <span class="font-semibold" :style="{ color: message.userInfo.color }">
-                  <NuxtLink :to="`https://twitch.tv/popout/${user?.login}/viewercard/${message.userInfo.userName}`" target="_blank" class="hover:underline">
+                  <NuxtLink :to="`https://twitch.tv/popout/${broadcaster?.login}/viewercard/${message.userInfo.userName}`" target="_blank" class="hover:underline">
                     {{ message.userInfo.displayName }}
                   </NuxtLink>
                 </span>

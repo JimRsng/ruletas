@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from "@nuxt/ui";
 
-const { user, clear } = useUserSession();
+const { user: broadcaster, clear } = useUserSession();
 
 const rewardsStore = useRewardsStore();
 const redemptionsStore = useRedemptionsStore();
@@ -32,9 +32,9 @@ const userMenu = computed<DropdownMenuItem[][]>(() => [
     <p class="text-muted">Crea ruletas a partir de recompensas de puntos de tu canal de Twitch</p>
     <div class="absolute top-0 inset-e-0">
       <UColorModeButton />
-      <UDropdownMenu v-if="user" :items="userMenu" :content="{ align: 'end', side: 'bottom', sideOffset: 8 }" :modal="false" arrow>
+      <UDropdownMenu v-if="broadcaster" :items="userMenu" :content="{ align: 'end', side: 'bottom', sideOffset: 8 }" :modal="false" arrow>
         <UButton
-          :label="user.displayName"
+          :label="broadcaster.displayName"
           trailing-icon="lucide:chevron-down"
           variant="subtle"
           color="neutral"
@@ -44,8 +44,8 @@ const userMenu = computed<DropdownMenuItem[][]>(() => [
           }"
         >
           <template #leading>
-            <UAvatar v-if="user.image" :src="user.image" :alt="user.login" size="2xs" />
-            <UAvatar v-else :alt="user.displayName" size="2xs" class="bg-accented" />
+            <UAvatar v-if="broadcaster.image" :src="broadcaster.image" :alt="broadcaster.login" size="2xs" />
+            <UAvatar v-else :alt="broadcaster.displayName" size="2xs" class="bg-accented" />
           </template>
         </UButton>
       </UDropdownMenu>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const open = defineModel<boolean>("open");
 
-const { user } = useUserSession();
+const { user: broadcaster } = useUserSession();
 
 const { winner } = storeToRefs(useWheelStore());
 </script>
@@ -25,7 +25,7 @@ const { winner } = storeToRefs(useWheelStore());
         <p class="uppercase tracking-widest text-primary">Ganador</p>
         <div>
           <NuxtLink
-            :to="`https://www.twitch.tv/popout/${user?.login}/viewercard/${winner?.user.login}`"
+            :to="`https://www.twitch.tv/popout/${broadcaster?.login}/viewercard/${winner?.user.login}`"
             target="_blank"
             class="text-5xl hover:underline font-bold"
           >
