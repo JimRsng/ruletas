@@ -83,7 +83,7 @@ onUnmounted(() => {
         v-model="selected.cost"
         class="max-w-20"
         size="sm"
-        :ui="{ base: 'rounded-xl rounded-t-none text-center' }"
+        :ui="{ base: 'rounded-xl rounded-t-none text-center bg-default/50' }"
         :format-options="{
           style: 'decimal',
         }"
