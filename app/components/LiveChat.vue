@@ -3,7 +3,7 @@ import type { TabsItem } from "@nuxt/ui";
 
 const { user } = useUserSession();
 
-const { winner, isSpinning, selected: wheelSelected } = storeToRefs(useWheelStore());
+const { winner, settings, isSpinning, selected: wheelSelected } = storeToRefs(useWheelStore());
 
 const chat = useTwitchChat(user.value?.login);
 const winnerChat = computed(() => chat.value.filter(m => m.userInfo.userName === winner.value?.user.login));
@@ -18,8 +18,8 @@ watch([chatsTab, () => chat.value.length], () => {
   });
 });
 
-watch(winner, (value) => {
-  if (!value) return;
+watch([winner, isSpinning], ([winnerValue, isSpinningValue]) => {
+  if (!winnerValue || isSpinningValue) return;
   chatsTab.value = "winner";
 });
 
@@ -39,21 +39,39 @@ const redemptionsStore = useRedemptionsStore();
 const completeWinner = () => {
   if (!winner.value || !selected.value) return;
   loading.value.complete = true;
-  redemptionsStore.complete(selected.value.id, winner.value.id).then(() => {
-    wheelSelected.value = null;
-  }).finally(() => {
-    loading.value.complete = false;
-  });
+  if (settings.value.weighted) {
+    redemptionsStore.completeAll(selected.value.id, winner.value.user.id).then(() => {
+      wheelSelected.value = null;
+    }).catch(() => {}).finally(() => {
+      loading.value.complete = false;
+    });
+  }
+  else {
+    redemptionsStore.complete(selected.value.id, winner.value.id).then(() => {
+      wheelSelected.value = null;
+    }).catch(() => {}).finally(() => {
+      loading.value.complete = false;
+    });
+  }
 };
 
 const rejectWinner = () => {
   if (!winner.value || !selected.value) return;
   loading.value.reject = true;
-  redemptionsStore.reject(selected.value.id, winner.value.id).then(() => {
-    wheelSelected.value = null;
-  }).finally(() => {
-    loading.value.reject = false;
-  });
+  if (settings.value.weighted) {
+    redemptionsStore.rejectAll(selected.value.id, winner.value.user.id).then(() => {
+      wheelSelected.value = null;
+    }).catch(() => {}).finally(() => {
+      loading.value.reject = false;
+    });
+  }
+  else {
+    redemptionsStore.reject(selected.value.id, winner.value.id).then(() => {
+      wheelSelected.value = null;
+    }).catch(() => {}).finally(() => {
+      loading.value.reject = false;
+    });
+  }
 };
 </script>
 

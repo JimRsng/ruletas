@@ -46,6 +46,7 @@ const canSpinGuard = () => {
     :palette="settings.palette"
     :idle-spin="true"
     :spin-guard="canSpinGuard"
+    :weighted="settings.weighted"
     @select="emits('winner', $event)"
   />
 </template>

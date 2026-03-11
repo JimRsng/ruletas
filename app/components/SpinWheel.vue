@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T">
-import { Wheel } from "spin-wheel";
+import { Wheel, type WheelItem } from "spin-wheel";
 import { Howl } from "howler";
 
 const props = withDefaults(defineProps<{
@@ -7,6 +7,7 @@ const props = withDefaults(defineProps<{
   spinDuration?: number;
   palette?: string[];
   idleSpin?: boolean;
+  weighted?: boolean;
   spinGuard?: () => boolean;
 }>(), {
   spinDuration: 8000,
@@ -59,11 +60,28 @@ const stopIdleSpin = () => {
   }
 };
 
-const items = computed(() => props.entries.map((label, index) => ({
-  label: String(label),
-  backgroundColor: props.palette[index % props.palette.length]!,
-  labelColor: "#17110d"
-})));
+const items = computed(() => {
+  if (props.weighted) {
+    const counts = new Map<T, number>();
+    for (const entry of props.entries) {
+      counts.set(entry, (counts.get(entry) ?? 0) + 1);
+    }
+    return Array.from(counts.entries()).map(([entry, count], index): WheelItem => ({
+      label: `${entry} (x${count})`,
+      backgroundColor: props.palette[index % props.palette.length]!,
+      labelColor: "#17110d",
+      weight: count
+    }));
+  }
+  else {
+    return props.entries.map((label, index) => ({
+      label: String(label),
+
+      backgroundColor: props.palette[index % props.palette.length]!,
+      labelColor: "#17110d"
+    } satisfies WheelItem));
+  }
+});
 
 function easeOutCubic (t: number) {
   const t1 = t - 1;
@@ -75,7 +93,7 @@ const init = () => {
   if (!container) return;
 
   wheel = new Wheel(container, {
-    debug: import.meta.dev,
+    // debug: import.meta.dev,
     items: items.value,
     borderWidth: 5,
     borderColor: "#1f160f",
@@ -115,11 +133,11 @@ const init = () => {
 };
 
 const spin = () => {
-  if (!isSpinning.value && props.entries.length >= 2 && wheel && props.spinGuard()) {
+  if (!isSpinning.value && items.value.length >= 2 && wheel && props.spinGuard()) {
     stopIdleSpin();
     isSpinning.value = true;
 
-    const winnerIndex = getRandomValue(0, props.entries.length);
+    const winnerIndex = getRandomValue(0, items.value.length);
 
     wheel.spinToItem(winnerIndex, props.spinDuration, false, 1, 3, easeOutCubic);
   }
@@ -169,7 +187,8 @@ watch(() => props.entries, () => {
 watch(() => [
   props.spinDuration,
   props.palette,
-  props.idleSpin
+  props.idleSpin,
+  props.weighted
 ], () => {
   if (!isSpinning.value && wheelContainerRef.value) {
     if (wheel) {

@@ -12,6 +12,7 @@ export const useWheelStore = defineStore("wheel", () => {
   const settings = ref({
     disallowDuplicates: true,
     subscribersOnly: false,
+    weighted: false,
     subscriberTiers: ["Tier 1", "Tier 2", "Tier 3"],
     palette: [
       "#f04e23",

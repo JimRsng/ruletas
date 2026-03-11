@@ -47,18 +47,25 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
     });
   };
 
-  const completeAll = async (rewardId: string) => {
-    if (!redemptions.value.length || !confirm("¿Estás seguro de que quieres marcar todos los canjes pendientes como completados?")) return;
+  const completeAll = async (rewardId: string, userId?: string) => {
+    if (!redemptions.value.length || !confirm("¿Estás seguro de que quieres marcar todos los canjes pendientes como completados?")) {
+      throw new Error("Acción cancelada");
+    }
+
     return $fetch(`/api/rewards/${rewardId}/redemptions`, {
-      method: "PATCH"
+      method: "PATCH",
+      query: userId ? { userId } : undefined
     }).then(() => {
-      redemptions.value = [];
+      redemptions.value = userId ? redemptions.value.filter(r => r.user.id !== userId) : [];
       toast.add({ description: "Todos los canjes pendientes han sido marcados como completados", color: "success" });
     });
   };
 
   const reject = async (rewardId: string, redemptionId: string) => {
-    if (!confirm("¿Estás seguro de que quieres reembolsar este canje?")) return;
+    if (!confirm("¿Estás seguro de que quieres reembolsar este canje?")) {
+      throw new Error("Acción cancelada");
+    }
+
     return $fetch(`/api/rewards/${rewardId}/redemptions/${redemptionId}`, {
       method: "DELETE"
     }).then(() => {
@@ -67,12 +74,16 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
     });
   };
 
-  const rejectAll = async (rewardId: string) => {
-    if (!redemptions.value.length || !confirm("¿Estás seguro de que quieres reembolsar todos los canjes pendientes?")) return;
+  const rejectAll = async (rewardId: string, userId?: string) => {
+    if (!redemptions.value.length || !confirm("¿Estás seguro de que quieres reembolsar todos los canjes pendientes?")) {
+      throw new Error("Acción cancelada");
+    }
+
     return $fetch(`/api/rewards/${rewardId}/redemptions`, {
-      method: "DELETE"
+      method: "DELETE",
+      query: userId ? { userId } : undefined
     }).then(() => {
-      redemptions.value = [];
+      redemptions.value = userId ? redemptions.value.filter(r => r.user.id !== userId) : [];
       toast.add({ description: "Todos los canjes pendientes han sido reembolsados", color: "success" });
     });
   };

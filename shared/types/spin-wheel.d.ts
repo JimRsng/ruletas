@@ -24,8 +24,8 @@ declare module "spin-wheel" {
     itemLabelBaselineOffset?: number;
     itemLabelFont?: string;
     itemLabelFontSizeMax?: number;
-    itemBackgroundColors?: string[];
-    itemLabelColors?: string[];
+    itemBackgroundColors?: (string | undefined)[];
+    itemLabelColors?: (string | undefined)[];
     rotationSpeedMax?: number;
     rotationResistance?: number;
     lineWidth?: number;

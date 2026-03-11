@@ -113,6 +113,11 @@ const completeAllRedemptions = () => {
       :disabled="isSpinning"
     />
     <USwitch
+      v-model="settings.weighted"
+      label="Entradas ponderadas"
+      :disabled="isSpinning"
+    />
+    <USwitch
       v-model="settings.subscribersOnly"
       label="Solo suscriptores"
       :disabled="isSpinning"
