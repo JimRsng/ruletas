@@ -14,5 +14,6 @@ export default [
   "lucide:crown",
   "lucide:moon",
   "lucide:sun",
+  "lucide:pencil",
   "tabler:dots-vertical"
 ];

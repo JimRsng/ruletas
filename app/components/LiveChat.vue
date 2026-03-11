@@ -85,7 +85,7 @@ const rejectWinner = () => {
       :ui="{
         content: 'flex-1',
         list: 'gap-1',
-        trigger: 'border border-accented hover:data-[state=inactive]:bg-accented data-[state=active]:bg-secondary data-[state=active]:border-secondary cursor-pointer',
+        trigger: 'border border-accented hover:data-[state=inactive]:bg-accented data-[state=active]:bg-secondary data-[state=active]:border-secondary cursor-pointer animate-on-hover',
       }"
     >
       <template #content="{ item }">

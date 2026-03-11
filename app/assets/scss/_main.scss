@@ -13,15 +13,15 @@ h1 {
 
 .animate-on-hover:hover {
   transform: translateY(-1px);
-  box-shadow: 0 5px 1px rgb(0 0 0 / 35%);
+  box-shadow: 0 4px 1px rgb(0 0 0 / 35%);
 }
 
 .animate-on-hover {
-  transition: transform 160ms ease, box-shadow 160ms ease;
+  transition: box-shadow 160ms ease, transform 160ms ease;
 }
 
 .scale-on-hover:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .scale-on-hover {

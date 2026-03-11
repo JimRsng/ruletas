@@ -12,7 +12,6 @@ rewardsStore.setup(data.value || []);
 
 const loading = ref({
   create: false,
-  deletions: {} as Record<string, boolean>,
   edit: false
 });
 
@@ -71,18 +70,6 @@ const createReward = async () => {
   });
 };
 
-const deleteReward = async (reward: RuletasReward) => {
-  loading.value.deletions[reward.id] = true;
-  rewardsStore.remove(reward.id).then(() => {
-    if (selected.value?.id === reward.id) {
-      redemptionsStore.clearInterval();
-      rewardsStore.clearSelected();
-    }
-  }).finally(() => {
-    loading.value.deletions[reward.id] = false;
-  });
-};
-
 onUnmounted(() => {
   redemptionsStore.clearInterval();
 });
@@ -115,7 +102,7 @@ onUnmounted(() => {
     </div>
     <UButton
       icon="lucide:arrow-left-right"
-      class="absolute -top-2 -inset-e-2 shadow"
+      class="absolute -top-2 -inset-e-2"
       size="sm"
       :disabled="isSpinning"
       @click="isModalOpen = true"
@@ -124,16 +111,16 @@ onUnmounted(() => {
   <UModal
     v-model:open="isModalOpen"
     title="Recompensas"
-    description="Selecciona una recompensa de Twitch para usar la ruleta"
+    description="Crea o administra recompensas de Twitch para la ruleta"
     :close="{
       variant: 'outline',
-      color: 'neutral',
+      color: 'primary',
       class: 'rounded-full',
     }"
   >
     <UButton
       v-if="!selected"
-      label="Selecciona una recompensa de Twitch para usar la ruleta"
+      label="Crea o administra recompensas de Twitch para la ruleta"
       variant="ghost"
       color="neutral"
       class="p-4 rounded-xl border-2 border-default text-muted hover:text-default animate-on-hover"
@@ -142,35 +129,14 @@ onUnmounted(() => {
     <template #body>
       <div class="flex flex-col gap-2">
         <TransitionGroup name="slide">
-          <div
+          <RewardCard
             v-for="reward of rewards"
             :key="reward.id"
-            class="p-4 border border-default rounded-xl hover:bg-elevated hover:border-primary"
+            :reward="reward"
             @click="selectReward(reward.id)"
-          >
-            <div class="flex gap-4 items-center">
-              <div class="flex items-center justify-center rounded-xl h-16 w-18 relative shrink-0" :style="{ backgroundColor: reward.color }">
-                <Icon name="custom:points" size="1.4rem" class="text-neutral-200" />
-                <span class="text-xs bg-default/80 absolute bottom-1 px-2 rounded-xl">{{ formatNumber(reward.cost) }}</span>
-              </div>
-              <div>
-                <h3 class="text-lg font-semibold">{{ reward.title }}</h3>
-                <p class="text-muted text-sm">{{ reward.description }}</p>
-              </div>
-              <UButton
-                icon="lucide:trash"
-                variant="outline"
-                color="error"
-                size="sm"
-                class="ms-auto"
-                :loading="loading.deletions[reward.id]"
-                :disabled="isSpinning"
-                @click.stop="deleteReward(reward)"
-              />
-            </div>
-          </div>
+          />
         </TransitionGroup>
-        <div v-if="!isCreate" class="p-4 border-2 border-dashed border-default rounded-xl text-center cursor-pointer hover:bg-elevated hover:border-primary group" @click="isCreate = true">
+        <div v-if="!isCreate" class="p-4 border-2 border-dashed border-default rounded-xl text-center cursor-pointer hover:bg-elevated hover:border-primary group scale-on-hover" @click="isCreate = true">
           <UButton
             icon="lucide:plus"
             variant="outline"
@@ -179,44 +145,16 @@ onUnmounted(() => {
           />
           <p>Crear recompensa</p>
         </div>
-        <form v-else class="border-2 border-dashed border-default rounded-xl p-4 flex flex-col gap-3" @submit.prevent="createReward">
-          <h3 class="font-semibold">Crear recompensa</h3>
-          <UFormField label="Título" required>
-            <UInput v-model="form.title" placeholder="Título" class="w-full" required />
-          </UFormField>
-          <UFormField label="Descripción">
-            <UInput v-model="form.description" placeholder="Descripción" class="w-full" />
-          </UFormField>
-          <div class="flex gap-2 items-center">
-            <UFormField label="Precio" required>
-              <UInputNumber
-                v-model="form.cost"
-                :min="1"
-                placeholder="Precio"
-                class="flex-1"
-                :ui="{ base: 'text-start' }"
-                :format-options="{ style: 'decimal' }"
-                decrement-icon="custom:points"
-                :increment="false"
-                :decrement="{
-                  color: 'neutral',
-                  disabled: true,
-                  ui: { base: 'cursor-auto!' },
-                }"
-              />
-            </UFormField>
-            <UFormField label="Color" required>
-              <label class="cursor-pointer" title="Color">
-                <span class="block size-9 rounded-xl border border-default" :style="{ backgroundColor: form.color }" />
-                <input v-model="form.color" type="color" class="sr-only">
-              </label>
-            </UFormField>
-          </div>
-          <div class="grid md:grid-cols-2 gap-2">
-            <UButton type="button" label="Cancelar" variant="subtle" color="error" block @click="isCreate = false" />
-            <UButton type="submit" label="Crear" variant="subtle" :loading="loading.create" block />
-          </div>
-        </form>
+        <RewardForm
+          v-else
+          v-model="form"
+          :title="'Crear recompensa'"
+          :submit-label="'Crear'"
+          :loading="loading.create"
+          cancellable
+          @cancel="isCreate = false"
+          @submit.prevent="createReward"
+        />
       </div>
     </template>
   </UModal>

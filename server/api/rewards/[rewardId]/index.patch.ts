@@ -9,9 +9,13 @@ export default defineEventHandler(async (event) => {
   }).parse);
 
   const body = await readValidatedBody(event, z.object({
-    active: z.boolean(),
-    paused: z.boolean(),
-    cost: z.number().int().positive()
+    title: z.string().optional(),
+    description: z.string().optional(),
+    cost: z.number().int().positive().optional(),
+    input: z.boolean().optional(),
+    active: z.boolean().optional(),
+    paused: z.boolean().optional(),
+    color: z.string().optional()
   }).parse);
 
   const config = useRuntimeConfig(event);
@@ -22,9 +26,13 @@ export default defineEventHandler(async (event) => {
   const twitch = new ApiClient({ authProvider: provider });
 
   const reward = await twitch.channelPoints.updateCustomReward(user.id, params.rewardId, {
+    title: body.title,
+    prompt: body.description,
+    userInputRequired: body.input,
     isEnabled: body.active,
     isPaused: body.paused,
-    cost: body.cost
+    cost: body.cost,
+    backgroundColor: body.color
   });
 
   return {

@@ -5,7 +5,7 @@ const { selected } = storeToRefs(useRewardsStore());
 const { redemptions, deduplicated } = storeToRefs(useRedemptionsStore());
 const { settings, isSpinning, selected: wheelSelected } = storeToRefs(useWheelStore());
 
-const emits = defineEmits<{
+const emit = defineEmits<{
   winner: [name: string];
 }>();
 
@@ -47,6 +47,6 @@ const canSpinGuard = () => {
     :idle-spin="true"
     :spin-guard="canSpinGuard"
     :weighted="settings.weighted"
-    @select="emits('winner', $event)"
+    @select="emit('winner', $event)"
   />
 </template>

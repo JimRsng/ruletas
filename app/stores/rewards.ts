@@ -40,7 +40,10 @@ export const useRewardsStore = defineStore("rewards", () => {
   };
 
   const remove = async (id: string) => {
-    if (!confirm("¿Estás seguro de que quieres eliminar esta recompensa?")) return;
+    if (!confirm("¿Estás seguro de que quieres eliminar esta recompensa?")) {
+      throw new Error("Acción cancelada");
+    }
+
     return $fetch(`/api/rewards/${id}`, {
       method: "DELETE"
     }).then(() => {
