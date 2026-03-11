@@ -23,6 +23,12 @@ const emit = defineEmits<{
 }>();
 
 const wheelContainerRef = useTemplateRef("wheelContainerRef");
+const sectionRef = useTemplateRef("sectionRef");
+
+const wheelSize = ref<number | undefined>(undefined);
+
+let resizeObserver: ResizeObserver | null = null;
+const resizeTimeout: ReturnType<typeof setTimeout> | null = null;
 
 const sounds = {
   tick: new Howl({ src: ["/sounds/tick.ogg"] }),
@@ -130,11 +136,28 @@ defineExpose({ reset });
 
 onUnmounted(() => {
   if (props.idleSpin) stopIdleSpin();
+  resizeObserver?.disconnect();
+  if (resizeTimeout !== null) clearTimeout(resizeTimeout);
 });
 
 onMounted(() => {
   nextTick(() => {
+    if (sectionRef.value) {
+      const { offsetWidth, offsetHeight } = sectionRef.value;
+      wheelSize.value = Math.min(offsetWidth, offsetHeight);
+    }
+
     init();
+
+    resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const size = Math.floor(Math.min(entry.contentRect.width, entry.contentRect.height));
+        if (size === wheelSize.value) continue;
+        wheelSize.value = size;
+      }
+    });
+
+    if (sectionRef.value) resizeObserver.observe(sectionRef.value);
   });
 });
 
@@ -159,7 +182,7 @@ watch(() => [
 </script>
 
 <template>
-  <section class="relative grid place-items-center size-full">
+  <section ref="sectionRef" class="relative flex items-center justify-center size-full">
     <button
       v-if="wheelContainerRef"
       type="button"
@@ -169,12 +192,13 @@ watch(() => [
       aria-label="Girar la ruleta"
       @click="spin"
     >
-      <span class="relative z-3 font-bold text-sm tracking-widest uppercase">GIRAR</span>
+      <span class="z-3 font-bold text-sm tracking-widest uppercase">GIRAR</span>
     </button>
     <div
       ref="wheelContainerRef"
-      class="wheel-canvas size-80 sm:size-120 md:size-full max-w-140 max-h-140 rounded-full bg-accented shadow"
+      class="wheel-canvas rounded-full bg-accented shadow relative"
       :class="{ 'animate-pulse': !wheelContainerRef }"
+      :style="wheelSize ? { width: `${wheelSize}px`, height: `${wheelSize}px` } : undefined"
     />
   </section>
 </template>

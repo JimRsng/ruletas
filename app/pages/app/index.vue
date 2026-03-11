@@ -15,7 +15,7 @@ const openWinner = ref(false);
         <RedemptionsPanel />
       </aside>
 
-      <div class="p-4 overflow-hidden bg-elevated rounded-xl space-y-4">
+      <div class="p-4 overflow-hidden bg-elevated rounded-xl space-y-4 flex flex-col">
         <ParticipantsPanel @winner="openWinner = true" />
       </div>
 
