@@ -24,7 +24,7 @@ const form = useFormState({
   cost: 10000,
   color: "#000000",
   active: true,
-  paused: false
+  paused: true
 });
 
 const selectReward = (id: string) => {
