@@ -125,7 +125,11 @@ const isListening = computed(() => {
         v-model="settings.subscriberTiers"
         orientation="horizontal"
         color="secondary"
-        :items="['Tier 1', 'Tier 2', 'Tier 3']"
+        :items="[
+          { label: 'Tier 1', value: '1' },
+          { label: 'Tier 2', value: '2' },
+          { label: 'Tier 3', value: '3' },
+        ]"
         class="ms-11"
         :ui="{
           indicator: !settings.subscribersOnly ? 'bg-accented' : '',
