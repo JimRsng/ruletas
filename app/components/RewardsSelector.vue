@@ -21,7 +21,7 @@ const isCreate = ref(false);
 const form = useFormState({
   title: "",
   description: "",
-  cost: 100,
+  cost: 10000,
   color: "#000000",
   active: true,
   paused: false
@@ -34,6 +34,16 @@ const selectReward = (id: string) => {
 
   redemptionsStore.clear();
   rewardsStore.select(id);
+};
+
+const createReward = async () => {
+  loading.value.create = true;
+  rewardsStore.create(form.value).then(() => {
+    form.reset();
+  }).finally(() => {
+    loading.value.create = false;
+    isCreate.value = false;
+  });
 };
 
 watch(selected, async (reward, oldReward) => {
@@ -59,16 +69,6 @@ watch(selected, async (reward, oldReward) => {
     loading.value.edit = false;
   });
 }, { deep: true });
-
-const createReward = async () => {
-  loading.value.create = true;
-  rewardsStore.create(form.value).then(() => {
-    form.reset();
-  }).finally(() => {
-    loading.value.create = false;
-    isCreate.value = false;
-  });
-};
 
 onUnmounted(() => {
   redemptionsStore.clearInterval();
