@@ -17,6 +17,8 @@ const emit = defineEmits<{
   submit: [event: SubmitEvent];
   cancel: [];
 }>();
+
+const colorRef = computed(() => form.value.color);
 </script>
 
 <template>
@@ -57,10 +59,25 @@ const emit = defineEmits<{
         />
       </UFormField>
       <UFormField label="Color" required>
-        <label class="cursor-pointer" title="Color">
-          <span class="block size-9 rounded-xl border border-default" :style="{ backgroundColor: form.color }" />
-          <input v-model="form.color" type="color" class="sr-only">
-        </label>
+        <UPopover>
+          <UButton color="neutral" variant="outline" class="rounded-lg">
+            <template #leading>
+              <span :style="{ backgroundColor: form.color }" class="h-5 w-12 rounded-md" />
+            </template>
+          </UButton>
+
+          <template #content>
+            <div class="p-2">
+              <UColorPicker v-model="form.color" default-value="#000000" />
+              <UInput
+                :value="colorRef"
+                placeholder="Color hex"
+                class="mt-2 w-full"
+                @change="form.color = ($event.target as HTMLInputElement).value"
+              />
+            </div>
+          </template>
+        </UPopover>
       </UFormField>
     </div>
     <UButton type="submit" :label="submitLabel" variant="subtle" :loading="loading" block />
