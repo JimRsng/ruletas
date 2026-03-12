@@ -117,7 +117,7 @@ watch(selected, () => {
                     {{ message.userInfo.displayName }}
                   </NuxtLink>
                 </span>
-                <span>: {{ message.text }}</span>
+                <span>: <ChannelEmotes :text="message.text" /></span>
               </div>
             </template>
             <template v-else-if="item.value === 'winner'">
@@ -131,7 +131,7 @@ watch(selected, () => {
                     {{ message.userInfo.displayName }}
                   </NuxtLink>
                 </span>
-                <span>: {{ message.text }}</span>
+                <span>: <ChannelEmotes :text="message.text" /></span>
               </div>
             </template>
           </div>
