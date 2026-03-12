@@ -31,12 +31,12 @@ h1 {
 .spin-wheel-indicator::before {
   content: "";
   position: absolute;
-  position-area: center;
-  inset: 0;
+  top: 50%;
+  left: 50%;
   width: 130px;
   height: 130px;
   border-radius: 50% 5% 50% 50%;
-  transform: rotate(-45deg);
+  transform: translate(-50%, -42%) rotate(-45deg);
   background: rgb(255 255 255);
   z-index: -1;
 
