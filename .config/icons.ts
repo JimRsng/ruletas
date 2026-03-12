@@ -18,5 +18,6 @@ export default [
   "lucide:user",
   "lucide:user-check",
   "lucide:user-x",
+  "lucide:search",
   "tabler:dots-vertical"
 ];

@@ -10,6 +10,14 @@ const loading = reactive({
   completeAll: false
 });
 
+const filters = ref({
+  search: ""
+});
+
+const filteredRedemptions = computed(() => {
+  return redemptions.value.filter(r => r.user.name.toLowerCase().includes(filters.value.search.toLowerCase()));
+});
+
 const rejectAllRedemptions = () => {
   if (!selected.value?.id) return;
   loading.rejectAll = true;
@@ -68,28 +76,40 @@ watch(selected, () => {
         </template>
       </UPopover>
     </div>
-    <ul class="bg-default h-100 overflow-y-auto rounded-xl border-2 border-accented">
-      <li
-        v-for="(redemption, i) of redemptions"
-        :key="redemption.id"
-        class="px-3 py-2"
-        :class="{ 'bg-elevated': i % 2 !== 0 }"
-      >
-        <div class="flex items-center gap-2">
-          <UserDisplay
-            :variant="'basic'"
-            :user="{
-              id: redemption.user.id,
-              name: redemption.user.name,
-              description: redemption.input,
-              login: redemption.user.login,
-              subscription: redemption.user.subscription,
-            }"
-          />
-          <RedemptionsOptions :redemption="redemption" class="ms-auto" />
-        </div>
-      </li>
-    </ul>
+    <div class="bg-default h-100 overflow-y-auto rounded-xl border-2 border-accented relative">
+      <UInput
+        v-model="filters.search"
+        icon="lucide:search"
+        placeholder="Buscar..."
+        class="w-full sticky top-0 right-0 left-0 z-1 shadow-md"
+        variant="none"
+        size="sm"
+        :ui="{ base: 'bg-elevated focus:bg-accented hover:bg-accented rounded-none' }"
+        :disabled="isSpinning || !selected"
+      />
+      <ul>
+        <li
+          v-for="(redemption, i) of filteredRedemptions"
+          :key="redemption.id"
+          class="px-3 py-2"
+          :class="{ 'bg-elevated': i % 2 !== 0 }"
+        >
+          <div class="flex items-center gap-2">
+            <UserDisplay
+              :variant="'basic'"
+              :user="{
+                id: redemption.user.id,
+                name: redemption.user.name,
+                description: redemption.input,
+                login: redemption.user.login,
+                subscription: redemption.user.subscription,
+              }"
+            />
+            <RedemptionsOptions :redemption="redemption" class="ms-auto" />
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <!-- Actions -->

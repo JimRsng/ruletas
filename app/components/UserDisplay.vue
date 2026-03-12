@@ -52,10 +52,10 @@ if (props.variant === "winner") {
 
 <template>
   <div v-if="user && variant === 'basic'">
-    <UUser :description="user.description">
+    <UUser :description="user.description" :ui="{ description: 'wrap-anywhere' }">
       <template #name>
         <div class="flex gap-2 items-center">
-          <NuxtLink :to="`https://twitch.tv/popout/${broadcaster?.login}/viewercard/${user.login}`" target="_blank" class="hover:underline">
+          <NuxtLink :to="`https://twitch.tv/popout/${broadcaster?.login}/viewercard/${user.login}`" target="_blank" class="hover:underline wrap-anywhere">
             {{ user.name }}
           </NuxtLink>
           <div v-if="user.subscription" :title="`Suscriptor Tier ${user.subscription.tier.replace('000', '')}`">
@@ -87,11 +87,12 @@ if (props.variant === "winner") {
       size="lg"
       :ui="{
         avatar: 'size-14',
+        description: 'wrap-anywhere',
       }"
     >
       <template #name>
         <div class="flex gap-2 items-center">
-          <NuxtLink :to="`https://twitch.tv/popout/${broadcaster.login}/viewercard/${winner.user.login}`" target="_blank" class="hover:underline">
+          <NuxtLink :to="`https://twitch.tv/popout/${broadcaster.login}/viewercard/${winner.user.login}`" target="_blank" class="hover:underline wrap-anywhere">
             {{ winner.user.name }}
           </NuxtLink>
           <div v-if="winner.user.subscription" :title="`Suscriptor Tier ${winner.user.subscription.tier.replace('000', '')}`">
