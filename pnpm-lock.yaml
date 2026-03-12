@@ -62,6 +62,9 @@ importers:
       spin-wheel:
         specifier: ^5.0.2
         version: 5.0.2
+      vue-rewards:
+        specifier: ^1.0.3
+        version: 1.0.3(vue@3.5.30(typescript@5.9.3))
     devDependencies:
       '@iconify-json/lucide':
         specifier: ^1.2.97
@@ -6673,6 +6676,11 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
+
+  vue-rewards@1.0.3:
+    resolution: {integrity: sha512-POR+JANyzj6K6HJWQXIStwAODMNt68prvrBHQybn/dnJV0X+swKDOv/c++u3jFN6R8rB6LdQJhrpiVWV0pef0Q==}
+    peerDependencies:
+      vue: ^3.3.4
 
   vue-router@5.0.3:
     resolution: {integrity: sha512-nG1c7aAFac7NYj8Hluo68WyWfc41xkEjaR0ViLHCa3oDvTQ/nIuLJlXJX1NUPw/DXzx/8+OKMng045HHQKQKWw==}
@@ -13819,6 +13827,10 @@ snapshots:
       semver: 7.7.4
     transitivePeerDependencies:
       - supports-color
+
+  vue-rewards@1.0.3(vue@3.5.30(typescript@5.9.3)):
+    dependencies:
+      vue: 3.5.30(typescript@5.9.3)
 
   vue-router@5.0.3(@vue/compiler-sfc@3.5.30)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.30(typescript@5.9.3)))(vue@3.5.30(typescript@5.9.3)):
     dependencies:

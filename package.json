@@ -61,7 +61,8 @@
     "nuxt-auth-utils": "^0.5.29",
     "pinia": "^3.0.4",
     "sass": "^1.98.0",
-    "spin-wheel": "^5.0.2"
+    "spin-wheel": "^5.0.2",
+    "vue-rewards": "^1.0.3"
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.97",
