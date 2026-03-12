@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(event, z.object({
     title: z.string().optional(),
     description: z.string().optional(),
-    cost: z.number().int().positive().optional(),
+    cost: z.int().positive().max(MAX_INT32).optional(),
     input: z.boolean().optional(),
     active: z.boolean().optional(),
     paused: z.boolean().optional(),
@@ -35,7 +35,8 @@ export default defineEventHandler(async (event) => {
     backgroundColor: body.color
   }).catch((e) => {
     throw createTwitchError(e, {
-      UPDATE_CUSTOM_REWARD_DUPLICATE_REWARD: [ErrorCode.CONFLICT, "Ya existe una recompensa con ese título en tu canal"]
+      UPDATE_CUSTOM_REWARD_DUPLICATE_REWARD: [ErrorCode.CONFLICT, "Ya existe una recompensa con ese título en tu canal"],
+      UPDATE_CUSTOM_REWARD_COST_INVALID: [ErrorCode.BAD_REQUEST, "El costo de la recompensa no es válido"]
     });
   });
 

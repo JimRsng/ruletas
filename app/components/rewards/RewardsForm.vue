@@ -61,6 +61,7 @@ const colorRef = computed(() => form.value.color);
         <UInputNumber
           v-model="form.cost"
           :min="1"
+          :max="MAX_INT32"
           placeholder="Precio"
           class="flex-1 max-w-35"
           :ui="{ base: 'text-start' }"
