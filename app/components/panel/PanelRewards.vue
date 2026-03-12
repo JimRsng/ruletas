@@ -14,7 +14,7 @@ const isLoading = ref(false);
 const isModalOpen = ref(false);
 
 watch(selected, async (reward, oldReward) => {
-  if (!reward) return;
+  if (!reward || isModalOpen.value) return;
 
   if (reward.active && !reward.paused) {
     redemptionsStore.createInterval(reward.id);
@@ -68,8 +68,9 @@ onUnmounted(() => {
       <USwitch v-model="selected.paused" label="Pausado" color="secondary" :loading="isLoading" :disabled="isSpinning" />
     </div>
     <UButton
-      icon="lucide:arrow-left-right"
+      :icon="isLoading ? 'lucide:loader-circle' : 'lucide:arrow-left-right'"
       class="absolute -top-2 -inset-e-2"
+      :class="{ 'animate-spin': isLoading }"
       size="sm"
       :disabled="isSpinning"
       @click="isModalOpen = true"
