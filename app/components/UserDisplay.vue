@@ -83,7 +83,7 @@ if (props.variant === "winner") {
           icon: 'text-inverted',
         },
       }"
-      :description="winner.inputs.join(', ')"
+      :description="winner.inputs.filter(Boolean).join(', ')"
       size="lg"
       :ui="{
         avatar: 'size-14',

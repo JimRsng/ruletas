@@ -77,6 +77,11 @@ watch([winner, isSpinning], () => {
   winnerTime.value = Date.now();
   chatsTab.value = "winner";
 });
+
+watch(selected, () => {
+  if (chatsTab.value === "live") return;
+  chatsTab.value = "live";
+});
 </script>
 
 <template>

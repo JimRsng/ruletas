@@ -31,7 +31,7 @@ const { winner } = storeToRefs(useWheelStore());
           >
             {{ winner?.user.name }}
           </NuxtLink>
-          <p v-if="winner?.inputs.length" class="text-sm text-muted">{{ winner?.inputs.join(", ") }}</p>
+          <p v-if="winner?.inputs.length" class="text-sm text-muted">{{ winner?.inputs.filter(Boolean).join(", ") }}</p>
         </div>
       </div>
     </template>
