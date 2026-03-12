@@ -33,6 +33,10 @@ export default defineEventHandler(async (event) => {
     isPaused: body.paused,
     cost: body.cost,
     backgroundColor: body.color
+  }).catch((e) => {
+    throw createTwitchError(e, {
+      UPDATE_CUSTOM_REWARD_DUPLICATE_REWARD: [ErrorCode.CONFLICT, "Ya existe una recompensa con ese título en tu canal"]
+    });
   });
 
   return {

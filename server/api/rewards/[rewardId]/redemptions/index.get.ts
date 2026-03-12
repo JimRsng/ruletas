@@ -14,7 +14,10 @@ export default defineEventHandler(async (event) => {
   const provider = new StaticAuthProvider(config.oauth.twitch.clientId, accessToken, scope);
   const twitch = new ApiClient({ authProvider: provider });
 
-  const redemptions = await twitch.channelPoints.getRedemptionsForBroadcasterPaginated(user.id, params.rewardId, "UNFULFILLED", { newestFirst: false }).getAll();
+  const redemptionsPagination = twitch.channelPoints.getRedemptionsForBroadcasterPaginated(user.id, params.rewardId, "UNFULFILLED", { newestFirst: false });
+  const redemptions = await redemptionsPagination.getAll().catch((e) => {
+    throw createTwitchError(e);
+  });
 
   const redemptionUserIds = [...new Set(redemptions.map(r => r.userId))];
   const subscriptions: { user_id: string, tier: TwitchSubscriptionTier }[] = [];

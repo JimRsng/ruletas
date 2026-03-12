@@ -15,5 +15,7 @@ export default defineEventHandler(async (event) => {
   const provider = new StaticAuthProvider(config.oauth.twitch.clientId, accessToken, scope);
   const twitch = new ApiClient({ authProvider: provider });
 
-  await twitch.channelPoints.deleteCustomReward(user.id, params.rewardId);
+  await twitch.channelPoints.deleteCustomReward(user.id, params.rewardId).catch((e) => {
+    throw createTwitchError(e);
+  });
 });

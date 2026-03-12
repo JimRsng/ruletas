@@ -15,7 +15,9 @@ export default defineEventHandler(async (event) => {
   const provider = new StaticAuthProvider(config.oauth.twitch.clientId, accessToken, scope);
   const twitch = new ApiClient({ authProvider: provider });
 
-  const twitchUser = await twitch.users.getUserById(params.id);
+  const twitchUser = await twitch.users.getUserById(params.id).catch((e) => {
+    throw createTwitchError(e);
+  });
 
   if (!twitchUser) {
     throw createError({

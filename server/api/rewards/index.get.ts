@@ -10,7 +10,9 @@ export default defineEventHandler(async (event) => {
   const provider = new StaticAuthProvider(config.oauth.twitch.clientId, accessToken, scope);
   const twitch = new ApiClient({ authProvider: provider });
 
-  const rewards = await twitch.channelPoints.getCustomRewards(user.id, true);
+  const rewards = await twitch.channelPoints.getCustomRewards(user.id, true).catch((e) => {
+    throw createTwitchError(e);
+  });
 
   return rewards.map(reward => ({
     id: reward.id,

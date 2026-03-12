@@ -26,6 +26,10 @@ export default defineEventHandler(async (event): Promise<RuletasReward> => {
     userInputRequired: body.input,
     isEnabled: false, // start disabled to not listen to redemptions right away
     backgroundColor: body.color
+  }).catch((e) => {
+    throw createTwitchError(e, {
+      CREATE_CUSTOM_REWARD_DUPLICATE_REWARD: [ErrorCode.CONFLICT, "Ya existe una recompensa con ese título en tu canal"]
+    });
   });
 
   return {

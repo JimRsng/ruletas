@@ -19,7 +19,9 @@ export default defineEventHandler(async (event) => {
   const twitch = new ApiClient({ authProvider: provider });
 
   const redemptionsPagination = twitch.channelPoints.getRedemptionsForBroadcasterPaginated(user.id, params.rewardId, "UNFULFILLED", { newestFirst: false });
-  const redemptions = await redemptionsPagination.getAll();
+  const redemptions = await redemptionsPagination.getAll().catch((e) => {
+    throw createTwitchError(e);
+  });
 
   const redemptionIds = redemptions.map(r => r.id);
 
@@ -48,5 +50,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  await Promise.all(promises);
+  await Promise.all(promises).catch((e) => {
+    throw createTwitchError(e);
+  });
 });

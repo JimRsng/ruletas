@@ -28,9 +28,9 @@ const createReward = async () => {
   isLoading.value = true;
   rewardsStore.create(form.value).then(() => {
     form.reset();
-  }).finally(() => {
-    isLoading.value = false;
     isAdd.value = false;
+  }).catch(() => {}).finally(() => {
+    isLoading.value = false;
   });
 };
 </script>

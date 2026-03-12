@@ -15,7 +15,10 @@ export default defineEventHandler(async (event) => {
   const provider = new StaticAuthProvider(config.oauth.twitch.clientId, accessToken, scope);
   const twitch = new ApiClient({ authProvider: provider });
 
-  const redemptions = await twitch.channelPoints.updateRedemptionStatusByIds(user.id, params.rewardId, [params.redemptionId], "FULFILLED");
+  const redemptions = await twitch.channelPoints.updateRedemptionStatusByIds(user.id, params.rewardId, [params.redemptionId], "FULFILLED").catch((e) => {
+    throw createTwitchError(e);
+  });
+
   const redemption = redemptions[0]!;
 
   return {
