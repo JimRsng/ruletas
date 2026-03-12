@@ -4,37 +4,27 @@ import type { TabsItem } from "@nuxt/ui";
 const { user: broadcaster } = useUserSession();
 
 const { winner, settings, isSpinning, selected: wheelSelected } = storeToRefs(useWheelStore());
-
-const chat = useTwitchChat(broadcaster.value?.login);
-const winnerChat = computed(() => chat.value.filter(m => m.userInfo.userName === winner.value?.user.login));
-
-const chatsTab = ref("live");
-const chatContainer = useTemplateRef("chatContainer");
-
-watch([chatsTab, chat], () => {
-  requestAnimationFrame(() => {
-    if (!chatContainer.value) return;
-    chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
-  });
-}, { deep: true });
-
-watch([winner, isSpinning], ([winnerValue, isSpinningValue]) => {
-  if (!winnerValue || isSpinningValue) return;
-  chatsTab.value = "winner";
-});
-
-const items = computed<TabsItem[]>(() => [
-  { label: "Chat", value: "live", icon: "simple-icons:twitch" },
-  { label: "Ganador", value: "winner", icon: "lucide:crown", disabled: !winner.value }
-]);
+const { selected } = storeToRefs(useRewardsStore());
+const redemptionsStore = useRedemptionsStore();
 
 const loading = ref({
   reject: false,
   complete: false
 });
 
-const { selected } = storeToRefs(useRewardsStore());
-const redemptionsStore = useRedemptionsStore();
+const chat = useTwitchChat(broadcaster.value?.login);
+
+const isCountUpStart = computed(() => !!winner.value && !isSpinning.value);
+const isCountUpStop = computed(() => winnerChat.value.length > 0);
+const countUp = useCountUp(isCountUpStart, isCountUpStop);
+
+const winnerTime = ref(0);
+const winnerChat = computed(() => chat.value.filter((m) => {
+  const messageTime = m.date.getTime();
+  return m.userInfo.userName === winner.value?.user.login && messageTime >= winnerTime.value;
+}));
+
+const chatContainer = useTemplateRef("chatContainer");
 
 const completeWinner = () => {
   if (!winner.value || !selected.value) return;
@@ -74,8 +64,19 @@ const rejectWinner = () => {
   }
 };
 
-const isCountUpStop = computed(() => winnerChat.value.length > 0);
-const countUp = useCountUp(winner, isCountUpStop);
+const chatsTab = ref("live");
+const items = computed<TabsItem[]>(() => [
+  { label: "Chat", value: "live", icon: "simple-icons:twitch" },
+  { label: "Ganador", value: "winner", icon: "lucide:crown", disabled: !winner.value }
+]);
+
+useChatScroll(chatContainer, [chatsTab, chat]);
+
+watch([winner, isSpinning], () => {
+  if (!winner.value || isSpinning.value) return;
+  winnerTime.value = Date.now();
+  chatsTab.value = "winner";
+});
 </script>
 
 <template>
