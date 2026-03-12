@@ -19,9 +19,11 @@ const openWinner = ref(false);
         <PanelParticipants @winner="openWinner = true" />
       </div>
 
-      <WinnerModal v-model:open="openWinner" />
-
-      <LiveChat class="lg:col-span-2 xl:col-span-1" />
+      <div class="relative lg:col-span-2 xl:col-span-1 min-h-125 xl:min-h-0">
+        <LiveChat class="absolute inset-0" />
+      </div>
     </div>
+
+    <WinnerModal v-model:open="openWinner" />
   </UContainer>
 </template>
