@@ -57,14 +57,14 @@
     "drizzle-kit": "^0.31.9",
     "drizzle-orm": "^0.45.1",
     "howler": "^2.2.4",
-    "nuxt": "^4.3.1",
+    "nuxt": "^4.4.2",
     "nuxt-auth-utils": "^0.5.29",
     "pinia": "^3.0.4",
     "sass": "^1.98.0",
     "spin-wheel": "^5.0.2"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.96",
+    "@iconify-json/lucide": "^1.2.97",
     "@iconify-json/simple-icons": "^1.2.73",
     "@iconify-json/tabler": "^1.2.31",
     "@nuxt/eslint": "^1.15.2",
