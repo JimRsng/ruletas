@@ -24,7 +24,9 @@ const parsedParts = computed(() => {
       emoteUrl ? h("img", {
         class: "h-8 -my-2",
         src: emoteUrl,
-        alt: word
+        alt: word,
+        loading: "lazy",
+        decoding: "async"
       }) : word
     );
   }
