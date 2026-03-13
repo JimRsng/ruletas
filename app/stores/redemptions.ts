@@ -30,25 +30,28 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
   };
 
   const createInterval = async (rewardId: string) => {
+    if (abortController.value !== null) return;
     console.info("Listening to redemptions...");
     const loop = async () => {
       abortController.value = new AbortController();
-      await fetch(rewardId, abortController.value.signal).catch(() => {});
-      if (abortController.value) {
+      fetch(rewardId, abortController.value.signal).then(() => {
         timeout.value = window.setTimeout(loop, pollInterval);
-      }
+      }).catch(() => {
+        console.warn("Redemptions fetch aborted or failed");
+      });
     };
     await loop();
   };
 
   const clearInterval = () => {
+    if (!abortController.value) return;
+    console.info("Stopping listening to redemptions...");
     if (timeout.value) {
-      console.info("Stopping listening to redemptions...");
       window.clearTimeout(timeout.value);
-      timeout.value = null;
-      abortController.value?.abort("Interval cleared");
-      abortController.value = null;
     }
+    timeout.value = null;
+    abortController.value.abort("Interval cleared");
+    abortController.value = null;
   };
 
   const complete = async (rewardId: string, redemptionId: string) => {
@@ -105,6 +108,19 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
     clearInterval();
     redemptions.value = [];
   };
+
+  if (import.meta.dev && import.meta.hot) {
+    import.meta.hot.on("vite:beforeUpdate", () => {
+      clearInterval();
+    });
+
+    import.meta.hot.on("vite:afterUpdate", () => {
+      const { selected } = storeToRefs(useRewardsStore());
+      if (selected.value?.active && !selected.value.paused) {
+        createInterval(selected.value.id);
+      }
+    });
+  }
 
   return {
     redemptions,
