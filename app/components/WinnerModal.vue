@@ -40,7 +40,7 @@ watch(open, () => {
             size="sm"
             @click="open = false"
           />
-          <UButton class="cursor-pointer uppercase tracking-widest p-0" variant="link" @click="confettiReward()">Ganador</UButton>
+          <UButton class="cursor-pointer uppercase tracking-widest p-0 animate-pulse" variant="link" @click="confettiReward()">Ganador</UButton>
           <div>
             <NuxtLink
               :to="`https://www.twitch.tv/popout/${broadcaster?.login}/viewercard/${winner?.user.login}`"

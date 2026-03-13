@@ -30,7 +30,7 @@ const userMenu = computed<DropdownMenuItem[][]>(() => [
     <p class="text-xs uppercase tracking-widest text-primary font-bold">JimTracker</p>
     <h1 class="text-5xl">Ruletas</h1>
     <p class="text-muted">Crea ruletas a partir de recompensas de puntos de tu canal de Twitch</p>
-    <div class="absolute top-0 inset-e-0">
+    <div class="absolute top-0 inset-e-0 flex gap-1">
       <UColorModeButton />
       <UDropdownMenu v-if="broadcaster" :items="userMenu" :content="{ align: 'end', side: 'bottom', sideOffset: 8 }" :modal="false" arrow>
         <UButton
@@ -38,7 +38,6 @@ const userMenu = computed<DropdownMenuItem[][]>(() => [
           trailing-icon="lucide:chevron-down"
           variant="subtle"
           color="neutral"
-          class="rounded-full"
           :ui="{
             base: 'text-md hover:bg-accented/50 data-active:bg-accented/75',
           }"

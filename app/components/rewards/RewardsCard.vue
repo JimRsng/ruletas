@@ -18,7 +18,7 @@ const isActive = computed(() => isHovered.value || isDropdownOpen.value);
     <div class="flex gap-4 items-center">
       <div class="flex items-center justify-center rounded-xl h-16 w-18 relative shrink-0" :style="{ backgroundColor: reward.color }">
         <Icon name="custom:points" size="1.4rem" class="text-neutral-200" />
-        <span class="text-xs bg-default/80 absolute bottom-1 px-2 rounded-xl">{{ formatNumber(reward.cost) }}</span>
+        <span class="text-xs bg-default/80 absolute bottom-1 px-2 rounded-md">{{ formatNumber(reward.cost) }}</span>
       </div>
       <div>
         <h3 class="text-lg font-semibold">{{ reward.title }}</h3>

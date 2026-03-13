@@ -2,7 +2,7 @@
 @import "@nuxt/ui";
 
 :root {
-  --ui-primary: var(--ui-color-primary-700);
+  --ui-primary: var(--ui-color-primary-600);
 }
 
 .dark {

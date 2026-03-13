@@ -53,7 +53,7 @@ const createReward = async () => {
       icon="lucide:plus"
       variant="outline"
       color="primary"
-      class="mb-2 group-hover:scale-[1.1] transition-transform group-hover:bg-primary/10"
+      class="rounded-full mb-2 group-hover:scale-[1.1] transition-transform group-hover:bg-primary/10"
     />
     <p>Crear recompensa</p>
   </div>

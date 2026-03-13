@@ -121,6 +121,7 @@ const options = computed<DropdownMenuItem[][]>(() => [
       variant="outline"
       color="neutral"
       size="sm"
+      class="rounded-full"
       @click.stop
     />
   </UDropdownMenu>

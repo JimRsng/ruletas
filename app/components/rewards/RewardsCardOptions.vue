@@ -79,6 +79,7 @@ const emit = defineEmits<{
         icon="tabler:dots-vertical"
         variant="outline"
         color="neutral"
+        class="rounded-full"
         size="sm"
         @click.stop
       />

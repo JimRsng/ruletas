@@ -32,7 +32,7 @@ const colorRef = computed(() => form.value.color);
     <h3 class="font-semibold">{{ title }}</h3>
     <UButton
       v-if="cancellable"
-      class="absolute top-4 inset-e-4"
+      class="absolute top-4 inset-e-4 rounded-full"
       icon="lucide:x"
       type="button"
       variant="outline"

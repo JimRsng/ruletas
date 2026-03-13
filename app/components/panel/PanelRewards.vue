@@ -44,7 +44,7 @@ onUnmounted(() => {
 
 <template>
   <Transition name="slide" mode="out-in">
-    <div v-if="selected" class="flex flex-col lg:flex-row gap-4 items-center relative p-4 bg-elevated rounded-xl">
+    <div v-if="selected" class="flex flex-col lg:flex-row gap-4 items-center relative p-4 bg-elevated rounded-xl shadow">
       <div class="flex flex-col items-center justify-center rounded-xl" :style="{ backgroundColor: selected.color }">
         <Icon name="custom:points" size="1.4rem" class="my-2 text-neutral-200" />
         <UInputNumber
@@ -70,7 +70,7 @@ onUnmounted(() => {
       </div>
       <UButton
         :icon="isLoading ? 'lucide:loader-circle' : 'lucide:arrow-left-right'"
-        class="absolute -top-2 -inset-e-2"
+        class="absolute -top-2 -inset-e-2 rounded-full"
         :class="{ 'animate-spin': isLoading }"
         size="sm"
         :disabled="isSpinning"
@@ -94,7 +94,7 @@ onUnmounted(() => {
       variant="subtle"
       color="neutral"
       :ui="{ base: 'ring-0 border-none' }"
-      class="text-muted hover:text-default p-4 animate-on-hover rounded-xl"
+      class="text-muted hover:text-default p-4 animate-on-hover rounded-xl shadow"
       block
     />
     <template #body>
