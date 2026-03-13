@@ -33,7 +33,7 @@ const deleteReward = async () => {
   loading.value.delete = true;
   rewardsStore.remove(rewardId).then(() => {
     if (selected.value?.id === rewardId) {
-      redemptionsStore.clearInterval();
+      redemptionsStore.clear();
       rewardsStore.clearSelected();
     }
     wheelStore.storage.remove(rewardId);
