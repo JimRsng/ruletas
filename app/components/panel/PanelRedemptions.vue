@@ -176,7 +176,7 @@ watch(selected, () => {
         <div class="flex items-center gap-2">
           <span>Sin participantes duplicados</span>
           <UPopover mode="hover" :content="{ side: 'top' }" arrow>
-            <UButton icon="lucide:circle-question-mark" variant="link" color="neutral" class="p-0" size="sm" />
+            <UButton icon="lucide:circle-question-mark" variant="link" color="neutral" class="p-0 cursor-help" size="sm" />
             <template #content>
               <p>Al activar esta opción, cada usuario solo podrá tener una participación en la ruleta. Al canjear o reembolsar puntos, la acción se aplicará a <strong class="text-primary">una sola entrada</strong> de ese usuario, aunque tenga varias.</p>
             </template>
@@ -192,7 +192,7 @@ watch(selected, () => {
         <div class="flex items-center gap-2">
           <span>Entradas ponderadas</span>
           <UPopover mode="hover" :content="{ side: 'top' }" arrow>
-            <UButton icon="lucide:circle-question-mark" variant="link" color="neutral" class="p-0" size="sm" />
+            <UButton icon="lucide:circle-question-mark" variant="link" color="neutral" class="p-0 cursor-help" size="sm" />
             <template #content>
               <p>Combina todas las entradas de un mismo usuario, incrementando su tamaño en la ruleta. Al canjear o reembolsar puntos, la acción se aplicará a <strong class="text-primary">todas sus entradas</strong>. Solo se puede activar si se permiten participantes duplicados.</p>
             </template>
