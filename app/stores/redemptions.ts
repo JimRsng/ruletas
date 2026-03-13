@@ -2,7 +2,11 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
   const toast = useToast();
 
   const redemptions = ref<RuletasRedemption[]>([]);
-  const interval = ref<number | null>(null);
+
+  const timeout = ref<number | null>(null);
+  const abortController = ref<AbortController | null>(null);
+  const pollInterval = import.meta.dev ? 10000 : 2000;
+  const fetchTimeout = 5000;
 
   const deduplicated = computed<RuletasRedemptionWithDuplicates[]>(() => {
     const map = new Map<string, RuletasRedemptionWithDuplicates>();
@@ -18,23 +22,32 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
     return Array.from(map.values());
   });
 
-  const fetch = async (rewardId: string) => {
-    $fetch(`/api/rewards/${rewardId}/redemptions`).then((data) => {
+  const fetch = async (rewardId: string, signal?: AbortSignal) => {
+    const combined = signal ? AbortSignal.any([signal, AbortSignal.timeout(fetchTimeout)]) : AbortSignal.timeout(fetchTimeout);
+    return $fetch(`/api/rewards/${rewardId}/redemptions`, { signal: combined }).then((data) => {
       redemptions.value = data;
     });
   };
 
   const createInterval = async (rewardId: string) => {
     console.info("Listening to redemptions...");
-    await fetch(rewardId);
-    interval.value = window.setInterval(async () => await fetch(rewardId), import.meta.dev ? 10000 : 2000);
+    const loop = async () => {
+      abortController.value = new AbortController();
+      await fetch(rewardId, abortController.value.signal).catch(() => {});
+      if (abortController.value) {
+        timeout.value = window.setTimeout(loop, pollInterval);
+      }
+    };
+    await loop();
   };
 
   const clearInterval = () => {
-    if (interval.value) {
+    if (timeout.value) {
       console.info("Stopping listening to redemptions...");
-      window.clearInterval(interval.value);
-      interval.value = null;
+      window.clearTimeout(timeout.value);
+      timeout.value = null;
+      abortController.value?.abort("Interval cleared");
+      abortController.value = null;
     }
   };
 
