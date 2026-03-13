@@ -24,12 +24,16 @@ const participants = computed(() => {
   }).map(e => e.user.name);
 });
 
+const isListening = computed(() => {
+  return selected.value?.active && !selected.value.paused;
+});
+
 const canSpinGuard = () => {
-  if (selected.value?.active && !selected.value?.paused) {
+  if (isListening.value) {
     toast.add({ description: "Pausa o desactiva la recompensa para poder girar la ruleta", color: "error" });
   }
 
-  return !isSpinning.value && redemptions.value.length >= 2 && (!selected.value?.active || !!selected.value?.paused);
+  return !isSpinning.value && redemptions.value.length >= 2 && !isListening.value;
 };
 
 const volumeIcon = computed(() => {
