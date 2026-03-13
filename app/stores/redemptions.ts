@@ -29,10 +29,10 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
     });
   };
 
-  const createInterval = async (rewardId: string) => {
+  const createInterval = (rewardId: string) => {
     if (abortController.value !== null) return;
     console.info("Listening to redemptions...");
-    const loop = async () => {
+    const loop = () => {
       abortController.value = new AbortController();
       fetch(rewardId, abortController.value.signal).then(() => {
         timeout.value = window.setTimeout(loop, pollInterval);
@@ -40,7 +40,7 @@ export const useRedemptionsStore = defineStore("redemptions", () => {
         console.warn("Redemptions fetch aborted or failed");
       });
     };
-    await loop();
+    loop();
   };
 
   const clearInterval = () => {
