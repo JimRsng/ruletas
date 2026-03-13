@@ -50,7 +50,7 @@ onUnmounted(() => {
         v-model="selected.cost"
         class="max-w-20"
         size="sm"
-        :ui="{ base: 'rounded-xl rounded-t-none text-center bg-default/50' }"
+        :ui="{ base: 'rounded-xl rounded-t-none text-center dark:bg-default/50 light:bg-default/80' }"
         :format-options="{
           style: 'decimal',
         }"
