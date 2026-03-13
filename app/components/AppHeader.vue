@@ -27,7 +27,7 @@ const userMenu = computed<DropdownMenuItem[][]>(() => [
 
 <template>
   <div class="mb-5 relative">
-    <p class="text-xs uppercase tracking-widest text-primary">JimTracker</p>
+    <p class="text-xs uppercase tracking-widest text-primary font-bold">JimTracker</p>
     <h1 class="text-5xl">Ruletas</h1>
     <p class="text-muted">Crea ruletas a partir de recompensas de puntos de tu canal de Twitch</p>
     <div class="absolute top-0 inset-e-0">

@@ -43,7 +43,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="selected" class="p-4 bg-elevated rounded-xl flex flex-col lg:flex-row gap-4 items-center relative">
+  <div v-if="selected" class="p-4 flex flex-col lg:flex-row gap-4 items-center relative">
     <div class="flex flex-col items-center justify-center rounded-xl" :style="{ backgroundColor: selected.color }">
       <Icon name="custom:points" size="1.4rem" class="my-2 text-neutral-200" />
       <UInputNumber

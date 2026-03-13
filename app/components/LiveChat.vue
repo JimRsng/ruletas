@@ -85,7 +85,7 @@ watch(selected, () => {
 </script>
 
 <template>
-  <div class="bg-elevated rounded-xl p-4 h-full flex flex-col">
+  <div class="p-4 h-full flex flex-col">
     <UTabs
       v-model="chatsTab"
       :items="items"

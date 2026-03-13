@@ -5,21 +5,27 @@ const openWinner = ref(false);
 </script>
 
 <template>
+  <BackgroundStars color="secondary" radial-gradient />
   <UContainer class="space-y-2 mx-auto max-w-360" as="main">
+    <BackgroundStars color="secondary" radial-gradient />
+    <BackgroundSpin class="dark:opacity-20 light:opacity-80" />
+
     <AppHeader />
 
-    <PanelRewards />
+    <div class="bg-elevated rounded-xl shadow">
+      <PanelRewards />
+    </div>
 
     <div class="grid gap-2 grid-cols-1 lg:grid-cols-[375px_1fr] xl:grid-cols-[375px_1fr_375px]">
-      <aside class="p-4 bg-elevated rounded-xl space-y-4">
+      <aside class="p-4 bg-elevated rounded-xl space-y-4 shadow">
         <PanelRedemptions />
       </aside>
 
-      <div class="p-4 overflow-hidden bg-elevated rounded-xl space-y-4 flex flex-col min-h-125">
+      <div class="p-4 overflow-hidden bg-elevated rounded-xl space-y-4 flex flex-col min-h-125 shadow">
         <PanelParticipants @winner="openWinner = true" />
       </div>
 
-      <div class="relative lg:col-span-2 xl:col-span-1 min-h-125 xl:min-h-0">
+      <div class="relative lg:col-span-2 xl:col-span-1 min-h-125 xl:min-h-0 bg-elevated rounded-xl shadow">
         <LiveChat class="absolute inset-0" />
       </div>
     </div>
