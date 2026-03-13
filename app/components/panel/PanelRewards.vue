@@ -13,16 +13,8 @@ rewardsStore.setup(data.value || []);
 const isLoading = ref(false);
 const isModalOpen = ref(false);
 
-watch(selected, async (reward, oldReward) => {
+watch(selected, (reward, oldReward) => {
   if (!reward || isModalOpen.value) return;
-
-  if (reward.active && !reward.paused) {
-    redemptionsStore.createInterval(reward.id);
-  }
-  else {
-    redemptionsStore.clearInterval();
-  }
-
   if (!oldReward || reward.id !== oldReward.id) return;
 
   isLoading.value = true;
@@ -35,6 +27,17 @@ watch(selected, async (reward, oldReward) => {
   }).finally(() => {
     isLoading.value = false;
   });
+}, { deep: true });
+
+watch(selected, (reward) => {
+  if (!reward || isModalOpen.value) return;
+
+  if (reward.active && !reward.paused) {
+    redemptionsStore.createInterval(reward.id);
+    return;
+  }
+
+  redemptionsStore.clearInterval();
 }, { deep: true });
 
 onUnmounted(() => {
