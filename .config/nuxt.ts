@@ -76,7 +76,7 @@ export default defineNuxtConfig({
     },
     colors: {
       neutral: "zinc",
-      primary: "emerald",
+      primary: "amber",
       secondary: "violet",
       error: "red"
     }

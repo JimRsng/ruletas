@@ -1,9 +1,5 @@
 .slide-enter-active,
-.slide-leave-active,
-.slide-right-enter-active,
-.slide-right-leave-active,
-.slide-left-enter-active,
-.slide-left-leave-active {
+.slide-leave-active {
   transition: all 0.2s;
 }
 
@@ -11,18 +7,6 @@
 .slide-leave-to {
   opacity: 0;
   transform: translate(0, -10px);
-}
-
-.slide-right-enter-from,
-.slide-right-leave-to {
-  opacity: 0;
-  transform: translate(10px, 0);
-}
-
-.slide-left-enter-from,
-.slide-left-leave-to {
-  opacity: 0;
-  transform: translate(-10px, 0);
 }
 
 .fade-enter-active,

@@ -2,23 +2,26 @@
 definePageMeta({ middleware: "authenticated" });
 
 const openWinner = ref(false);
+const renderBg = ref(false);
+
+onMounted(() => {
+  renderBg.value = true;
+});
 </script>
 
 <template>
-  <ClientOnly>
-    <BackgroundStars color="secondary" radial-gradient />
-  </ClientOnly>
+  <Transition name="fade">
+    <BackgroundStars v-if="renderBg" color="secondary" radial-gradient />
+  </Transition>
   <UContainer class="space-y-2 mx-auto max-w-360" as="main">
-    <ClientOnly>
-      <BackgroundStars color="secondary" radial-gradient clientonly />
-    </ClientOnly>
+    <Transition name="fade">
+      <BackgroundStars v-if="renderBg" color="secondary" radial-gradient clientonly />
+    </Transition>
     <BackgroundSpin class="dark:opacity-20 light:opacity-80" />
 
     <AppHeader />
 
-    <div class="bg-elevated rounded-xl shadow">
-      <PanelRewards />
-    </div>
+    <PanelRewards />
 
     <div class="grid gap-2 grid-cols-1 lg:grid-cols-[375px_1fr] xl:grid-cols-[375px_1fr_375px]">
       <aside class="p-4 bg-elevated rounded-xl space-y-4 shadow">
@@ -30,7 +33,7 @@ const openWinner = ref(false);
       </div>
 
       <div class="relative lg:col-span-2 xl:col-span-1 min-h-125 xl:min-h-0 bg-elevated rounded-xl shadow">
-        <LiveChat class="absolute inset-0" />
+        <LiveChat class="p-4 absolute inset-0" />
       </div>
     </div>
 

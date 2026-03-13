@@ -59,9 +59,9 @@ watch(selected, () => {
         <UButton variant="link" class="ms-auto p-0 cursor-help">
           <UChip
             :class="{ 'animate-pulse': isListening }"
-            :color="selected ? isListening ? 'primary' : 'error' : 'neutral'"
+            :color="selected ? isListening ? 'success' : 'error' : 'neutral'"
             :ui="{
-              base: 'drop-shadow-md ' + (selected ? isListening ? 'drop-shadow-primary/30' : 'drop-shadow-error/30' : 'bg-accented'),
+              base: 'drop-shadow-md ' + (selected ? isListening ? 'drop-shadow-success/30' : 'drop-shadow-error/30' : 'bg-accented'),
             }"
             standalone
             inset
