@@ -68,11 +68,9 @@ watch(selected, () => {
           />
         </UButton>
         <template #content>
-          <div class="p-3 text-sm">
-            <p v-if="!selected">No has seleccionado una recompensa</p>
-            <p v-else-if="isListening">Esperando entradas...</p>
-            <p v-else>La recompensa está pausada o inactiva</p>
-          </div>
+          <p v-if="!selected">No has seleccionado una recompensa</p>
+          <p v-else-if="isListening">Esperando entradas...</p>
+          <p v-else>La recompensa está pausada o inactiva</p>
         </template>
       </UPopover>
     </div>

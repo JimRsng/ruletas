@@ -58,16 +58,21 @@ if (props.variant === "winner") {
           <NuxtLink :to="`https://twitch.tv/popout/${broadcaster?.login}/viewercard/${user.login}`" target="_blank" class="hover:underline wrap-anywhere">
             {{ user.name }}
           </NuxtLink>
-          <div v-if="user.subscription" :title="`Suscriptor Tier ${user.subscription.tier.replace('000', '')}`">
-            <Icon
-              name="lucide:star"
-              :class="{
-                'dark:text-purple-400 light:text-purple-500': user.subscription.tier === '1000',
-                'dark:text-slate-400 light:text-slate-400': user.subscription.tier === '2000',
-                'dark:text-amber-400 light:text-amber-400': user.subscription.tier === '3000',
-              }"
-            />
-          </div>
+          <UPopover v-if="user.subscription" mode="hover" :content="{ side: 'top' }" arrow>
+            <UButton variant="link" class="p-0 cursor-help">
+              <Icon
+                name="lucide:star"
+                :class="{
+                  'dark:text-purple-400 light:text-purple-500': user.subscription.tier === '1000',
+                  'dark:text-slate-400 light:text-slate-400': user.subscription.tier === '2000',
+                  'dark:text-amber-400 light:text-amber-400': user.subscription.tier === '3000',
+                }"
+              />
+            </UButton>
+            <template #content>
+              <p>Suscriptor Tier {{ user.subscription.tier.replace('000', '') }}</p>
+            </template>
+          </UPopover>
         </div>
       </template>
     </UUser>
@@ -95,16 +100,21 @@ if (props.variant === "winner") {
           <NuxtLink :to="`https://twitch.tv/popout/${broadcaster.login}/viewercard/${winner.user.login}`" target="_blank" class="hover:underline wrap-anywhere">
             {{ winner.user.name }}
           </NuxtLink>
-          <div v-if="winner.user.subscription" :title="`Suscriptor Tier ${winner.user.subscription.tier.replace('000', '')}`">
-            <Icon
-              name="lucide:star"
-              :class="{
-                'dark:text-purple-400 light:text-purple-500': winner.user.subscription.tier === '1000',
-                'dark:text-slate-400 light:text-slate-400': winner.user.subscription.tier === '2000',
-                'dark:text-amber-400 light:text-amber-400': winner.user.subscription.tier === '3000',
-              }"
-            />
-          </div>
+          <UPopover v-if="winner.user.subscription" mode="hover" :content="{ side: 'top' }" arrow>
+            <UButton variant="link" class="p-0 cursor-help">
+              <Icon
+                name="lucide:star"
+                :class="{
+                  'dark:text-purple-400 light:text-purple-500': winner.user.subscription.tier === '1000',
+                  'dark:text-slate-400 light:text-slate-400': winner.user.subscription.tier === '2000',
+                  'dark:text-amber-400 light:text-amber-400': winner.user.subscription.tier === '3000',
+                }"
+              />
+            </UButton>
+            <template #content>
+              <p>Suscriptor Tier {{ winner.user.subscription.tier.replace('000', '') }}</p>
+            </template>
+          </UPopover>
         </div>
       </template>
     </UUser>

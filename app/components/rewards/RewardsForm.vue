@@ -76,21 +76,19 @@ const colorRef = computed(() => form.value.color);
         />
       </UFormField>
       <UFormField label="Color" required>
-        <UPopover>
+        <UPopover :ui="{ content: 'p-2' }" arrow>
           <UButton color="neutral" variant="outline" :style="{ backgroundColor: form.color }" class="overflow-hidden rounded-lg px-0">
             <div class="h-5 w-12" />
           </UButton>
 
           <template #content>
-            <div class="p-2">
-              <UColorPicker v-model="form.color" default-value="#000000" />
-              <UInput
-                :value="colorRef"
-                placeholder="Color hex"
-                class="mt-2 w-full"
-                @change="form.color = ($event.target as HTMLInputElement).value"
-              />
-            </div>
+            <UColorPicker v-model="form.color" default-value="#000000" />
+            <UInput
+              :value="colorRef"
+              placeholder="Color hex"
+              class="mt-2 w-full"
+              @change="form.color = ($event.target as HTMLInputElement).value"
+            />
           </template>
         </UPopover>
       </UFormField>
