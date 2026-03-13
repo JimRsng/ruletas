@@ -19,5 +19,6 @@ export default [
   "lucide:user-check",
   "lucide:user-x",
   "lucide:search",
+  "lucide:circle-question-mark",
   "tabler:dots-vertical"
 ];

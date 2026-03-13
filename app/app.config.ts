@@ -12,7 +12,7 @@ export default defineAppConfig({
     },
     popover: {
       slots: {
-        content: "py-2 px-3 text-sm"
+        content: "py-2 px-3 text-sm max-w-sm"
       }
     }
   }
