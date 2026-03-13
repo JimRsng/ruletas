@@ -67,7 +67,7 @@ const options = computed<DropdownMenuItem[][]>(() => [
     {
       label: "Completar",
       icon: "lucide:check",
-      color: "primary",
+      color: "success",
       onSelect: async (e) => {
         e.preventDefault();
         await completeRedemption("current");
@@ -78,7 +78,7 @@ const options = computed<DropdownMenuItem[][]>(() => [
     {
       label: "Completar todas",
       icon: "lucide:user-check",
-      color: "primary",
+      color: "success",
       onSelect: async (e) => {
         e.preventDefault();
         await completeRedemption("all");
