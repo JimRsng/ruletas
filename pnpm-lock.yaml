@@ -87,6 +87,9 @@ importers:
       nuxt-ui-colors-no-inline:
         specifier: ^0.0.2
         version: 0.0.2(@tiptap/extensions@3.20.1(@tiptap/core@3.20.1(@tiptap/pm@3.20.1))(@tiptap/pm@3.20.1))(@tiptap/y-tiptap@3.0.2(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.6)(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29))(change-case@5.4.4)(db0@0.3.4(@libsql/client@0.17.0)(drizzle-orm@0.45.1(@cloudflare/workers-types@4.20260312.1)(@libsql/client@0.17.0)))(embla-carousel@8.6.0)(ioredis@5.10.0)(magicast@0.5.2)(typescript@5.9.3)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.98.0)(terser@5.46.0)(yaml@2.8.2))(vue@3.5.30(typescript@5.9.3))(yjs@13.6.29)(zod@4.3.6)
+      streamer-emotes:
+        specifier: 0.0.2
+        version: 0.0.2
       stylelint:
         specifier: ^17.4.0
         version: 17.4.0(typescript@5.9.3)
@@ -4559,6 +4562,9 @@ packages:
   globjoin@0.1.4:
     resolution: {integrity: sha512-xYfnw62CKG8nLkZBfWbhWwDw02CHty86jfPcc2cr3ZfeuK9ysoVPPEUxf21bAD/rWAgk52SuBrLJlefNy8mvFg==}
 
+  gql-payload@2.1.0:
+    resolution: {integrity: sha512-9m1dX7bIjJkhBs03MxplUfG1KsQ5S6al5DnzrZrjARF6jWCtRC1DmjGaozbNxe+L1eIZ7k6wLcR0GOQM1+vpzw==}
+
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
@@ -6237,6 +6243,9 @@ packages:
 
   std-env@4.0.0:
     resolution: {integrity: sha512-zUMPtQ/HBY3/50VbpkupYHbRroTRZJPRLvreamgErJVys0ceuzMkD44J/QjqhHjOzK42GQ3QZIeFG1OYfOtKqQ==}
+
+  streamer-emotes@0.0.2:
+    resolution: {integrity: sha512-IaEVNfE4MA4FnBsyCw4cTFl6TJvDo2YVklAhZoakVVinYSMQAgdFLacfssVAfdrZJ9OkzZ6YeXzgpma9XM8KIA==}
 
   streamx@2.23.0:
     resolution: {integrity: sha512-kn+e44esVfn2Fa/O0CPFcex27fjIL6MkVae0Mm6q+E6f0hWv578YCERbv+4m02cjxvDsPKLnmxral/rR6lBMAg==}
@@ -11432,6 +11441,8 @@ snapshots:
 
   globjoin@0.1.4: {}
 
+  gql-payload@2.1.0: {}
+
   graceful-fs@4.2.11: {}
 
   gzip-size@7.0.0:
@@ -13448,6 +13459,11 @@ snapshots:
   std-env@3.10.0: {}
 
   std-env@4.0.0: {}
+
+  streamer-emotes@0.0.2:
+    dependencies:
+      gql-payload: 2.1.0
+      ofetch: 2.0.0-alpha.3
 
   streamx@2.23.0:
     dependencies:

@@ -28,14 +28,22 @@ declare global {
   }
 
   interface StreamElementsEmotes {
-    bttvChannelEmotes: Record<string, StreamElementsEmote<"bttv">>;
-    bttvGlobalEmotes: Record<string, StreamElementsEmote<"bttv">>;
-    ffzChannelEmotes: Record<string, StreamElementsEmote<"ffz">>;
-    ffzGlobalEmotes: Record<string, StreamElementsEmote<"ffz">>;
-    sevenTVChannelEmotes: Record<string, StreamElementsEmote<"7tv">>;
-    sevenTVGlobalEmotes: Record<string, StreamElementsEmote<"7tv">>;
-    twitchGlobalEmotes: Record<string, StreamElementsEmote<"twitch">>;
-    twitchSubEmotes: Record<string, StreamElementsEmote<"twitch">>;
+    bttv: {
+      channel: Record<string, StreamElementsEmote<"bttv">>;
+      global: Record<string, StreamElementsEmote<"bttv">>;
+    };
+    ffz: {
+      channel: Record<string, StreamElementsEmote<"ffz">>;
+      global: Record<string, StreamElementsEmote<"ffz">>;
+    };
+    sevenTV: {
+      channel: Record<string, StreamElementsEmote<"7tv">>;
+      global: Record<string, StreamElementsEmote<"7tv">>;
+    };
+    twitch: {
+      global: Record<string, StreamElementsEmote<"twitch">>;
+      sub: Record<string, StreamElementsEmote<"twitch">>;
+    };
   }
 }
 
