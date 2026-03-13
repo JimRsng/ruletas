@@ -12,44 +12,22 @@ const { data: emotes } = await useLazyFetch("/api/channel-emotes", {
 });
 
 const parsedParts = computed(() => {
-  const words = props.text.split(" ");
+  const tokens = props.text.split(" ");
 
-  if (!emotes.value) return words;
+  if (!emotes.value) return tokens.map(token => ({ token, url: null as string | null }));
 
-  const parts: (string | VNode)[] = [];
-
-  for (const word of words) {
-    const emoteUrl = emotes.value[word];
-    parts.push(
-      emoteUrl ? h("img", {
-        class: "h-8 -my-2",
-        src: emoteUrl,
-        alt: word,
-        loading: "lazy",
-        decoding: "async"
-      }) : word
-    );
-  }
-
-  return parts;
+  return tokens.map(token => ({
+    token,
+    url: emotes.value![token] ?? null
+  }));
 });
 </script>
 
 <template>
   <span class="channel-emotes max-h-6 relative">
     <template v-for="(part, index) in parsedParts" :key="index">
-      <template v-if="typeof part === 'string'">
-        {{ part }}
-      </template>
-      <UPopover v-else-if="popover" mode="hover" :content="{ side: 'top' }" arrow>
-        <UButton variant="link" class="p-0 align-middle inline-flex">
-          <component :is="part" />
-        </UButton>
-        <template #content>
-          {{ part.props!.alt }}
-        </template>
-      </UPopover>
-      <component :is="part" v-else class="inline-block align-middle" :title="part.props!.alt" />
+      <template v-if="!part.url">{{ part.token }}</template>
+      <img v-else class="inline-block align-middle h-8 -my-2" :src="part.url" :alt="part.token" loading="lazy" decoding="async" :title="part.token">
       <template v-if="index < parsedParts.length - 1">{{ ' ' }}</template>
     </template>
   </span>
