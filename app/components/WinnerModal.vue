@@ -36,7 +36,7 @@ watch(open, () => {
             icon="lucide:x"
             variant="outline"
             color="neutral"
-            class="absolute right-2 top-2"
+            class="rounded-full absolute right-2 top-2"
             size="sm"
             @click="open = false"
           />

@@ -1,6 +1,5 @@
 <script setup lang="ts" generic="T">
 import { Wheel, type WheelItem } from "spin-wheel";
-import { Howl } from "howler";
 
 const props = withDefaults(defineProps<{
   entries: T[];
@@ -23,6 +22,8 @@ const emit = defineEmits<{
   select: [value: NonNullable<T>];
 }>();
 
+const { sounds } = useWheelStore();
+
 const wheelContainerRef = useTemplateRef("wheelContainerRef");
 const sectionRef = useTemplateRef("sectionRef");
 
@@ -30,11 +31,6 @@ const wheelSize = ref<number | undefined>(undefined);
 
 let resizeObserver: ResizeObserver | null = null;
 const resizeTimeout: ReturnType<typeof setTimeout> | null = null;
-
-const sounds = {
-  tick: new Howl({ src: ["/sounds/tick.ogg"] }),
-  winner: new Howl({ src: ["/sounds/winner.ogg"] })
-};
 
 let wheel: Wheel | null = null;
 let idleAnimFrame: number | null = null;
@@ -119,7 +115,7 @@ const init = () => {
     const winner = props.entries.find(entry => String(entry) === winnerItem?.label?.replace(/ \[x\d+\]$/, ""));
 
     if (winner) {
-      sounds.winner.play();
+      sounds.play("winner");
       emit("select", winner);
       select.value = winner;
     }
@@ -127,7 +123,7 @@ const init = () => {
 
   wheel.onCurrentIndexChange = () => {
     if (idleAnimFrame || !isSpinning.value) return;
-    sounds.tick.play();
+    sounds.play("tick");
   };
 
   stopIdleSpin();

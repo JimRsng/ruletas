@@ -3,7 +3,7 @@ const toast = useToast();
 
 const { selected } = storeToRefs(useRewardsStore());
 const { redemptions, deduplicated } = storeToRefs(useRedemptionsStore());
-const { settings, isSpinning, selected: wheelSelected } = storeToRefs(useWheelStore());
+const { settings, isSpinning, selected: wheelSelected, volume } = storeToRefs(useWheelStore());
 
 const emit = defineEmits<{
   winner: [name: string];
@@ -31,6 +31,12 @@ const canSpinGuard = () => {
 
   return !isSpinning.value && redemptions.value.length >= 2 && (!selected.value?.active || !!selected.value?.paused);
 };
+
+const volumeIcon = computed(() => {
+  if (volume.value === 0) return "lucide:volume-x";
+  if (volume.value < 50) return "lucide:volume-1";
+  return "lucide:volume-2";
+});
 </script>
 
 <template>
@@ -38,6 +44,13 @@ const canSpinGuard = () => {
     <UIcon name="simple-icons:twitch" size="1.3rem" />
     <h3 class="text-sm font-semibold">Participantes (<span class="text-primary">{{ participants.length }}</span>)</h3>
   </div>
+
+  <UPopover :ui="{ content: 'p-2' }" :content="{ side: 'top' }" arrow>
+    <UButton v-memo="[volumeIcon]" :icon="volumeIcon" color="neutral" variant="outline" class="rounded-full absolute bottom-0 right-4 z-1" />
+    <template #content>
+      <USlider v-model="volume" orientation="vertical" class="h-32" :tooltip="{ arrow: true, content: { side: 'right' } }" />
+    </template>
+  </UPopover>
 
   <SpinWheel
     v-model="wheelSelected"

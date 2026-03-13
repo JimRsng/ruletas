@@ -20,5 +20,8 @@ export default [
   "lucide:user-x",
   "lucide:search",
   "lucide:circle-question-mark",
+  "lucide:volume-1",
+  "lucide:volume-2",
+  "lucide:volume-x",
   "tabler:dots-vertical"
 ];

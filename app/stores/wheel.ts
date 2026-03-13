@@ -1,16 +1,20 @@
 import { StorageSerializers, useStorage } from "@vueuse/core";
+import { Howl } from "howler";
 
 export const useWheelStore = defineStore("wheel", () => {
+  const { deduplicated } = storeToRefs(useRedemptionsStore());
+
+  // States
   const isSpinning = ref(false);
   const selected = ref<string | null>(null);
-
-  const { deduplicated } = storeToRefs(useRedemptionsStore());
+  const volume = ref(50);
 
   const winner = computed(() => {
     if (!selected.value) return null;
     return deduplicated.value.find(e => e.user.name === selected.value) || null;
   });
 
+  // Settings
   const defaultSettings = {
     disallowDuplicates: true,
     subscribersOnly: false,
@@ -21,6 +25,7 @@ export const useWheelStore = defineStore("wheel", () => {
 
   const settings = ref(defaultSettings);
 
+  // Settings storage
   type WheelStorage = Record<string, Omit<typeof settings.value, "palette"> | null>;
   const storedSettings = useStorage<WheelStorage>("wheel:settings", null, undefined, { serializer: StorageSerializers.object });
 
@@ -42,11 +47,43 @@ export const useWheelStore = defineStore("wheel", () => {
     }
   };
 
+  // Sounds
+  const soundsMap = {
+    tick: new Howl({ src: ["/sounds/tick.ogg"] }),
+    winner: new Howl({ src: ["/sounds/winner.ogg"] })
+  };
+
+  const sounds = {
+    play: (type: keyof typeof soundsMap) => {
+      const sound = soundsMap[type];
+      sound.play();
+    },
+    volume: (value: number) => {
+      for (const sound of Object.values(soundsMap)) {
+        sound.volume(value / 100);
+        storedVolume.value = value;
+      }
+    }
+  };
+
+  const storedVolume = useStorage<number | null>("wheel:volume", null, undefined, { serializer: StorageSerializers.number });
+
+  watch(volume, (value) => {
+    sounds.volume(value);
+  });
+
+  onMounted(() => {
+    if (storedVolume.value === null) return;
+    volume.value = storedVolume.value;
+  });
+
   return {
     settings,
     isSpinning,
     selected,
     winner,
-    storage
+    storage,
+    sounds,
+    volume
   };
 });

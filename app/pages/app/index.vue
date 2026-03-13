@@ -28,7 +28,7 @@ onMounted(() => {
         <PanelRedemptions />
       </aside>
 
-      <div class="p-4 overflow-hidden bg-elevated rounded-xl space-y-4 flex flex-col min-h-125 shadow">
+      <div class="relative p-4 overflow-hidden bg-elevated rounded-xl space-y-4 flex flex-col min-h-125 shadow">
         <PanelParticipants @winner="openWinner = true" />
       </div>
 
