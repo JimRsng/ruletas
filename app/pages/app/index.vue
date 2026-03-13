@@ -5,9 +5,13 @@ const openWinner = ref(false);
 </script>
 
 <template>
-  <BackgroundStars color="secondary" radial-gradient />
-  <UContainer class="space-y-2 mx-auto max-w-360" as="main">
+  <ClientOnly>
     <BackgroundStars color="secondary" radial-gradient />
+  </ClientOnly>
+  <UContainer class="space-y-2 mx-auto max-w-360" as="main">
+    <ClientOnly>
+      <BackgroundStars color="secondary" radial-gradient clientonly />
+    </ClientOnly>
     <BackgroundSpin class="dark:opacity-20 light:opacity-80" />
 
     <AppHeader />
