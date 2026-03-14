@@ -9,6 +9,8 @@ const emit = defineEmits<{
   winner: [name: string];
 }>();
 
+const spinWheelRef = useTemplateRef("spinWheelRef");
+
 const participants = computed(() => {
   const entries = settings.value.disallowDuplicates ? deduplicated.value : redemptions.value;
 
@@ -41,6 +43,11 @@ const volumeIcon = computed(() => {
   if (volume.value < 50) return "lucide:volume-1";
   return "lucide:volume-2";
 });
+
+watch(participants, () => {
+  if (participants.value.length) return;
+  spinWheelRef.value?.reset();
+});
 </script>
 
 <template>
@@ -57,6 +64,7 @@ const volumeIcon = computed(() => {
   </UPopover>
 
   <SpinWheel
+    ref="spinWheelRef"
     v-model="wheelSelected"
     v-model:spinning="isSpinning"
     :entries="participants"
