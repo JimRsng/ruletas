@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { TabsItem } from "@nuxt/ui";
+import type { ChatMessage } from "@twurple/chat";
 
 const { user: broadcaster } = useUserSession();
 
@@ -12,17 +13,23 @@ const loading = ref({
   complete: false
 });
 
-const chat = useTwitchChat(broadcaster.value?.login);
+const winnerTime = ref(0);
+const winnerMessages = ref<ChatMessage[]>([]);
+
+const chat = useTwitchChat(broadcaster.value?.login, {
+  onMessage: (data) => {
+    if (!winner.value) return;
+    if (data.userInfo.userName === winner.value.user.login && data.date.getTime() >= winnerTime.value) {
+      winnerMessages.value.push(data);
+    }
+  }
+});
+
+const winnerChat = computed(() => winnerMessages.value.slice(-100));
 
 const isCountUpStart = computed(() => !!winner.value && !isSpinning.value);
 const isCountUpStop = computed(() => winnerChat.value.length > 0);
 const countUp = useCountUp(isCountUpStart, isCountUpStop);
-
-const winnerTime = ref(0);
-const winnerChat = computed(() => chat.value.filter((m) => {
-  const messageTime = m.date.getTime();
-  return m.userInfo.userName === winner.value?.user.login && messageTime >= winnerTime.value;
-}));
 
 const chatContainer = useTemplateRef("chatContainer");
 
@@ -79,6 +86,7 @@ useChatScroll(chatContainer, [chatsTab, chat]);
 watch([winner, isSpinning], () => {
   if (!winner.value || isSpinning.value) return;
   winnerTime.value = Date.now();
+  winnerMessages.value = [];
   chatsTab.value = "winner";
 });
 

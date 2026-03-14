@@ -1,7 +1,10 @@
 import { ChatClient, type ChatMessage } from "@twurple/chat";
 
-export const useTwitchChat = (channel?: string) => {
+export const useTwitchChat = (channel?: string, options: {
+  onMessage?: (data: ChatMessage) => void;
+} = {}) => {
   const messages = ref<ChatMessage[]>([]);
+  const { onMessage } = options;
 
   if (!channel) return messages;
 
@@ -17,6 +20,7 @@ export const useTwitchChat = (channel?: string) => {
 
     chat.onMessage((_, user, text, data) => {
       messages.value.push(data);
+      onMessage?.(data);
     });
   });
 
