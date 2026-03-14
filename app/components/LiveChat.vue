@@ -32,6 +32,7 @@ const completeWinner = () => {
   if (settings.value.weighted) {
     redemptionsStore.completeAll(selected.value.id, winner.value.user.id).then(() => {
       wheelSelected.value = null;
+      chatsTab.value = "live";
     }).catch(() => {}).finally(() => {
       loading.value.complete = false;
     });
@@ -39,6 +40,7 @@ const completeWinner = () => {
   else {
     redemptionsStore.complete(selected.value.id, winner.value.id).then(() => {
       wheelSelected.value = null;
+      chatsTab.value = "live";
     }).catch(() => {}).finally(() => {
       loading.value.complete = false;
     });
@@ -51,6 +53,7 @@ const rejectWinner = () => {
   if (settings.value.weighted) {
     redemptionsStore.rejectAll(selected.value.id, winner.value.user.id).then(() => {
       wheelSelected.value = null;
+      chatsTab.value = "live";
     }).catch(() => {}).finally(() => {
       loading.value.reject = false;
     });
@@ -58,6 +61,7 @@ const rejectWinner = () => {
   else {
     redemptionsStore.reject(selected.value.id, winner.value.id).then(() => {
       wheelSelected.value = null;
+      chatsTab.value = "live";
     }).catch(() => {}).finally(() => {
       loading.value.reject = false;
     });
