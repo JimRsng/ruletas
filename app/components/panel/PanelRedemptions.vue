@@ -3,7 +3,7 @@ const redemptionsStore = useRedemptionsStore();
 const { redemptions } = storeToRefs(redemptionsStore);
 const { selected } = storeToRefs(useRewardsStore());
 const wheelStore = useWheelStore();
-const { settings, isSpinning } = storeToRefs(wheelStore);
+const { settings, isSpinning, selected: wheelSelected } = storeToRefs(wheelStore);
 
 const loading = reactive({
   rejectAll: false,
@@ -21,7 +21,9 @@ const filteredRedemptions = computed(() => {
 const rejectAllRedemptions = () => {
   if (!selected.value?.id) return;
   loading.rejectAll = true;
-  redemptionsStore.rejectAll(selected.value.id).catch(() => {}).finally(() => {
+  redemptionsStore.rejectAll(selected.value.id).then(() => {
+    wheelSelected.value = null;
+  }).catch(() => {}).finally(() => {
     loading.rejectAll = false;
   });
 };
@@ -29,7 +31,9 @@ const rejectAllRedemptions = () => {
 const completeAllRedemptions = () => {
   if (!selected.value?.id) return;
   loading.completeAll = true;
-  redemptionsStore.completeAll(selected.value.id).catch(() => {}).finally(() => {
+  redemptionsStore.completeAll(selected.value.id).then(() => {
+    wheelSelected.value = null;
+  }).catch(() => {}).finally(() => {
     loading.completeAll = false;
   });
 };
