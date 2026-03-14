@@ -7,6 +7,7 @@ Web app for creating picker wheels linked to Twitch channel point rewards.
 ## Contents
 
 - 🚀 [Features](#features)
+- 🖼️ [Screenshots](#screenshots)
 - ⭐ [Credits](#credits)
 - ⚖️ [License](#license)
 - 💻 [Development](#development)
@@ -22,6 +23,12 @@ Web app for creating picker wheels linked to Twitch channel point rewards.
 - Twitch live chat with emotes support.
 - Winner celebration display, winner chat integration, and timer.
 - Wheel spin sound and volume control.
+
+## <a name="screenshots">🖼️ Screenshots</a>
+
+![screenshot-1](https://github.com/user-attachments/assets/da294a97-3182-4a5b-b521-2915cf1063b2)
+![screenshot-2](https://github.com/user-attachments/assets/6049a06c-3a7b-4816-a93f-e90216df4535)
+![screenshot-2](https://github.com/user-attachments/assets/74d6f16b-abee-497f-a7e4-0cdd0ab617c9)
 
 ## <a name="credits">⭐ Credits</a>
 
