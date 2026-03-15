@@ -123,8 +123,8 @@ export default defineNuxtConfig({
       dialect: "sqlite",
       casing: "snake_case"
     },
-    cache: true
     */
+    cache: true
   },
 
   eslint: {
