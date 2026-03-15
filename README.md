@@ -14,7 +14,7 @@ Web app for creating picker wheels linked to Twitch channel point rewards.
 
 ## <a name="features">🚀 Features</a>
 
-- Complete Twitch channel point reward integration.
+- Complete Twitch channel point rewards integration.
 - Create, edit, and delete Twitch channel point rewards.
 - Select or change the reward used for the wheel
 - Rewards redemption entries list.
