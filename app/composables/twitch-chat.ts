@@ -19,7 +19,7 @@ export const useTwitchChat = (channel?: string, options: {
     chat.connect();
 
     chat.onMessage((_, user, text, data) => {
-      messages.value.push(data);
+      messages.value.push(markRaw(data));
       onMessage?.(data);
     });
   });

@@ -20,7 +20,7 @@ Web app for creating picker wheels linked to Twitch channel point rewards.
 - Rewards redemption entries list.
 - View and manage entries.
 - Per-reward wheel settings and filters.
-- Twitch live chat with emotes support.
+- Real-time Twitch live chat with emotes and user badge display.
 - Winner celebration display, winner chat integration, and timer.
 - Wheel spin sound and volume control.
 

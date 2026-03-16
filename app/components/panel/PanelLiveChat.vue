@@ -125,11 +125,12 @@ watch(wheelSelected, () => {
               <div v-if="!chat.length" class="text-muted italic animate-pulse">No hay mensajes aún...</div>
               <div v-for="(message, i) in chat" :key="i">
                 <span class="font-semibold" :style="{ color: message.userInfo.color }">
+                  <ChatBadges :badges="message.userInfo.badges" />
                   <NuxtLink :to="`https://twitch.tv/popout/${broadcaster?.login}/viewercard/${message.userInfo.userName}`" target="_blank" class="hover:underline">
                     {{ message.userInfo.displayName }}
                   </NuxtLink>
                 </span>
-                <span>: <ChannelEmotes :text="message.text" /></span>
+                <span>: <ChatEmotes :text="message.text" /></span>
               </div>
             </template>
             <template v-else-if="item.value === 'winner'">
@@ -139,11 +140,12 @@ watch(wheelSelected, () => {
                   [{{ message.date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: false }) }}]
                 </span>
                 <span class="font-semibold" :style="{ color: message.userInfo.color }">
+                  <ChatBadges :badges="message.userInfo.badges" />
                   <NuxtLink :to="`https://twitch.tv/popout/${broadcaster?.login}/viewercard/${message.userInfo.userName}`" target="_blank" class="hover:underline">
                     {{ message.userInfo.displayName }}
                   </NuxtLink>
                 </span>
-                <span>: <ChannelEmotes :text="message.text" /></span>
+                <span>: <ChatEmotes :text="message.text" /></span>
               </div>
             </template>
           </div>

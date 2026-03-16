@@ -65,13 +65,13 @@
     "vue-rewards": "^1.0.3"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.97",
-    "@iconify-json/simple-icons": "^1.2.73",
+    "@iconify-json/lucide": "^1.2.98",
+    "@iconify-json/simple-icons": "^1.2.74",
     "@iconify-json/tabler": "^1.2.31",
     "@nuxt/eslint": "^1.15.2",
     "@types/howler": "^2.2.12",
     "eslint": "^10.0.3",
-    "nuxt-ui-colors-no-inline": "^0.0.2",
+    "nuxt-ui-colors-no-inline": "^0.0.3",
     "streamer-emotes": "^0.1.1",
     "stylelint": "^17.4.0",
     "stylelint-config-standard-scss": "^17.0.0",

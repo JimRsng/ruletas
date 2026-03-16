@@ -33,7 +33,7 @@ onMounted(() => {
       </div>
 
       <div class="relative lg:col-span-2 xl:col-span-1 min-h-125 xl:min-h-0 bg-elevated rounded-xl shadow">
-        <LiveChat class="p-4 absolute inset-0" />
+        <PanelLiveChat class="p-4 absolute inset-0" />
       </div>
     </div>
 

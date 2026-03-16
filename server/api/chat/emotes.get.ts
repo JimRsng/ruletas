@@ -26,7 +26,7 @@ export default defineCachedEventHandler(async (event) => {
   maxAge: 1 * 24 * 60 * 60, // 1 day
   swr: false,
   group: "api",
-  name: "channel-emotes",
+  name: "chat:emotes",
   getKey: async (event) => {
     const { user } = await requireUserSession(event);
     return user.id;
