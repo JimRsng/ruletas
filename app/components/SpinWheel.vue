@@ -35,11 +35,14 @@ const resizeTimeout: ReturnType<typeof setTimeout> | null = null;
 let wheel: Wheel | null = null;
 let idleAnimFrame: number | null = null;
 let lastTs: number | null = null;
+let stopIdle = false;
 const IDLE_DEG_PER_SEC = 5;
 
 const startIdleSpin = () => {
+  stopIdle = false;
   lastTs = null;
   const step = (ts: number) => {
+    if (stopIdle) return;
     if (lastTs !== null && wheel) {
       wheel.rotation = (wheel.rotation + IDLE_DEG_PER_SEC * (ts - lastTs) / 1000) % 360;
     }
@@ -50,6 +53,7 @@ const startIdleSpin = () => {
 };
 
 const stopIdleSpin = () => {
+  stopIdle = true;
   if (idleAnimFrame !== null) {
     cancelAnimationFrame(idleAnimFrame);
     idleAnimFrame = null;
@@ -122,7 +126,7 @@ const init = () => {
   };
 
   wheel.onCurrentIndexChange = () => {
-    if (idleAnimFrame || !isSpinning.value) return;
+    if (!isSpinning.value) return;
     sounds.play("tick");
   };
 
@@ -195,7 +199,7 @@ watch(() => [
     wheel = null;
     init();
   }
-}, { deep: true });
+});
 </script>
 
 <template>
