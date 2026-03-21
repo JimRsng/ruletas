@@ -48,15 +48,17 @@ export const useWheelStore = defineStore("wheel", () => {
   };
 
   // Sounds
-  const soundsMap = {
-    tick: new Howl({ src: ["/sounds/tick.ogg"] }),
-    winner: new Howl({ src: ["/sounds/winner.ogg"] })
+  const soundConfigs = {
+    tick: () => new Howl({ src: ["/sounds/tick.ogg"] }),
+    winner: () => new Howl({ src: ["/sounds/winner.ogg"] })
   };
 
+  const soundsMap = {} as Record<keyof typeof soundConfigs, Howl>;
+
   const sounds = {
-    play: (type: keyof typeof soundsMap) => {
-      const sound = soundsMap[type];
-      sound.play();
+    play: (type: keyof typeof soundConfigs) => {
+      soundsMap[type] ??= soundConfigs[type]();
+      soundsMap[type].play();
     },
     volume: (value: number) => {
       Howler.volume(value / 100);
