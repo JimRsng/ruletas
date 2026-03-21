@@ -30,7 +30,6 @@ const sectionRef = useTemplateRef("sectionRef");
 const wheelSize = ref<number | undefined>(undefined);
 
 let resizeObserver: ResizeObserver | null = null;
-const resizeTimeout: ReturnType<typeof setTimeout> | null = null;
 
 let wheel: Wheel | null = null;
 let idleAnimFrame: number | null = null;
@@ -114,8 +113,7 @@ const init = () => {
   wheel.onRest = ({ currentIndex }) => {
     isSpinning.value = false;
 
-    const winnerIndex = currentIndex;
-    const winnerItem = items.value[winnerIndex];
+    const winnerItem = items.value[currentIndex];
     const winner = props.entries.find(entry => String(entry) === winnerItem?.label?.replace(/ \[x\d+\]$/, ""));
 
     if (winner) {
@@ -157,7 +155,6 @@ defineExpose({ reset });
 onUnmounted(() => {
   if (props.idleSpin) stopIdleSpin();
   resizeObserver?.disconnect();
-  if (resizeTimeout !== null) clearTimeout(resizeTimeout);
 });
 
 onMounted(() => {
