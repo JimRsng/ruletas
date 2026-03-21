@@ -59,10 +59,8 @@ export const useWheelStore = defineStore("wheel", () => {
       sound.play();
     },
     volume: (value: number) => {
-      for (const sound of Object.values(soundsMap)) {
-        sound.volume(value / 100);
-        storedVolume.value = value;
-      }
+      Howler.volume(value / 100);
+      storedVolume.value = value;
     }
   };
 
