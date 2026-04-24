@@ -189,13 +189,15 @@ watch(() => [
   props.idleSpin,
   props.weighted
 ], () => {
-  if (!isSpinning.value && wheelContainerRef.value) {
+  nextTick(() => {
+    if (isSpinning.value || !wheelContainerRef.value) return;
+
     if (wheel) {
       wheel.remove();
     }
     wheel = null;
     init();
-  }
+  });
 });
 </script>
 
