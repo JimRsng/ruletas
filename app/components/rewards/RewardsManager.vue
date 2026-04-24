@@ -11,8 +11,10 @@ const emits = defineEmits<{
 }>();
 
 const selectReward = (id: string) => {
-  redemptionsStore.clear();
-  rewardsStore.select(id);
+  if (rewardsStore.selected?.id !== id) {
+    redemptionsStore.clear();
+    rewardsStore.select(id);
+  }
   emits("select", id);
 };
 
