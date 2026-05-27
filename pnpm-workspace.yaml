@@ -1,14 +1,15 @@
+minimumReleaseAge: 0
 shamefullyHoist: true
 strictPeerDependencies: false
 
 packages:
   - .
 
-ignoredBuiltDependencies:
-  - '@parcel/watcher'
-  - canvas
-  - esbuild
-  - sharp
-  - unrs-resolver
-  - vue-demi
-  - workerd
+allowBuilds:
+  '@parcel/watcher': false
+  canvas: false
+  esbuild: false
+  sharp: false
+  unrs-resolver: false
+  vue-demi: false
+  workerd: false
