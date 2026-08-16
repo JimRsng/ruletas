@@ -47,7 +47,7 @@ export default defineNuxtConfig({
       meta: [
         { name: "robots", content: "index, follow" },
         { name: "apple-mobile-web-app-title", content: SITE.name },
-        { name: "apple-mobile-web-app-capable", content: SITE.name },
+        { name: "apple-mobile-web-app-capable", content: "yes" },
         { name: "application-name", content: SITE.name },
         { property: "og:site_name", content: SITE.name }
       ]
