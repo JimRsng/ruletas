@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "ruletas",
-  "compatibility_date": "2026-03-09",
+  "compatibility_date": "2026-08-22",
   "main": ".output/server/index.mjs",
   "compatibility_flags": ["nodejs_compat"],
   "routes": [

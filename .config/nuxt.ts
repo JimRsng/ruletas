@@ -31,7 +31,7 @@ export default defineNuxtConfig({
       viewport: "width=device-width, initial-scale=1",
       title: SITE.name,
       htmlAttrs: {
-        lang: "en"
+        lang: "es"
       },
       link: [
         { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
@@ -97,7 +97,7 @@ export default defineNuxtConfig({
     typedPages: true
   },
 
-  compatibilityDate: "2026-03-07",
+  compatibilityDate: "2026-08-22",
 
   nitro: {
     prerender: {
@@ -105,25 +105,12 @@ export default defineNuxtConfig({
       crawlLinks: false,
       routes: ["/sitemap.xml"]
     },
-    cloudflare: {
-      pages: {
-        routes: {
-          exclude: ["/images/*"]
-        }
-      }
-    },
     experimental: {
       tasks: true
     }
   },
 
   hub: {
-    /*
-    db: {
-      dialect: "sqlite",
-      casing: "snake_case"
-    },
-    */
     cache: true
   },
 
