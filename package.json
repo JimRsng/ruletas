@@ -72,7 +72,7 @@
     "@types/howler": "^2.2.13",
     "eslint": "^10.9.0",
     "nuxt-ui-colors-no-inline": "^0.0.6",
-    "streamer-emotes": "^0.1.2",
+    "streamer-emotes": "^0.1.4",
     "stylelint": "^17.14.1",
     "stylelint-config-standard-scss": "^17.0.0",
     "typescript": "^6.0.3",

@@ -130,7 +130,7 @@ watch(wheelSelected, () => {
                     {{ message.userInfo.displayName }}
                   </NuxtLink>
                 </span>
-                <span>: <ChatEmotes :text="message.text" /></span>
+                <span>: <ChatEmotes :text="message.text" :emote-offsets="message.emoteOffsets" /></span>
               </div>
             </template>
             <template v-else-if="item.value === 'winner'">
@@ -145,7 +145,7 @@ watch(wheelSelected, () => {
                     {{ message.userInfo.displayName }}
                   </NuxtLink>
                 </span>
-                <span>: <ChatEmotes :text="message.text" /></span>
+                <span>: <ChatEmotes :text="message.text" :emote-offsets="message.emoteOffsets" /></span>
               </div>
             </template>
           </div>

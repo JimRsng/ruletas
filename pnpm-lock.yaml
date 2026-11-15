@@ -88,8 +88,8 @@ importers:
         specifier: ^0.0.6
         version: 0.0.6(6538dff95d44751f331bba4a3900fe6f)
       streamer-emotes:
-        specifier: ^0.1.2
-        version: 0.1.2
+        specifier: ^0.1.4
+        version: 0.1.4
       stylelint:
         specifier: ^17.14.1
         version: 17.14.1(supports-color@10.2.2)(typescript@6.0.3)
@@ -6421,8 +6421,8 @@ packages:
   std-env@4.2.0:
     resolution: {integrity: sha512-oCUKSupKTHX53EyjDtuZQ64pjLJ6yYCtpmEw0goYxtjG9KpbRe8KAsl2tBUGU9DyMcJ0RwJ8GqJAFzMXcXW1Rw==}
 
-  streamer-emotes@0.1.2:
-    resolution: {integrity: sha512-SHu8HrBKWqlzmEp6Hyh42hVU4PSNOtj1URByZPhMDboaYuoj2KJyFu16VjNh9FnsWDayiCNmUSZVYbn6M4Zghw==}
+  streamer-emotes@0.1.4:
+    resolution: {integrity: sha512-iz8RFp4cCtKpSfAoKiWz4Rt0guSYWIIRumG5T/T9yQWYSWHuvyHDOGy2jtTCSD0NwN4PsRcf6v1T52o8Fvp9bw==}
 
   streamx@2.28.0:
     resolution: {integrity: sha512-1Yowhzjf0ivGMrTIkY9hav5TxobO9qIVqUE41fiCGMGgc3CLlf4MY+9AHmZqBWgDTue0fY9zWjYFVyf6Diuobw==}
@@ -14033,7 +14033,7 @@ snapshots:
 
   std-env@4.2.0: {}
 
-  streamer-emotes@0.1.2:
+  streamer-emotes@0.1.4:
     dependencies:
       gql-payload: 2.1.0
       ofetch: 2.0.0-alpha.3

@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { fillTextPositions, parseEmotePositions } from "@twurple/chat";
+import { getTwitchEmoteImagesById } from "streamer-emotes";
+
 const props = withDefaults(defineProps<{
   text: string;
+  emoteOffsets?: Map<string, string[]>;
   popover?: boolean;
 }>(), {
   popover: true
@@ -12,14 +16,23 @@ const { data: emotes } = await useLazyFetch("/api/chat/emotes", {
 });
 
 const parsedParts = computed(() => {
-  const tokens = props.text.split(" ");
+  const messageParts = fillTextPositions(
+    props.text,
+    parseEmotePositions(props.text, props.emoteOffsets ?? new Map())
+  ).filter(part => part.type !== "cheer");
+  return messageParts.flatMap((part) => {
+    if (part.type === "emote") {
+      return {
+        token: part.name,
+        url: getTwitchEmoteImagesById(part.id)?.[0]?.url ?? null
+      };
+    }
 
-  if (!emotes.value) return tokens.map(token => ({ token, url: null as string | null }));
-
-  return tokens.map(token => ({
-    token,
-    url: emotes.value![token] ?? null
-  }));
+    return part.text.split(" ").map(token => ({
+      token,
+      url: emotes.value?.[token] ?? null
+    }));
+  });
 });
 </script>
 
